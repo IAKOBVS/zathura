@@ -134,6 +134,9 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
   GOptionContext* context = g_option_context_new(" [file1] [file2] [...]");
   g_option_context_add_main_entries(context, entries, NULL);
 
+  const int orig_argc     = argc;
+  g_auto(GStrv) orig_argv = g_strdupv(argv);
+
   g_autoptr(GError) error = NULL;
   if (g_option_context_parse(context, &argc, &argv, &error) == false) {
     girara_error("Error parsing command line arguments: %s\n", error->message);
@@ -190,59 +193,83 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
   int file_idx = argc > file_idx_base ? file_idx_base : 0;
   /* If more than one file, fork an instance for each. */
   if (print_version == false && argc > file_idx_base + 1) {
-    const pid_t parent_pid              = getpid();
     g_autoptr(girara_list_t) child_pids = girara_list_new();
 
     for (int idx = file_idx_base; idx < argc; ++idx) {
-      const pid_t pid = fork();
-      if (pid == 0) {
-        // child process
-        file_idx = idx;
-        if (forkback == true && setsid() == -1) {
-          // start new process group if forkback was requested
-          girara_error("Could not start new process group: %s", strerror(errno));
-          return -1;
+      GPtrArray* arr = g_ptr_array_new();
+      g_ptr_array_add(arr, g_strdup(orig_argv[0]));
+      for (int i = 1; i < orig_argc; i++) {
+        if (g_strcmp0(orig_argv[i], "--fork") == 0) {
+          continue;
         }
-        break;
-      } else if (pid < 0) {
-        // error
-        girara_error("Could not fork: %s", strerror(errno));
-        return -1;
-      } else {
-        // parent process
-        girara_list_append(child_pids, (void*)(intptr_t)pid);
+        bool is_file = false;
+        for (int j = 0; j < argc - file_idx_base; j++) {
+          if (g_strcmp0(orig_argv[i], argv[file_idx_base + j]) == 0) {
+            is_file = true;
+            break;
+          }
+        }
+        if (!is_file) {
+          g_ptr_array_add(arr, g_strdup(orig_argv[i]));
+        }
       }
-    }
+      g_ptr_array_add(arr, g_strdup(argv[idx]));
+      g_ptr_array_add(arr, NULL);
+      char** spawn_argv = (char**)g_ptr_array_free(arr, FALSE);
 
-    if (parent_pid == getpid()) {
-      // parent
-      if (forkback == true) {
-        // forkback was requested, so no need to wait
-        return 0;
+      GPid pid;
+      GError* err = NULL;
+      if (!g_spawn_async(NULL, spawn_argv, NULL, G_SPAWN_DEFAULT, NULL, NULL, &pid, &err)) {
+        girara_error("Could not spawn: %s", err->message);
+        g_error_free(err);
+        g_strfreev(spawn_argv);
+        return -1;
       }
-      // wait for all children
-      for (size_t idx = 0; idx != girara_list_size(child_pids); ++idx) {
-        const pid_t pid = (pid_t)(intptr_t)girara_list_nth(child_pids, idx);
-        waitpid(pid, NULL, 0);
-      }
-      return 0;
+      g_strfreev(spawn_argv);
+      girara_list_append(child_pids, (void*)(intptr_t)pid);
     }
+    if (forkback == false) {
+      for (size_t idx = 0; idx != girara_list_size(child_pids); ++idx) {
+        waitpid((GPid)(intptr_t)girara_list_nth(child_pids, idx), NULL, 0);
+      }
+    }
+    return 0;
   }
 
   /* Fork into the background if the user really wants to ... */
   if (print_version == false && forkback == true && file_idx < file_idx_base + 1) {
-    const pid_t pid = fork();
-    if (pid > 0) { /* parent */
-      return 0;
-    } else if (pid < 0) { /* error */
-      girara_error("Could not fork: %s", strerror(errno));
-      return -1;
+    GPtrArray* arr = g_ptr_array_new();
+    g_ptr_array_add(arr, g_strdup(orig_argv[0]));
+    for (int i = 1; i < orig_argc; i++) {
+      if (g_strcmp0(orig_argv[i], "--fork") == 0) {
+        continue;
+      }
+      bool is_file = false;
+      for (int j = 0; j < argc - file_idx_base; j++) {
+        if (g_strcmp0(orig_argv[i], argv[file_idx_base + j]) == 0) {
+          is_file = true;
+          break;
+        }
+      }
+      if (!is_file) {
+        g_ptr_array_add(arr, g_strdup(orig_argv[i]));
+      }
     }
+    if (file_idx != 0) {
+      g_ptr_array_add(arr, g_strdup(argv[file_idx]));
+    }
+    g_ptr_array_add(arr, NULL);
+    char** spawn_argv = (char**)g_ptr_array_free(arr, FALSE);
 
-    if (setsid() == -1) {
-      girara_error("Could not start new process group: %s", strerror(errno));
+    GError* err = NULL;
+    if (!g_spawn_async(NULL, spawn_argv, NULL, G_SPAWN_DEFAULT, NULL, NULL, NULL, &err)) {
+      girara_error("Could not spawn: %s", err->message);
+      g_error_free(err);
+      g_strfreev(spawn_argv);
       return -1;
     }
+    g_strfreev(spawn_argv);
+    return 0;
   }
 
   /* Print version */
