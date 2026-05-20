@@ -606,6 +606,8 @@ void config_load_default(zathura_t* zathura) {
   bool_value = true;
   girara_setting_add(gsession, "selection-notification",     &bool_value,  BOOLEAN, false, _("Enable notification after selecting text"), NULL, NULL);
   bool_value = false;
+  girara_setting_add(gsession, "selection-keep-highlight",   &bool_value,  BOOLEAN, false, _("Keep selection highlighted after mouse release"), NULL, NULL);
+  bool_value = false;
   girara_setting_add(gsession, "show-signature-information", &bool_value,  BOOLEAN, false, _("Disable additional information for signatures embedded in the document."), cb_show_signature_info, NULL);
 
   // clang-format on
