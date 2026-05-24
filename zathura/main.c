@@ -85,7 +85,7 @@ static zathura_t* init_zathura(const char* config_dir, const char* data_dir, con
   return zathura;
 }
 
-static char** build_argv_for_child(int idx, char** argv, int argc, char** orig_argv, int orig_argc, int file_idx_base) {
+static GStrv build_argv_for_child(int idx, char** argv, int argc, char** orig_argv, int orig_argc, int file_idx_base) {
   GPtrArray* arr = g_ptr_array_new();
   g_ptr_array_add(arr, g_strdup(orig_argv[0]));
   for (int i = 1; i < orig_argc; i++) {
@@ -106,7 +106,14 @@ static char** build_argv_for_child(int idx, char** argv, int argc, char** orig_a
     g_ptr_array_add(arr, g_strdup(argv[idx]));
   }
   g_ptr_array_add(arr, NULL);
-  return (char**)g_ptr_array_free(arr, FALSE);
+  return (GStrv)g_ptr_array_free(arr, FALSE);
+}
+
+static void start_process_group(void* GIRARA_UNUSED(data)) {
+  if (setsid() == -1) {
+    girara_error("Could not start new process group: %s", strerror(errno));
+    exit(-1);
+  }
 }
 
 /* main function */
@@ -220,22 +227,21 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
     g_autoptr(girara_list_t) child_pids = girara_list_new();
 
     for (int idx = file_idx_base; idx < argc; ++idx) {
-      char** spawn_argv = build_argv_for_child(idx, argv, argc, orig_argv, orig_argc, file_idx_base);
-
+      g_auto(GStrv) spawn_argv = build_argv_for_child(idx, argv, argc, orig_argv, orig_argc, file_idx_base);
       GPid pid;
-      GError* err = NULL;
-      if (!g_spawn_async(NULL, spawn_argv, NULL, G_SPAWN_DEFAULT, NULL, NULL, &pid, &err)) {
-        girara_error("Could not spawn: %s", err->message);
-        g_error_free(err);
-        g_strfreev(spawn_argv);
+      if (!g_spawn_async(NULL, spawn_argv, NULL, forkback ? G_SPAWN_DEFAULT : G_SPAWN_DO_NOT_REAP_CHILD,
+                         forkback ? start_process_group : NULL, NULL, &pid, &error)) {
+        girara_error("Could not spawn: %s", error->message);
         return -1;
       }
-      g_strfreev(spawn_argv);
+
       girara_list_append(child_pids, (void*)(intptr_t)pid);
     }
+
     if (forkback == false) {
       for (size_t idx = 0; idx != girara_list_size(child_pids); ++idx) {
-        waitpid((GPid)(intptr_t)girara_list_nth(child_pids, idx), NULL, 0);
+        const pid_t pid = (pid_t)(intptr_t)girara_list_nth(child_pids, idx);
+        waitpid(pid, NULL, 0);
       }
     }
     return 0;
@@ -243,16 +249,12 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
 
   /* Fork into the background if the user really wants to ... */
   if (print_version == false && forkback == true && file_idx < file_idx_base + 1) {
-    char** spawn_argv = build_argv_for_child(file_idx, argv, argc, orig_argv, orig_argc, file_idx_base);
-
-    GError* err = NULL;
-    if (!g_spawn_async(NULL, spawn_argv, NULL, G_SPAWN_DEFAULT, NULL, NULL, NULL, &err)) {
-      girara_error("Could not spawn: %s", err->message);
-      g_error_free(err);
-      g_strfreev(spawn_argv);
+    g_auto(GStrv) spawn_argv = build_argv_for_child(file_idx, argv, argc, orig_argv, orig_argc, file_idx_base);
+    if (!g_spawn_async(NULL, spawn_argv, NULL, G_SPAWN_DEFAULT, start_process_group, NULL, NULL, &error)) {
+      girara_error("Could not spawn: %s", error->message);
       return -1;
     }
-    g_strfreev(spawn_argv);
+
     return 0;
   }
 
