@@ -199,10 +199,9 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
     zathura_plugin_manager_set_dir(plugin_manager, plugin_path);
     zathura_plugin_manager_load(plugin_manager);
 
-    char* string = zathura_get_version_string(plugin_manager, false);
+    g_autofree char* string = zathura_get_version_string(plugin_manager, false);
     if (string != NULL) {
       fprintf(stdout, "%s\n", string);
-      g_free(string);
     }
     zathura_plugin_manager_free(plugin_manager);
 
