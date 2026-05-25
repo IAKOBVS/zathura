@@ -162,7 +162,7 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
       {NULL, '\0', 0, 0, NULL, NULL, NULL},
   };
 
-  GOptionContext* context = g_option_context_new(" [file1] [file2] [...]");
+  g_autoptr(GOptionContext) context = g_option_context_new(" [file1] [file2] [...]");
   g_option_context_add_main_entries(context, entries, NULL);
 
   const int orig_argc     = argc;
@@ -171,11 +171,8 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
   g_autoptr(GError) error = NULL;
   if (g_option_context_parse(context, &argc, &argv, &error) == false) {
     girara_error("Error parsing command line arguments: %s\n", error->message);
-    g_option_context_free(context);
-
     return -1;
   }
-  g_option_context_free(context);
 
   zathura_set_log_level(loglevel);
 
