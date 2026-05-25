@@ -138,7 +138,7 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
   gint synctex_pid                 = -1;
   Window embed                     = 0;
 
-  GOptionEntry entries[] = {
+  const GOptionEntry entries[] = {
       {"reparent", 'e', 0, G_OPTION_ARG_INT, &embed, _("Reparents to window specified by xid (X11)"), "xid"},
       {"config-dir", 'c', 0, G_OPTION_ARG_FILENAME, &config_dir, _("Path to the config directory"), "path"},
       {"data-dir", 'd', 0, G_OPTION_ARG_FILENAME, &data_dir, _("Path to the data directory"), "path"},
