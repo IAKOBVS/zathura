@@ -197,7 +197,7 @@ if seccomp.found() or landlock or target_machine.system() == 'openbsd'
 
   zathura_sandbox = executable(
     'zathura-sandbox',
-    files('zathura/main-sandbox.c') + sandbox_sources,
+    files('zathura/main-sandbox.c'),
     dependencies: build_dependencies + [libzathura_sandbox_dep] + sandbox_dependencies,
     install: true,
     include_directories: include_directories,
