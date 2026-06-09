@@ -226,7 +226,8 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
     for (int idx = file_idx_base; idx < argc; ++idx) {
       g_auto(GStrv) spawn_argv = build_argv_for_child(idx, argv, argc, orig_argv, orig_argc, file_idx_base);
       GPid pid;
-      if (!g_spawn_async(NULL, spawn_argv, NULL, forkback ? G_SPAWN_DEFAULT : G_SPAWN_DO_NOT_REAP_CHILD,
+      if (!g_spawn_async(NULL, spawn_argv, NULL,
+                         G_SPAWN_SEARCH_PATH | (forkback ? G_SPAWN_DEFAULT : G_SPAWN_DO_NOT_REAP_CHILD),
                          forkback ? start_process_group : NULL, NULL, &pid, &error)) {
         girara_error("Could not spawn: %s", error->message);
         return -1;
@@ -247,7 +248,8 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
   /* Fork into the background if the user really wants to ... */
   if (print_version == false && forkback == true && file_idx < file_idx_base + 1) {
     g_auto(GStrv) spawn_argv = build_argv_for_child(file_idx, argv, argc, orig_argv, orig_argc, file_idx_base);
-    if (!g_spawn_async(NULL, spawn_argv, NULL, G_SPAWN_DEFAULT, start_process_group, NULL, NULL, &error)) {
+    if (!g_spawn_async(NULL, spawn_argv, NULL, G_SPAWN_DEFAULT | G_SPAWN_SEARCH_PATH, start_process_group, NULL, NULL,
+                       &error)) {
       girara_error("Could not spawn: %s", error->message);
       return -1;
     }
