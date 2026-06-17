@@ -9,7 +9,7 @@ Requirements
 
 The following dependencies are required:
 
-* `gtk4` (>= 4.22)
+* `gtk4` (>= 4.12)
 * `glib` (>= 2.76)
 * `girara` (>= 2026.01.30)
 * `libmagic` from file(1): for mime-type detection
