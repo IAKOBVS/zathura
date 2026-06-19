@@ -405,7 +405,7 @@ static unsigned int* parse_first_page_column_list(const char* first_page_column_
   for (unsigned int i = 0; i < length; i++) {
     guint64 column = 1;
 
-    if (g_ascii_string_to_unsigned(tokens[i], 10, 1, i + 1, &column, NULL) == TRUE && column <= UINT_MAX) {
+    if (g_ascii_string_to_unsigned(tokens[i], 10, 1, UINT_MAX, &column, NULL) == TRUE && column <= UINT_MAX) {
       settings[i] = (unsigned int)column;
     } else {
       settings[i] = 1;
@@ -433,7 +433,8 @@ unsigned int find_first_page_column(const char* first_page_column_list, const un
     first_page_column = settings[size - 1];
   }
 
-  return first_page_column;
+
+  return MIN(first_page_column, pages_per_row);
 }
 
 char* increment_first_page_column(const char* first_page_column_list, const unsigned int pages_per_row, int incr) {
