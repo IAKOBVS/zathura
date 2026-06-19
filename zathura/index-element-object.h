@@ -8,6 +8,8 @@
 #include <gtk/gtk.h>
 
 #define ZATHURA_TYPE_INDEX_ELEMENT_OBJECT (zathura_index_element_object_get_type())
+
+/* GObject wrapping zathura_index_element_t so it can live in a GListModel */
 G_DECLARE_FINAL_TYPE(ZathuraIndexElementObject, zathura_index_element_object, ZATHURA, INDEX_ELEMENT_OBJECT, GObject)
 
 struct _ZathuraIndexElementObject {

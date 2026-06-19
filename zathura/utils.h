@@ -32,7 +32,6 @@ bool file_valid_extension(zathura_t* zathura, const char* path);
  * @param tree the document index tree
  * @return root list model of ZathuraIndexElement objects
  */
-/* GObject wrapping zathura_index_element_t so it can live in a GListModel */
 GListModel* document_index_build_model(girara_session_t* session, girara_tree_node_t* tree);
 
 /**
