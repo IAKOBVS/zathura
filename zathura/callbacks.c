@@ -18,6 +18,7 @@
 #include "render.h"
 #include "document.h"
 #include "document-widget.h"
+#include "index-element-object.h"
 #include "utils.h"
 #include "shortcuts.h"
 #include "page-widget.h"

@@ -24,6 +24,7 @@
 #include "page.h"
 #include "plugin.h"
 #include "content-type.h"
+#include "index-element-object.h"
 
 double zathura_correct_zoom_value(girara_session_t* session, const double zoom) {
   if (session == NULL) {
@@ -54,34 +55,6 @@ bool file_valid_extension(zathura_t* zathura, const char* path) {
 
   return zathura_plugin_manager_get_plugin(zathura->plugins.manager, content_type) != NULL;
 }
-
-G_DEFINE_TYPE(ZathuraIndexElementObject, zathura_index_element_object, G_TYPE_OBJECT)
-
-static void zathura_index_element_object_dispose(GObject* object) {
-  ZathuraIndexElementObject* self = ZATHURA_INDEX_ELEMENT_OBJECT(object);
-  g_clear_object(&self->children);
-  G_OBJECT_CLASS(zathura_index_element_object_parent_class)->dispose(object);
-}
-
-static void zathura_index_element_object_finalize(GObject* object) {
-  ZathuraIndexElementObject* self = ZATHURA_INDEX_ELEMENT_OBJECT(object);
-  g_clear_pointer(&self->title, g_free);
-  g_clear_pointer(&self->page_label, g_free);
-  g_clear_pointer(&self->page_alt, g_free);
-  if (self->element != NULL) {
-    zathura_index_element_free(self->element);
-    self->element = NULL;
-  }
-  G_OBJECT_CLASS(zathura_index_element_object_parent_class)->finalize(object);
-}
-
-static void zathura_index_element_object_class_init(ZathuraIndexElementObjectClass* klass) {
-  GObjectClass* object_class = G_OBJECT_CLASS(klass);
-  object_class->dispose      = zathura_index_element_object_dispose;
-  object_class->finalize     = zathura_index_element_object_finalize;
-}
-
-static void zathura_index_element_object_init(ZathuraIndexElementObject* UNUSED(self)) {}
 
 /* build children store from a girara tree node */
 static GListStore* index_element_build_children(girara_session_t* session, girara_tree_node_t* tree) {
@@ -432,7 +405,6 @@ unsigned int find_first_page_column(const char* first_page_column_list, const un
   } else if (size > 0) {
     first_page_column = settings[size - 1];
   }
-
 
   return MIN(first_page_column, pages_per_row);
 }

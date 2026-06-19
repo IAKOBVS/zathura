@@ -21,6 +21,7 @@
 #include "dbus-interface.h"
 #include "document-widget.h"
 #include "document.h"
+#include "index-element-object.h"
 #include "page-widget.h"
 #include "page.h"
 #include "plugin.h"
