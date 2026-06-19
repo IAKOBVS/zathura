@@ -1495,7 +1495,7 @@ msgid "Disable additional information for signatures embedded in the document."
 msgstr "Zeige zusätzliche Informationen für Dokumentsignaturen an."
 
 msgid "Enable prompt to confirm when opening links"
-msgstr ""
+msgstr "Zeige Aufforderung vor dem Öffnen von Links"
 
 #. define default inputbar commands
 msgid "Map a key sequence"
@@ -1505,7 +1505,7 @@ msgid "Set an option"
 msgstr "Setze eine Option"
 
 msgid "Run a shortcut"
-msgstr ""
+msgstr "Führe Shortcut aus"
 
 msgid "Unmap a key sequence"
 msgstr "Tastenfolge entbinden"
@@ -1715,22 +1715,22 @@ msgstr "Ungültiger Anpassungsmodus: %d"
 
 #, c-format
 msgid "Copied file path to selection %s: %s"
-msgstr ""
+msgstr "Dateipfad in ZWischenablage %s kopiert: %s"
 
 msgid "This document does not contain any index"
 msgstr "Dieses Dokument beinhaltet kein Inhaltsverzeichnis"
 
 msgid "Could not get path from file."
-msgstr ""
+msgstr "Konnte Pfad von Datei nicht erfragen."
 
 msgid "Open file"
 msgstr "Öffne Datei"
 
 msgid "Supported documents"
-msgstr ""
+msgstr "Unterstützte Dokumente"
 
 msgid "All files"
-msgstr ""
+msgstr "Alle Dateien"
 
 #, c-format
 msgid "[Search %d/%d]"
@@ -1815,7 +1815,7 @@ msgstr "Unbekannter Wert für Option: %s"
 
 #, c-format
 msgid "Invalid value for option: %s"
-msgstr ""
+msgstr "Ungültiger Wert für Option: %s"
 
 #. unhandled command
 #, c-format

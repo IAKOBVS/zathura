@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 15:44+0200\n"
+"POT-Creation-Date: 2026-06-20 20:14+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: Pablo Saez, 2025\n"
 "Language-Team: Spanish (http://app.transifex.com/pwmt/zathura/language/es/)\n"
@@ -1455,6 +1455,8 @@ msgstr ""
 
 msgid "Display (current page / total pages) as a percent in the statusbar"
 msgstr ""
+"Mostrar (página actual / páginas totales) como porcentaje en la barra de "
+"estado"
 
 msgid "Enable SyncTeX support"
 msgstr "Habilitar soporte SyncTeX"
@@ -1484,13 +1486,14 @@ msgid "Enable notification after selecting text"
 msgstr "Habilitar notificaciones tras seleccionar texto"
 
 msgid "Keep selection highlighted after mouse release"
-msgstr ""
+msgstr "Mantener la selección resaltada después de soltar el ratón"
 
 msgid "Disable additional information for signatures embedded in the document."
 msgstr ""
+"Desactivar información adicional para las firmas incrustadas en el documento."
 
 msgid "Enable prompt to confirm when opening links"
-msgstr ""
+msgstr "Activar confirmación al abrir enlaces"
 
 #. define default inputbar commands
 msgid "Map a key sequence"
@@ -1500,7 +1503,7 @@ msgid "Set an option"
 msgstr "Asignar un valor a una opción"
 
 msgid "Run a shortcut"
-msgstr ""
+msgstr "Ejecutar un atajo"
 
 msgid "Unmap a key sequence"
 msgstr "Quitar el mapeo de una secuencia de teclas"
@@ -1579,17 +1582,17 @@ msgid "Failed to run xdg-open."
 msgstr "Error al tratar de ejecutar xdg-open"
 
 msgid "y"
-msgstr ""
+msgstr "s"
 
 msgid "Y"
-msgstr ""
+msgstr "S"
 
 msgid "Cancelled."
-msgstr ""
+msgstr "Cancelado."
 
 #, c-format
 msgid "Open external link <b>%s</b>? [Y/n]"
-msgstr ""
+msgstr "¿Abrir enlace externo <b>%s</b>? [S/n]"
 
 msgid "Opening external applications in strict sandbox mode is not permitted"
 msgstr ""
@@ -1711,26 +1714,26 @@ msgstr "Modo de ajuste incorrecto: %d"
 
 #, c-format
 msgid "Copied file path to selection %s: %s"
-msgstr ""
+msgstr "Ruta del archivo copiada a la selección %s: %s"
 
 msgid "This document does not contain any index"
 msgstr "Este documento no contiene ningún índice"
 
 msgid "Could not get path from file."
-msgstr ""
+msgstr "No se pudo obtener la ruta del archivo."
 
 msgid "Open file"
 msgstr "Abrir archivo"
 
 msgid "Supported documents"
-msgstr ""
+msgstr "Documentos soportados"
 
 msgid "All files"
-msgstr ""
+msgstr "Todos los archivos"
 
 #, c-format
 msgid "[Search %d/%d]"
-msgstr ""
+msgstr "[Búsqueda %d/%d]"
 
 #, c-format
 msgid "Pattern not found: %s"
@@ -1812,7 +1815,7 @@ msgstr "Valor desconocido para la opción: %s"
 
 #, c-format
 msgid "Invalid value for option: %s"
-msgstr ""
+msgstr "Valor inválido para la opción: %s"
 
 #. unhandled command
 #, c-format

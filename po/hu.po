@@ -1,26 +1,23 @@
-# zathura - language file (Indonesian)
+# zathura - language file (Hungarian)
 # SPDX-License-Identifier: Zlib
 #
 # Translators:
-# andjeng <teratower8@gmail.com>, 2013
-# Ibnu Daru Aji, 2013-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-19 15:44+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
-"Last-Translator: Ibnu Daru Aji, 2013\n"
-"Language-Team: Indonesian (http://app.transifex.com/pwmt/zathura/language/"
-"id/)\n"
-"Language: id\n"
+"Last-Translator: Sebastian Ramacher <sebastian+dev@ramacher.at>\n"
+"Language-Team: Hungarian (http://app.transifex.com/pwmt/zathura/language/hu/)\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 msgid "Minimalistic document viewer"
-msgstr "Pembaca dokumen minimalis"
+msgstr "Minimalista dokumentummegjelenítő"
 
 msgid ""
 "Zathura is a highly customizable and functional document viewer. It provides "
@@ -28,32 +25,39 @@ msgid ""
 "mainly focuses on keyboard interaction. Zathura makes it possible to "
 "completely view and navigate through documents without using a mouse."
 msgstr ""
+"A Zathura jól testreszabható és hatékony dokumentummegjelenítő. "
+"Minimalista, helytakarékos felületet kínál, és egyszerű használatot "
+"biztosít, amely főként a billentyűzetes kezelésre összpontosít. A Zathura "
+"lehetővé teszi a dokumentumok teljes megtekintését és bejárását egér "
+"használata nélkül."
 
 msgid ""
 "Zathura can be extended to support multiple document formats using plugins. "
 "Other features include:"
 msgstr ""
+"A Zathura bővítményekkel több dokumentumformátum támogatására is "
+"kiterjeszthető. További funkciók:"
 
 msgid "SyncTeX forward and backward synchronization support."
-msgstr ""
+msgstr "SyncTeX előre- és visszafelé szinkronizálás támogatása."
 
 msgid "Quickmarks and bookmarks."
-msgstr ""
+msgstr "Gyorsjelölők és könyvjelzők."
 
 msgid "Automatic document reloading."
-msgstr ""
+msgstr "Dokumentumok automatikus újratöltése."
 
 msgid "Reading a PDF file"
-msgstr ""
+msgstr "PDF-fájl olvasása"
 
 msgid "Opening a file with the `open` command"
-msgstr ""
+msgstr "Fájl megnyitása az `open` paranccsal"
 
 msgid "Following links"
-msgstr ""
+msgstr "Hivatkozások követése"
 
 msgid "Listing and selecting bookmakrs"
-msgstr ""
+msgstr "Könyvjelzők listázása és kiválasztása"
 
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
@@ -624,7 +628,7 @@ msgid "Scroll horizontally with shift and mouse wheel"
 msgstr ""
 
 msgid "Page aware scrolling"
-msgstr "Penggulungan sadar halaman"
+msgstr ""
 
 msgid "SyncTeX forward synchronisation"
 msgstr ""
@@ -849,7 +853,7 @@ msgid "Extended statusbar string manipulation"
 msgstr ""
 
 msgid "`function`"
-msgstr ""
+msgstr "`function`"
 
 msgid "Strip executable"
 msgstr ""
@@ -960,7 +964,7 @@ msgid "Marker support"
 msgstr ""
 
 msgid "Highlight search results"
-msgstr "Sorot hasil pencarian"
+msgstr ""
 
 msgid "Buffered commands"
 msgstr ""
@@ -978,652 +982,655 @@ msgid "Initial release"
 msgstr ""
 
 msgid "Zathura"
-msgstr ""
+msgstr "Zathura"
 
 #. Translators: Search terms to find this application. Do not translate or
 #. localize the semicolons. The list must also end with a semicolon.
 msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
-msgstr ""
+msgstr "PDF;PS;PostScript;DjVU;dokumentum;bemutató;megjelenítő;"
 
 #, c-format
 msgid "'%s' must not be 0. Set to 1."
-msgstr "'%s' tidak boleh 0. Diatur ke 1."
+msgstr "A(z) '%s' nem lehet 0. 1-re állítva."
 
 #, c-format
 msgid "Invalid input '%s' given."
-msgstr "Masukan '%s' tidak valid"
+msgstr "Érvénytelen bemenet: '%s'."
 
 #, c-format
 msgid "Invalid index '%s' given."
-msgstr "Index '%s' tidak valid"
+msgstr "Érvénytelen index: '%s'."
 
 msgid "Enter password:"
-msgstr ""
+msgstr "Adja meg a jelszót:"
 
 #, c-format
 msgid "Copied selected text to selection %s: %s"
-msgstr ""
+msgstr "A kijelölt szöveg átmásolva a(z) %s kijelölésbe: %s"
 
 #, c-format
 msgid "Copied selected image to selection %s"
-msgstr ""
+msgstr "A kijelölt kép átmásolva a(z) %s kijelölésbe"
 
 msgid "No document opened."
-msgstr "Tidak ada dokumen yang terbuka."
+msgstr "Nincs megnyitott dokumentum."
 
 msgid "Invalid number of arguments given."
-msgstr "jumlah argumen yang diberikan tidak valid"
+msgstr "Érvénytelen számú argumentum."
 
 #, c-format
 msgid "Could not update bookmark: %s"
-msgstr "Tidak dapat membuat bookmark: %s"
+msgstr "Nem sikerült frissíteni a könyvjelzőt: %s"
 
 #, c-format
 msgid "Could not create bookmark: %s"
-msgstr "Tidak dapat membuat bookmark: %s"
+msgstr "Nem sikerült létrehozni a könyvjelzőt: %s"
 
 #, c-format
 msgid "Bookmark successfully updated: %s"
-msgstr "bookmark yang sukses terupdate : %s"
+msgstr "A könyvjelző sikeresen frissítve: %s"
 
 #, c-format
 msgid "Bookmark successfully created: %s"
-msgstr "Bookmark yang sukses dibuat: %s"
+msgstr "A könyvjelző sikeresen létrehozva: %s"
 
 #, c-format
 msgid "Removed bookmark: %s"
-msgstr "Bookmark %s telah sukses dihapus"
+msgstr "Könyvjelző eltávolítva: %s"
 
 #, c-format
 msgid "Failed to remove bookmark: %s"
-msgstr "Gagal menghapus bookmark: %s"
+msgstr "Nem sikerült eltávolítani a könyvjelzőt: %s"
 
 msgid "No bookmarks available."
-msgstr ""
+msgstr "Nincsenek elérhető könyvjelzők."
 
 #, c-format
 msgid "No such bookmark: %s"
-msgstr "Tidak ada bookmark: %s"
+msgstr "Nincs ilyen könyvjelző: %s"
 
 msgid "Argument must be a nonzero number."
-msgstr ""
+msgstr "Az argumentumnak nullától eltérő számnak kell lennie."
 
 #, c-format
 msgid "[%d]: page=<b>%2d</b>, x=%f, y=%f %s\n"
-msgstr ""
+msgstr "[%d]: oldal=<b>%2d</b>, x=%f, y=%f %s\n"
 
 msgid "(current)"
-msgstr ""
+msgstr "(aktuális)"
 
 msgid "No jumplist available."
-msgstr ""
+msgstr "Nincs elérhető ugrási lista."
 
 msgid "Title"
-msgstr "Judul"
+msgstr "Cím"
 
 msgid "Subject"
-msgstr "Subjek"
+msgstr "Tárgy"
 
 msgid "Keywords"
-msgstr "Kata kunci"
+msgstr "Kulcsszavak"
 
 msgid "Author"
-msgstr "Penulis"
+msgstr "Szerző"
 
 msgid "Creator"
-msgstr "Pembuat"
+msgstr "Létrehozó"
 
 msgid "Producer"
-msgstr "Produser"
+msgstr "Készítő"
 
 msgid "Creation date"
-msgstr "Tanggal pembuatan"
+msgstr "Létrehozás dátuma"
 
 msgid "Modification date"
-msgstr "Tanggal ubahan"
+msgstr "Módosítás dátuma"
 
 msgid "Format"
-msgstr ""
+msgstr "Formátum"
 
 msgid "Other"
-msgstr ""
+msgstr "Egyéb"
 
 msgid "No information available."
-msgstr "Tidak ada informasi tersedia"
+msgstr "Nincs elérhető információ."
 
 msgid ""
 "Please check the man pages zathura(1) and zathurarc(5) for more information."
 msgstr ""
+"További információkért nézze meg a zathura(1) és zathurarc(5) "
+"kézikönyvoldalakat."
 
 msgid "Too many arguments."
-msgstr "Argumen terlalu banyak"
+msgstr "Túl sok argumentum."
 
 msgid "No arguments given."
-msgstr "Tidak ada argumen yang diberikan"
+msgstr "Nincs megadva argumentum."
 
 msgid "Printing is not permitted in strict sandbox mode"
-msgstr ""
+msgstr "A nyomtatás nem engedélyezett szigorú sandbox módban"
 
 msgid "Saving is not permitted in strict sandbox mode"
-msgstr ""
+msgstr "A mentés nem engedélyezett szigorú sandbox módban"
 
 msgid "Invalid number of arguments."
-msgstr "Jumlah argumen tidak valid"
+msgstr "Érvénytelen számú argumentum."
 
 msgid "Exporting attachments is not permitted in strict sandbox mode"
-msgstr ""
+msgstr "A mellékletek exportálása nem engedélyezett szigorú sandbox módban"
 
 #, c-format
 msgid "Couldn't write attachment '%s' to '%s'."
-msgstr "Tidak dapat menulis lampiran '%s' ke '%s'"
+msgstr "Nem sikerült a(z) '%s' mellékletet ide írni: '%s'."
 
 #, c-format
 msgid "Wrote attachment '%s' to '%s'."
-msgstr "Tidak dapat menyimpan lampiran '%s' ke '%s'"
+msgstr "A(z) '%s' melléklet kiírva ide: '%s'."
 
 #, c-format
 msgid "Wrote image '%s' to '%s'."
-msgstr "Menulis citra dari '%s' ke '%s'"
+msgstr "A(z) '%s' kép kiírva ide: '%s'."
 
 #, c-format
 msgid "Couldn't write image '%s' to '%s'."
-msgstr "Tidak dapat menulis citra '%s' ke %s'"
+msgstr "Nem sikerült a(z) '%s' képet ide írni: '%s'."
 
 #, c-format
 msgid "Unknown image '%s'."
-msgstr "Citra tidak diketahui '%s'"
+msgstr "Ismeretlen kép: '%s'."
 
 #, c-format
 msgid "Unknown attachment or image '%s'."
-msgstr "Lampiran atau gambar tidak diketahui '%s'"
+msgstr "Ismeretlen melléklet vagy kép: '%s'."
 
 #, c-format
 msgid "Failed to execute command: %s"
-msgstr ""
+msgstr "Nem sikerült végrehajtani a parancsot: %s"
 
 msgid "Exec is not permitted in strict sandbox mode"
-msgstr ""
+msgstr "Parancsok végrehajtása nem engedélyezett szigorú sandbox módban"
 
 msgid "Argument must be a number."
-msgstr "Argumen harus berupa angka."
+msgstr "Az argumentumnak számnak kell lennie."
 
 #, c-format
 msgid "Page %d"
-msgstr "Halaman %d"
+msgstr "%d. oldal"
 
 msgid "Attachments"
-msgstr "Lampiran"
+msgstr "Mellékletek"
 
 #. add images
 msgid "Images"
-msgstr "Citra"
+msgstr "Képek"
 
 msgid "Plugin does not support exporting attachments and images."
-msgstr ""
+msgstr "A bővítmény nem támogatja a mellékletek és képek exportálását."
 
 msgid "Document contains no images or attachments"
-msgstr ""
+msgstr "A dokumentum nem tartalmaz képeket vagy mellékleteket"
 
 #. clang-format off
 #. settings
 msgid "Font"
-msgstr ""
+msgstr "Betűkészlet"
 
 #. colors affecting the CSS
 msgid "Default foreground color"
-msgstr ""
+msgstr "Alapértelmezett előtérszín"
 
 msgid "Default background color"
-msgstr ""
+msgstr "Alapértelmezett háttérszín"
 
 msgid "Inputbar foreground color"
-msgstr ""
+msgstr "Beviteli sáv előtérszíne"
 
 msgid "Inputbar background color"
-msgstr ""
+msgstr "Beviteli sáv háttérszíne"
 
 msgid "Statusbar foreground color"
-msgstr ""
+msgstr "Állapotsor előtérszíne"
 
 msgid "Statsubar background color"
-msgstr ""
+msgstr "Állapotsor háttérszíne"
 
 msgid "Completion foreground color"
-msgstr ""
+msgstr "Kiegészítés előtérszíne"
 
 msgid "Completion background color"
-msgstr ""
+msgstr "Kiegészítés háttérszíne"
 
 msgid "Completion group foreground color"
-msgstr ""
+msgstr "Kiegészítési csoport előtérszíne"
 
 msgid "Completion group background color"
-msgstr ""
+msgstr "Kiegészítési csoport háttérszíne"
 
 msgid "Completion highlight foreground color"
-msgstr ""
+msgstr "Kiemelt kiegészítés előtérszíne"
 
 msgid "Completion highlight background color"
-msgstr ""
+msgstr "Kiemelt kiegészítés háttérszíne"
 
 msgid "Error notification foreground color"
-msgstr ""
+msgstr "Hibaértesítés előtérszíne"
 
 msgid "Error notification background color"
-msgstr ""
+msgstr "Hibaértesítés háttérszíne"
 
 msgid "Warning notification foreground color"
-msgstr ""
+msgstr "Figyelmeztető értesítés előtérszíne"
 
 msgid "Warning notifaction background color"
-msgstr ""
+msgstr "Figyelmeztető értesítés háttérszíne"
 
 msgid "Notification foreground color"
-msgstr ""
+msgstr "Értesítés előtérszíne"
 
 msgid "Notification background color"
-msgstr ""
+msgstr "Értesítés háttérszíne"
 
 msgid "Index mode foreground color"
-msgstr "Warna depan mode indeks"
+msgstr "Index mód előtérszíne"
 
 msgid "Index mode background color"
-msgstr "Warna latar mode indeks"
+msgstr "Index mód háttérszíne"
 
 msgid "Index mode foreground color (active element)"
-msgstr "Warna depan mode indeks (elemen aktif)"
+msgstr "Index mód előtérszíne (aktív elem)"
 
 msgid "Index mode background color (active element)"
-msgstr "Warna latar mode indeks (elemen aktif)"
+msgstr "Index mód háttérszíne (aktív elem)"
 
 msgid "Scrollbar foreground color"
-msgstr ""
+msgstr "Görgetősáv előtérszíne"
 
 msgid "Scrollbar background color"
-msgstr ""
+msgstr "Görgetősáv háttérszíne"
 
 msgid "Initial window width"
-msgstr ""
+msgstr "Kezdeti ablak szélessége"
 
 msgid "Initial window height"
-msgstr ""
+msgstr "Kezdeti ablak magassága"
 
 msgid "Horizontal padding for the status, input, and notification bars"
-msgstr ""
+msgstr "Az állapot-, beviteli és értesítési sávok vízszintes belső margója"
 
 msgid "Vertical padding for the status, input, and notification bars"
-msgstr ""
+msgstr "Az állapot-, beviteli és értesítési sávok függőleges belső margója"
 
 msgid "Number of completion items"
-msgstr ""
+msgstr "Kiegészítési elemek száma"
 
 msgid "Command to execute in :exec"
-msgstr ""
+msgstr "A :exec paranccsal végrehajtandó parancs"
 
 msgid "Show or hide certain GUI elements"
-msgstr ""
+msgstr "Bizonyos grafikus felületi elemek megjelenítése vagy elrejtése"
 
 msgid "Database backend"
-msgstr "backend database"
+msgstr "Adatbázis-háttérrendszer"
 
 msgid "File monitor backend"
-msgstr ""
+msgstr "Fájlfigyelő háttérrendszer"
 
 msgid "Zoom step"
-msgstr "Tingkat pembesaran"
+msgstr "Nagyítási lépés"
 
 msgid "Horizontal padding between pages"
-msgstr ""
+msgstr "Vízszintes térköz az oldalak között"
 
 msgid "Vertical padding between pages"
-msgstr ""
+msgstr "Függőleges térköz az oldalak között"
 
 msgid "Number of pages per row"
-msgstr "Jumlah halaman tiap kolom"
+msgstr "Oldalak száma soronként"
 
 msgid "Column of the first page"
-msgstr "Kolom pada halaman pertama"
+msgstr "Az első oldal oszlopa"
 
 msgid "Render pages from right to left"
-msgstr ""
+msgstr "Oldalak megjelenítése jobbról balra"
 
 msgid "Scroll step"
-msgstr "Tingkat menggulung"
+msgstr "Görgetési lépés"
 
 msgid "Horizontal scroll step"
-msgstr "Tingkat penggulungan horisontal"
+msgstr "Vízszintes görgetési lépés"
 
 msgid "Full page scroll overlap"
-msgstr "Geser laman utuh"
+msgstr "Teljes oldalas görgetés átfedése"
 
 msgid "Zoom minimum"
-msgstr "Pembesaran minimum"
+msgstr "Minimális nagyítás"
 
 msgid "Zoom maximum"
-msgstr "Pembesaran maksimal"
+msgstr "Maximális nagyítás"
 
 msgid "Maximum number of pages to keep in the cache"
-msgstr "Jumlah laman yang disimpan pada cache"
+msgstr "A gyorsítótárban tartandó oldalak maximális száma"
 
 msgid "Maximum size in pixels of thumbnails to keep in the cache"
-msgstr ""
-"Ukuran maksimal gambar thumbnail dalam piksel yang disimpan di tembolok"
+msgstr "A gyorsítótárban tartandó bélyegképek maximális mérete pixelben"
 
 msgid "Number of positions to remember in the jumplist"
-msgstr "Jumlah posisi yang diingat pada jumplist"
+msgstr "Az ugrási listában megjegyzendő pozíciók száma"
 
 msgid "Recoloring (dark color)"
-msgstr "Mewarnai ulang (warna gelap)"
+msgstr "Újraszínezés (sötét szín)"
 
 msgid "Recoloring (light color)"
-msgstr "Mewarnai ulang (warna cerah)"
+msgstr "Újraszínezés (világos szín)"
 
 msgid "Color for highlighting"
-msgstr "Warna sorotan"
+msgstr "Kiemelés színe"
 
 msgid "Foreground color for highlighting"
-msgstr ""
+msgstr "Kiemelés előtérszíne"
 
 msgid "Color for highlighting (active)"
-msgstr "Warna sorotan (aktif)"
+msgstr "Kiemelés színe (aktív)"
 
 msgid "'Loading ...' background color"
-msgstr "'Memuat ...; warna latar"
+msgstr "A „Betöltés ...” háttérszíne"
 
 msgid "'Loading ...' foreground color"
-msgstr "'Memuat ...' warna depan"
+msgstr "A „Betöltés ...” előtérszíne"
 
 msgid "Color used to highlight valid signatures"
-msgstr ""
+msgstr "Érvényes aláírások kiemelésére használt szín"
 
 msgid "Color used to highlight signatures with warnings"
-msgstr ""
+msgstr "Figyelmeztetéses aláírások kiemelésére használt szín"
 
 msgid "Color used to highlight invalid signatures"
-msgstr ""
+msgstr "Érvénytelen aláírások kiemelésére használt szín"
 
 msgid "Recolor pages"
-msgstr "Mewarnai ulang halaman"
+msgstr "Oldalak újraszínezése"
 
 msgid "When recoloring keep original hue and adjust lightness only"
-msgstr "Ketika mewarnai ulang, jaga hue dan sesuaikan kecerahan saja"
+msgstr ""
+"Újraszínezéskor az eredeti árnyalat megtartása és csak a fényesség "
+"módosítása"
 
 msgid "When recoloring keep original image colors"
-msgstr "Warna citra tetap sama saat mewarnai ulang"
+msgstr "Újraszínezéskor a képek eredeti színeinek megtartása"
 
 msgid "When recoloring adjust lightness"
-msgstr ""
+msgstr "Újraszínezéskor a fényesség módosítása"
 
 msgid "Wrap scrolling"
-msgstr "Lipat gulung"
+msgstr "Körkörös görgetés"
 
 msgid "Advance number of pages per row"
-msgstr "Jumlah halaman per baris \"lanjutan\""
+msgstr "Előrelépés a soronkénti oldalszámmal"
 
 msgid "Horizontally centered zoom"
-msgstr "Pembesaran horisontal tengah"
+msgstr "Vízszintesen középre igazított nagyítás"
 
 msgid "Vertically center pages"
-msgstr ""
+msgstr "Oldalak függőleges középre igazítása"
 
 msgid "Align link target to the left"
-msgstr "Ratakan tautan ke kiri"
+msgstr "Hivatkozás céljának balra igazítása"
 
 msgid "Let zoom be changed when following links"
-msgstr "Biarkan pembesaran berubah saat mengikuti pranala"
+msgstr "A nagyítás változhat hivatkozások követésekor"
 
 msgid "Center result horizontally"
-msgstr "Tengah-horisontalkan hasil"
+msgstr "Eredmény vízszintes középre igazítása"
 
 msgid "Render 'Loading ...'"
-msgstr "Memuat Render..."
+msgstr "A „Betöltés ...” megjelenítése"
 
 msgid "Adjust to when opening file"
-msgstr "Menyesuaikan ketika membuka file"
+msgstr "Igazítás fájl megnyitásakor"
 
 msgid "Show hidden files and directories"
-msgstr "Perlihatkan file dan direktori tersembunyi"
+msgstr "Rejtett fájlok és könyvtárak megjelenítése"
 
 msgid "Show directories"
-msgstr "Perlihatkan direktori"
+msgstr "Könyvtárak megjelenítése"
 
 msgid "Show recent files"
-msgstr ""
+msgstr "Legutóbbi fájlok megjelenítése"
 
 msgid "Always open on first page"
-msgstr "Selalu buka halaman pertama"
+msgstr "Mindig az első oldalon nyíljon meg"
 
 msgid "Disable highlighting of search results"
-msgstr ""
+msgstr "Keresési eredmények kiemelésének letiltása"
 
 msgid "Double click to follow links"
-msgstr ""
+msgstr "Dupla kattintás hivatkozások követéséhez"
 
 msgid "Enable incremental search"
-msgstr "Fungsikan pencarian berkelanjutan"
+msgstr "Növekményes keresés engedélyezése"
 
 msgid "Clear search results on abort"
-msgstr "Hapus hasil pencarian ketika batal mencari"
+msgstr "Keresési eredmények törlése megszakításkor"
 
 msgid "Use basename of the file in the window title"
-msgstr "Gunakan nama dasar file pada judul jendela"
+msgstr "A fájl alapnevének használata az ablak címében"
 
 msgid "Use ~ instead of $HOME in the filename in the window title"
-msgstr ""
+msgstr "~ használata $HOME helyett az ablak címében lévő fájlnévben"
 
 msgid "Display the page number in the window title"
-msgstr "Tampilkan nomor laman pada jendela judul"
+msgstr "Oldalszám megjelenítése az ablak címében"
 
 msgid "Use basename of the file in the statusbar"
-msgstr "Gunakan nama dasar berkas pada statusbar"
+msgstr "A fájl alapnevének használata az állapotsorban"
 
 msgid "Use ~ instead of $HOME in the filename in the statusbar"
-msgstr ""
+msgstr "~ használata $HOME helyett az állapotsorban lévő fájlnévben"
 
 msgid "Display (current page / total pages) as a percent in the statusbar"
-msgstr ""
+msgstr "(aktuális oldal / összes oldal) megjelenítése százalékként az állapotsorban"
 
 msgid "Enable SyncTeX support"
-msgstr "Support SyncTeX"
+msgstr "SyncTeX támogatás engedélyezése"
 
 msgid "SyncTeX editor command"
-msgstr "Penyunting perintah SyncTeX"
+msgstr "SyncTeX szerkesztőparancs"
 
 msgid "SyncTeX edit modifier"
-msgstr ""
+msgstr "SyncTeX szerkesztési módosító"
 
 msgid "Highlighter modifier"
-msgstr ""
+msgstr "Kiemelő módosító"
 
 msgid "Enable D-Bus service"
-msgstr "Aktifkan layanan D-Bus"
+msgstr "D-Bus szolgáltatás engedélyezése"
 
 msgid "Raise window on certain D-Bus commands"
-msgstr ""
+msgstr "Ablak előtérbe hozása bizonyos D-Bus parancsoknál"
 
 msgid "Save history at each page change"
-msgstr ""
+msgstr "Előzmények mentése minden oldalváltáskor"
 
 msgid "The clipboard into which mouse-selected data will be written"
-msgstr "Data yang dipilih tetikus akan ditulis ke clipboard"
+msgstr "A vágólap, amelyre az egérrel kijelölt adatok kerülnek"
 
 msgid "Enable notification after selecting text"
-msgstr "Aktifkan pemberitahuan setelah menyeleksi teks"
+msgstr "Értesítés engedélyezése szöveg kijelölése után"
 
 msgid "Keep selection highlighted after mouse release"
-msgstr ""
+msgstr "Kijelölés kiemelésének megtartása az egér felengedése után"
 
 msgid "Disable additional information for signatures embedded in the document."
-msgstr ""
+msgstr "A dokumentumba ágyazott aláírások további információinak letiltása."
 
 msgid "Enable prompt to confirm when opening links"
-msgstr ""
+msgstr "Megerősítő kérdés engedélyezése hivatkozások megnyitásakor"
 
 #. define default inputbar commands
 msgid "Map a key sequence"
-msgstr ""
+msgstr "Billentyűsorozat hozzárendelése"
 
 msgid "Set an option"
-msgstr ""
+msgstr "Beállítás megadása"
 
 msgid "Run a shortcut"
-msgstr ""
+msgstr "Gyorsbillentyű futtatása"
 
 msgid "Unmap a key sequence"
-msgstr ""
+msgstr "Billentyűsorozat hozzárendelésének törlése"
 
 msgid "Dump settings to a file"
-msgstr ""
+msgstr "Beállítások kiírása fájlba"
 
 msgid "Add a bookmark"
-msgstr "Tambahkan pada bookmark"
+msgstr "Könyvjelző hozzáadása"
 
 msgid "Delete a bookmark"
-msgstr "Hapus bookmark"
+msgstr "Könyvjelző törlése"
 
 msgid "List all bookmarks"
-msgstr "Perlihatkan semua bookmark"
+msgstr "Összes könyvjelző listázása"
 
 msgid "Jump to bookmark"
-msgstr ""
+msgstr "Ugrás könyvjelzőre"
 
 msgid "Show recent jumps in jumplist"
-msgstr ""
+msgstr "Legutóbbi ugrások megjelenítése az ugrási listában"
 
 msgid "Close current file"
-msgstr "Tutup file ini"
+msgstr "Aktuális fájl bezárása"
 
 msgid "Show file information"
-msgstr "Informasi file"
+msgstr "Fájlinformációk megjelenítése"
 
 msgid "Execute a command"
-msgstr "Jalankan perintah"
+msgstr "Parancs végrehajtása"
 
 #. like vim
 msgid "Show help"
-msgstr "Bantuan"
+msgstr "Súgó megjelenítése"
 
 msgid "Open document"
-msgstr "Buka dokumen"
+msgstr "Dokumentum megnyitása"
 
 msgid "Close zathura"
-msgstr "Tutup zathura"
+msgstr "Zathura bezárása"
 
 msgid "Print document"
-msgstr "Cetak dokumen"
+msgstr "Dokumentum nyomtatása"
 
 msgid "Save document"
-msgstr "Simpan dokumen"
+msgstr "Dokumentum mentése"
 
 msgid "Save document (and force overwriting)"
-msgstr "Simpan dokumen (dan menimpa berkas)"
+msgstr "Dokumentum mentése (felülírás kényszerítésével)"
 
 msgid "Save attachments"
-msgstr "Simpan lampiran"
+msgstr "Mellékletek mentése"
 
 msgid "Set page offset"
-msgstr "Set offset halaman"
+msgstr "Oldaleltolás beállítása"
 
 msgid "Mark current location within the document"
-msgstr "Tandai lokasi sekarang dalam dokumen"
+msgstr "Aktuális hely megjelölése a dokumentumban"
 
 msgid "Delete the specified marks"
-msgstr "Hapus tanda terpilih"
+msgstr "Megadott jelölések törlése"
 
 msgid "Remove highlights of current search results"
-msgstr ""
+msgstr "Aktuális keresési eredmények kiemeléseinek eltávolítása"
 
 msgid "Highlight current search results"
-msgstr "Sorot hasil pencarian sekarang"
+msgstr "Aktuális keresési eredmények kiemelése"
 
 msgid "Show version information"
-msgstr "Tunjukan informasi versi"
+msgstr "Verzióinformációk megjelenítése"
 
 msgid "Source config file"
-msgstr ""
+msgstr "Konfigurációs fájl betöltése"
 
 msgid "Failed to run xdg-open."
-msgstr "Gagal menjalankan program xdg-open"
+msgstr "Nem sikerült futtatni az xdg-open parancsot."
 
 msgid "y"
-msgstr ""
+msgstr "i"
 
 msgid "Y"
-msgstr ""
+msgstr "I"
 
 msgid "Cancelled."
-msgstr ""
+msgstr "Megszakítva."
 
 #, c-format
 msgid "Open external link <b>%s</b>? [Y/n]"
-msgstr ""
+msgstr "Megnyitja a külső hivatkozást: <b>%s</b>? [I/n]"
 
 msgid "Opening external applications in strict sandbox mode is not permitted"
-msgstr ""
+msgstr "Külső alkalmazások megnyitása nem engedélyezett szigorú sandbox módban"
 
 #, c-format
 msgid "Link: page %d"
-msgstr "Link: halaman %d"
+msgstr "Hivatkozás: %d. oldal"
 
 #, c-format
 msgid "Link: %s"
-msgstr "Link: %s"
+msgstr "Hivatkozás: %s"
 
 msgid "Link: Invalid"
-msgstr "Link: Tidak valid"
+msgstr "Hivatkozás: érvénytelen"
 
 #, c-format
 msgid "Copied page number: %d"
-msgstr ""
+msgstr "Oldalszám másolva: %d"
 
 #, c-format
 msgid "Copied link: %s"
-msgstr ""
+msgstr "Hivatkozás másolva: %s"
 
 msgid "Path to the config directory"
-msgstr "Path ke direktori konfigurasi"
+msgstr "Konfigurációs könyvtár elérési útja"
 
 msgid "Path to the data directory"
-msgstr "Path ke direktori data"
+msgstr "Adatkönyvtár elérési útja"
 
 msgid "Path to the cache directory"
-msgstr "Path ke direktori tembolok"
+msgstr "Gyorsítótárkönyvtár elérési útja"
 
 msgid "Path to the directories containing plugins"
-msgstr "Path ke direktori plugin"
+msgstr "A bővítményeket tartalmazó könyvtárak elérési útja"
 
 msgid "Fork into the background"
-msgstr "Jalankan pada latar"
+msgstr "Háttérbe helyezés"
 
 msgid "Document password"
-msgstr "Kata sandi dokumen"
+msgstr "Dokumentum jelszava"
 
 msgid "Page number to go to"
-msgstr "Nomor halaman tujuan"
+msgstr "Megnyitandó oldalszám"
 
 msgid "Log level (debug, info, warning, error)"
-msgstr "Tingkat log (debug, info, peringatan, error)"
+msgstr "Naplózási szint (debug, info, warning, error)"
 
 msgid "Print version information"
-msgstr "Cetak informasi versi"
+msgstr "Verzióinformációk kiírása"
 
 msgid "SyncTeX editor (forwarded to the synctex command)"
-msgstr "SyncTeX editor (diteruskan ke perintah SyncTeX)"
+msgstr "SyncTeX szerkesztő (továbbítva a synctex parancsnak)"
 
 msgid "Move to given SyncTeX position"
-msgstr "Pindahkan ke posisi SyncTeX yang diberikan"
+msgstr "Ugrás a megadott SyncTeX pozícióra"
 
 msgid "Highlight given position in the given process"
-msgstr "Sorot posisi pada proses yang diberikan"
+msgstr "Megadott pozíció kiemelése a megadott folyamatban"
 
 msgid "Start in a non-default mode"
-msgstr "Mulai pada mode non-bawaan"
+msgstr "Indítás nem alapértelmezett módban"
 
 msgid "Bookmark to go to"
-msgstr ""
+msgstr "Megnyitandó könyvjelző"
 
 msgid "Search for the given phrase and display results"
-msgstr ""
+msgstr "A megadott kifejezés keresése és az eredmények megjelenítése"
 
 #, c-format
 msgid ""
@@ -1632,158 +1639,163 @@ msgid ""
 "  %s\n"
 "on %s."
 msgstr ""
+"Az aláírás érvényes.\n"
+"Ezt a dokumentumot aláírta:\n"
+"  %s\n"
+"Dátum: %s."
 
 msgid "Signature certificate is expired."
-msgstr ""
+msgstr "Az aláírás tanúsítványa lejárt."
 
 msgid "Signature certificate is revoked."
-msgstr ""
+msgstr "Az aláírás tanúsítványát visszavonták."
 
 msgid "Signature certificate is not trusted."
-msgstr ""
+msgstr "Az aláírás tanúsítványa nem megbízható."
 
 msgid "Signature certificate is invalid."
-msgstr ""
+msgstr "Az aláírás tanúsítványa érvénytelen."
 
 msgid "Signature is invalid."
-msgstr ""
+msgstr "Az aláírás érvénytelen."
 
 msgid "Loading..."
-msgstr "Memuat....."
+msgstr "Betöltés..."
 
 msgid "Copy image"
-msgstr "Salin gambar"
+msgstr "Kép másolása"
 
 msgid "Save image as"
-msgstr "Simpan gambar sebagai"
+msgstr "Kép mentése másként"
 
 #. Update statusbar.
 #, c-format
 msgid "Printing page %d ..."
-msgstr ""
+msgstr "%d. oldal nyomtatása ..."
 
 #, c-format
 msgid "Printing failed: %s"
-msgstr "Gagal mencetak: %s"
+msgstr "A nyomtatás sikertelen: %s"
 
 #, c-format
 msgid "Invalid adjust mode: %d"
-msgstr ""
+msgstr "Érvénytelen igazítási mód: %d"
 
 #, c-format
 msgid "Copied file path to selection %s: %s"
-msgstr ""
+msgstr "Fájl elérési útja átmásolva a(z) %s kijelölésbe: %s"
 
 msgid "This document does not contain any index"
-msgstr "Dokumen ini tidak mempunyai indeks"
+msgstr "Ez a dokumentum nem tartalmaz tartalomjegyzéket"
 
 msgid "Could not get path from file."
-msgstr ""
+msgstr "Nem sikerült lekérni az elérési utat a fájlból."
 
 msgid "Open file"
-msgstr ""
+msgstr "Fájl megnyitása"
 
 msgid "Supported documents"
-msgstr ""
+msgstr "Támogatott dokumentumok"
 
 msgid "All files"
-msgstr ""
+msgstr "Minden fájl"
 
 #, c-format
 msgid "[Search %d/%d]"
-msgstr ""
+msgstr "[Keresés %d/%d]"
 
 #, c-format
 msgid "Pattern not found: %s"
-msgstr ""
+msgstr "A minta nem található: %s"
 
 msgid "[No name]"
-msgstr "[Tidak berjudul]"
+msgstr "[Névtelen]"
 
 msgid "Could not read file from stdin and write it to a temporary file."
 msgstr ""
-"Tidak dapat membaca berkas dari stdin dan menulisnya ke berkas sementar"
+"Nem sikerült fájlt olvasni a szabványos bemenetről és ideiglenes fájlba "
+"írni."
 
 msgid "Could not read file from GIO and copy it to a temporary file."
-msgstr ""
+msgstr "Nem sikerült fájlt olvasni a GIO-ból és ideiglenes fájlba másolni."
 
 msgid "Unsupported file type. Please install the necessary plugin."
-msgstr "Tipe berkas tidak didukung. Silakan memasang plugin yang dibutuhkan."
+msgstr "Nem támogatott fájltípus. Telepítse a szükséges bővítményt."
 
 msgid "Document does not contain any pages"
-msgstr "Dokumen tidak mempunyai laman apapun"
+msgstr "A dokumentum nem tartalmaz oldalakat"
 
 #, c-format
 msgid "File already exists: %s. Use :write! to overwrite it."
-msgstr ""
+msgstr "A fájl már létezik: %s. A felülíráshoz használja a :write! parancsot."
 
 msgid "Failed to save document."
-msgstr "Gagal menyimpan dokumen"
+msgstr "Nem sikerült menteni a dokumentumot."
 
 msgid "Document saved."
-msgstr "Dokumen telah disimpan"
+msgstr "Dokumentum mentve."
 
 #, c-format
 msgid "Invalid number of arguments passed: %zu instead of at least %u"
-msgstr ""
+msgstr "Érvénytelen számú argumentum lett átadva: %zu legalább %u helyett"
 
 #, c-format
 msgid "Unregistered mode specified: %s"
-msgstr ""
+msgstr "Nem regisztrált mód lett megadva: %s"
 
 msgid "Invalid number of arguments passed"
-msgstr ""
+msgstr "Érvénytelen számú argumentum lett átadva"
 
 #, c-format
 msgid "Invalid modifier in %s"
-msgstr ""
+msgstr "Érvénytelen módosító itt: %s"
 
 #, c-format
 msgid "Invalid special key value for %s"
-msgstr ""
+msgstr "Érvénytelen speciális billentyűérték ehhez: %s"
 
 #, c-format
 msgid "Invalid special key value or mode %s"
-msgstr ""
+msgstr "Érvénytelen speciális billentyűérték vagy mód: %s"
 
 #, c-format
 msgid "Not a valid shortcut function: %s"
-msgstr ""
+msgstr "Nem érvényes gyorsbillentyű-függvény: %s"
 
 msgid "Not enough arguments."
-msgstr ""
+msgstr "Nincs elég argumentum."
 
 #, c-format
 msgid "Unknown option: %s"
-msgstr ""
+msgstr "Ismeretlen beállítás: %s"
 
 msgid "true"
-msgstr ""
+msgstr "igaz"
 
 msgid "false"
-msgstr ""
+msgstr "hamis"
 
 #, c-format
 msgid "No value defined for option: %s"
-msgstr ""
+msgstr "Nincs érték megadva a beállításhoz: %s"
 
 #, c-format
 msgid "Unknown value for option: %s"
-msgstr ""
+msgstr "Ismeretlen érték a beállításhoz: %s"
 
 #, c-format
 msgid "Invalid value for option: %s"
-msgstr ""
+msgstr "Érvénytelen érték a beállításhoz: %s"
 
 #. unhandled command
 #, c-format
 msgid "Not a valid command: %s"
-msgstr ""
+msgstr "Nem érvényes parancs: %s"
 
 #, c-format
 msgid "Invalid number of arguments passed: %zu instead of 1"
-msgstr ""
+msgstr "Érvénytelen számú argumentum lett átadva: %zu 1 helyett"
 
 #, c-format
 msgid "Failed to write JSON: %s"
-msgstr ""
+msgstr "Nem sikerült JSON-t írni: %s"

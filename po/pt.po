@@ -1,26 +1,25 @@
-# zathura - language file (Indonesian)
+# zathura - language file (Portuguese)
 # SPDX-License-Identifier: Zlib
 #
 # Translators:
-# andjeng <teratower8@gmail.com>, 2013
-# Ibnu Daru Aji, 2013-2014
 msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 15:44+0200\n"
+"POT-Creation-Date: 2026-06-20 20:14+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
-"Last-Translator: Ibnu Daru Aji, 2013\n"
-"Language-Team: Indonesian (http://app.transifex.com/pwmt/zathura/language/"
-"id/)\n"
-"Language: id\n"
+"Last-Translator: Fernando Henrique <liquuid@gmail.com>, 2020\n"
+"Language-Team: Portuguese (http://app.transifex.com/pwmt/zathura/language/"
+"pt/)\n"
+"Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % "
+"1000000 == 0 ? 1 : 2;\n"
 
 msgid "Minimalistic document viewer"
-msgstr "Pembaca dokumen minimalis"
+msgstr "Visualizador de documentos minimalista"
 
 msgid ""
 "Zathura is a highly customizable and functional document viewer. It provides "
@@ -28,32 +27,39 @@ msgid ""
 "mainly focuses on keyboard interaction. Zathura makes it possible to "
 "completely view and navigate through documents without using a mouse."
 msgstr ""
+"O Zathura é um visualizador de documentos altamente personalizável e "
+"funcional. Disponibiliza uma interface minimalista e economizadora de "
+"espaço, bem como uma utilização simples focada sobretudo na interação pelo "
+"teclado. O Zathura permite visualizar e navegar por documentos sem usar o "
+"rato."
 
 msgid ""
 "Zathura can be extended to support multiple document formats using plugins. "
 "Other features include:"
 msgstr ""
+"O Zathura pode ser expandido para suportar vários formatos de documentos "
+"através de plugins. Outras funcionalidades incluem:"
 
 msgid "SyncTeX forward and backward synchronization support."
-msgstr ""
+msgstr "Suporte de sincronização direta e inversa do SyncTeX."
 
 msgid "Quickmarks and bookmarks."
-msgstr ""
+msgstr "Marcadores rápidos e marcadores."
 
 msgid "Automatic document reloading."
-msgstr ""
+msgstr "Recarregamento automático de documentos."
 
 msgid "Reading a PDF file"
-msgstr ""
+msgstr "Leitura de um ficheiro PDF"
 
 msgid "Opening a file with the `open` command"
-msgstr ""
+msgstr "Abertura de um ficheiro com o comando `open`"
 
 msgid "Following links"
-msgstr ""
+msgstr "Seguir ligações"
 
 msgid "Listing and selecting bookmakrs"
-msgstr ""
+msgstr "Listar e selecionar marcadores"
 
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
@@ -624,7 +630,7 @@ msgid "Scroll horizontally with shift and mouse wheel"
 msgstr ""
 
 msgid "Page aware scrolling"
-msgstr "Penggulungan sadar halaman"
+msgstr ""
 
 msgid "SyncTeX forward synchronisation"
 msgstr ""
@@ -960,7 +966,7 @@ msgid "Marker support"
 msgstr ""
 
 msgid "Highlight search results"
-msgstr "Sorot hasil pencarian"
+msgstr ""
 
 msgid "Buffered commands"
 msgstr ""
@@ -983,647 +989,653 @@ msgstr ""
 #. Translators: Search terms to find this application. Do not translate or
 #. localize the semicolons. The list must also end with a semicolon.
 msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
-msgstr ""
+msgstr "PDF;PS;PostScript;DjVU;documento;apresentação;visualizador;"
 
 #, c-format
 msgid "'%s' must not be 0. Set to 1."
-msgstr "'%s' tidak boleh 0. Diatur ke 1."
+msgstr "'%s' não pode ser 0. Definido como 1."
 
 #, c-format
 msgid "Invalid input '%s' given."
-msgstr "Masukan '%s' tidak valid"
+msgstr "Foi indicada a entrada inválida '%s'."
 
 #, c-format
 msgid "Invalid index '%s' given."
-msgstr "Index '%s' tidak valid"
+msgstr "Foi indicado o índice inválido '%s'."
 
 msgid "Enter password:"
-msgstr ""
+msgstr "Introduza a palavra-passe:"
 
 #, c-format
 msgid "Copied selected text to selection %s: %s"
-msgstr ""
+msgstr "Texto selecionado copiado para a seleção %s: %s"
 
 #, c-format
 msgid "Copied selected image to selection %s"
-msgstr ""
+msgstr "Imagem selecionada copiada para a seleção %s"
 
 msgid "No document opened."
-msgstr "Tidak ada dokumen yang terbuka."
+msgstr "Nenhum documento aberto."
 
 msgid "Invalid number of arguments given."
-msgstr "jumlah argumen yang diberikan tidak valid"
+msgstr "Número inválido de argumentos."
 
 #, c-format
 msgid "Could not update bookmark: %s"
-msgstr "Tidak dapat membuat bookmark: %s"
+msgstr "Não foi possível atualizar o marcador: %s"
 
 #, c-format
 msgid "Could not create bookmark: %s"
-msgstr "Tidak dapat membuat bookmark: %s"
+msgstr "Não foi possível criar o marcador: %s"
 
 #, c-format
 msgid "Bookmark successfully updated: %s"
-msgstr "bookmark yang sukses terupdate : %s"
+msgstr "Marcador atualizado com sucesso: %s"
 
 #, c-format
 msgid "Bookmark successfully created: %s"
-msgstr "Bookmark yang sukses dibuat: %s"
+msgstr "Marcador criado com sucesso: %s"
 
 #, c-format
 msgid "Removed bookmark: %s"
-msgstr "Bookmark %s telah sukses dihapus"
+msgstr "Marcador removido: %s"
 
 #, c-format
 msgid "Failed to remove bookmark: %s"
-msgstr "Gagal menghapus bookmark: %s"
+msgstr "Falha ao remover o marcador: %s"
 
 msgid "No bookmarks available."
-msgstr ""
+msgstr "Nenhum marcador disponível."
 
 #, c-format
 msgid "No such bookmark: %s"
-msgstr "Tidak ada bookmark: %s"
+msgstr "Não existe esse marcador: %s"
 
 msgid "Argument must be a nonzero number."
-msgstr ""
+msgstr "O argumento deve ser um número diferente de zero."
 
 #, c-format
 msgid "[%d]: page=<b>%2d</b>, x=%f, y=%f %s\n"
-msgstr ""
+msgstr "[%d]: página=<b>%2d</b>, x=%f, y=%f %s\n"
 
 msgid "(current)"
-msgstr ""
+msgstr "(atual)"
 
 msgid "No jumplist available."
-msgstr ""
+msgstr "Nenhuma lista de saltos disponível."
 
 msgid "Title"
-msgstr "Judul"
+msgstr "Título"
 
 msgid "Subject"
-msgstr "Subjek"
+msgstr "Assunto"
 
 msgid "Keywords"
-msgstr "Kata kunci"
+msgstr "Palavras-chave"
 
 msgid "Author"
-msgstr "Penulis"
+msgstr "Autor"
 
 msgid "Creator"
-msgstr "Pembuat"
+msgstr "Criador"
 
 msgid "Producer"
-msgstr "Produser"
+msgstr "Produtor"
 
 msgid "Creation date"
-msgstr "Tanggal pembuatan"
+msgstr "Data de criação"
 
 msgid "Modification date"
-msgstr "Tanggal ubahan"
+msgstr "Data de modificação"
 
 msgid "Format"
-msgstr ""
+msgstr "Formato"
 
 msgid "Other"
-msgstr ""
+msgstr "Outro"
 
 msgid "No information available."
-msgstr "Tidak ada informasi tersedia"
+msgstr "Nenhuma informação disponível."
 
 msgid ""
 "Please check the man pages zathura(1) and zathurarc(5) for more information."
 msgstr ""
+"Consulte as páginas de manual zathura(1) e zathurarc(5) para mais "
+"informações."
 
 msgid "Too many arguments."
-msgstr "Argumen terlalu banyak"
+msgstr "Demasiados argumentos."
 
 msgid "No arguments given."
-msgstr "Tidak ada argumen yang diberikan"
+msgstr "Nenhum argumento indicado."
 
 msgid "Printing is not permitted in strict sandbox mode"
-msgstr ""
+msgstr "A impressão não é permitida no modo de sandbox estrito"
 
 msgid "Saving is not permitted in strict sandbox mode"
-msgstr ""
+msgstr "Guardar não é permitido no modo de sandbox estrito"
 
 msgid "Invalid number of arguments."
-msgstr "Jumlah argumen tidak valid"
+msgstr "Número inválido de argumentos."
 
 msgid "Exporting attachments is not permitted in strict sandbox mode"
-msgstr ""
+msgstr "A exportação de anexos não é permitida no modo de sandbox estrito"
 
 #, c-format
 msgid "Couldn't write attachment '%s' to '%s'."
-msgstr "Tidak dapat menulis lampiran '%s' ke '%s'"
+msgstr "Não foi possível escrever o anexo '%s' em '%s'."
 
 #, c-format
 msgid "Wrote attachment '%s' to '%s'."
-msgstr "Tidak dapat menyimpan lampiran '%s' ke '%s'"
+msgstr "Anexo '%s' escrito em '%s'."
 
 #, c-format
 msgid "Wrote image '%s' to '%s'."
-msgstr "Menulis citra dari '%s' ke '%s'"
+msgstr "Imagem '%s' escrita em '%s'."
 
 #, c-format
 msgid "Couldn't write image '%s' to '%s'."
-msgstr "Tidak dapat menulis citra '%s' ke %s'"
+msgstr "Não foi possível escrever a imagem '%s' em '%s'."
 
 #, c-format
 msgid "Unknown image '%s'."
-msgstr "Citra tidak diketahui '%s'"
+msgstr "Imagem desconhecida '%s'."
 
 #, c-format
 msgid "Unknown attachment or image '%s'."
-msgstr "Lampiran atau gambar tidak diketahui '%s'"
+msgstr "Anexo ou imagem desconhecido: '%s'."
 
 #, c-format
 msgid "Failed to execute command: %s"
-msgstr ""
+msgstr "Falha ao executar o comando: %s"
 
 msgid "Exec is not permitted in strict sandbox mode"
-msgstr ""
+msgstr "A execução de comandos não é permitida no modo de sandbox estrito"
 
 msgid "Argument must be a number."
-msgstr "Argumen harus berupa angka."
+msgstr "O argumento deve ser um número."
 
 #, c-format
 msgid "Page %d"
-msgstr "Halaman %d"
+msgstr "Página %d"
 
 msgid "Attachments"
-msgstr "Lampiran"
+msgstr "Anexos"
 
 #. add images
 msgid "Images"
-msgstr "Citra"
+msgstr "Imagens"
 
 msgid "Plugin does not support exporting attachments and images."
-msgstr ""
+msgstr "O plugin não suporta a exportação de anexos e imagens."
 
 msgid "Document contains no images or attachments"
-msgstr ""
+msgstr "O documento não contém imagens nem anexos"
 
 #. clang-format off
 #. settings
 msgid "Font"
-msgstr ""
+msgstr "Tipo de letra"
 
 #. colors affecting the CSS
 msgid "Default foreground color"
-msgstr ""
+msgstr "Cor de primeiro plano predefinida"
 
 msgid "Default background color"
-msgstr ""
+msgstr "Cor de fundo predefinida"
 
 msgid "Inputbar foreground color"
-msgstr ""
+msgstr "Cor de primeiro plano da barra de entrada"
 
 msgid "Inputbar background color"
-msgstr ""
+msgstr "Cor de fundo da barra de entrada"
 
 msgid "Statusbar foreground color"
-msgstr ""
+msgstr "Cor de primeiro plano da barra de estado"
 
 msgid "Statsubar background color"
-msgstr ""
+msgstr "Cor de fundo da barra de estado"
 
 msgid "Completion foreground color"
-msgstr ""
+msgstr "Cor de primeiro plano da completação"
 
 msgid "Completion background color"
-msgstr ""
+msgstr "Cor de fundo da completação"
 
 msgid "Completion group foreground color"
-msgstr ""
+msgstr "Cor de primeiro plano do grupo de completação"
 
 msgid "Completion group background color"
-msgstr ""
+msgstr "Cor de fundo do grupo de completação"
 
 msgid "Completion highlight foreground color"
-msgstr ""
+msgstr "Cor de primeiro plano da completação realçada"
 
 msgid "Completion highlight background color"
-msgstr ""
+msgstr "Cor de fundo da completação realçada"
 
 msgid "Error notification foreground color"
-msgstr ""
+msgstr "Cor de primeiro plano da notificação de erro"
 
 msgid "Error notification background color"
-msgstr ""
+msgstr "Cor de fundo das notificações de erro"
 
 msgid "Warning notification foreground color"
-msgstr ""
+msgstr "Cor de primeiro plano da notificação de aviso"
 
 msgid "Warning notifaction background color"
-msgstr ""
+msgstr "Cor de fundo da notificação de aviso"
 
 msgid "Notification foreground color"
-msgstr ""
+msgstr "Cor de primeiro plano da notificação"
 
 msgid "Notification background color"
-msgstr ""
+msgstr "Cor de fundo da notificação"
 
 msgid "Index mode foreground color"
-msgstr "Warna depan mode indeks"
+msgstr "Cor de primeiro plano do modo de índice"
 
 msgid "Index mode background color"
-msgstr "Warna latar mode indeks"
+msgstr "Cor de fundo do modo de índice"
 
 msgid "Index mode foreground color (active element)"
-msgstr "Warna depan mode indeks (elemen aktif)"
+msgstr "Cor de primeiro plano do modo de índice (elemento ativo)"
 
 msgid "Index mode background color (active element)"
-msgstr "Warna latar mode indeks (elemen aktif)"
+msgstr "Cor de fundo do modo de índice (elemento ativo)"
 
 msgid "Scrollbar foreground color"
-msgstr ""
+msgstr "Cor de primeiro plano da barra de deslocamento"
 
 msgid "Scrollbar background color"
-msgstr ""
+msgstr "Cor de fundo da barra de deslocamento"
 
 msgid "Initial window width"
-msgstr ""
+msgstr "Largura inicial da janela"
 
 msgid "Initial window height"
-msgstr ""
+msgstr "Altura inicial da janela"
 
 msgid "Horizontal padding for the status, input, and notification bars"
-msgstr ""
+msgstr "Preenchimento horizontal das barras de estado, entrada e notificações"
 
 msgid "Vertical padding for the status, input, and notification bars"
-msgstr ""
+msgstr "Preenchimento vertical das barras de estado, entrada e notificações"
 
 msgid "Number of completion items"
-msgstr ""
+msgstr "Número de itens de completação"
 
 msgid "Command to execute in :exec"
-msgstr ""
+msgstr "Comando a executar em :exec"
 
 msgid "Show or hide certain GUI elements"
-msgstr ""
+msgstr "Mostrar ou ocultar certos elementos da interface gráfica"
 
 msgid "Database backend"
-msgstr "backend database"
+msgstr "Backend da base de dados"
 
 msgid "File monitor backend"
-msgstr ""
+msgstr "Backend de monitorização de ficheiros"
 
 msgid "Zoom step"
-msgstr "Tingkat pembesaran"
+msgstr "Incremento de zoom"
 
 msgid "Horizontal padding between pages"
-msgstr ""
+msgstr "Preenchimento horizontal entre páginas"
 
 msgid "Vertical padding between pages"
-msgstr ""
+msgstr "Preenchimento vertical entre páginas"
 
 msgid "Number of pages per row"
-msgstr "Jumlah halaman tiap kolom"
+msgstr "Número de páginas por linha"
 
 msgid "Column of the first page"
-msgstr "Kolom pada halaman pertama"
+msgstr "Coluna da primeira página"
 
 msgid "Render pages from right to left"
-msgstr ""
+msgstr "Renderizar páginas da direita para a esquerda"
 
 msgid "Scroll step"
-msgstr "Tingkat menggulung"
+msgstr "Passo de deslocamento"
 
 msgid "Horizontal scroll step"
-msgstr "Tingkat penggulungan horisontal"
+msgstr "Passo de deslocamento horizontal"
 
 msgid "Full page scroll overlap"
-msgstr "Geser laman utuh"
+msgstr "Sobreposição do deslocamento de página inteira"
 
 msgid "Zoom minimum"
-msgstr "Pembesaran minimum"
+msgstr "Zoom mínimo"
 
 msgid "Zoom maximum"
-msgstr "Pembesaran maksimal"
+msgstr "Zoom máximo"
 
 msgid "Maximum number of pages to keep in the cache"
-msgstr "Jumlah laman yang disimpan pada cache"
+msgstr "Número máximo de páginas a manter na cache"
 
 msgid "Maximum size in pixels of thumbnails to keep in the cache"
-msgstr ""
-"Ukuran maksimal gambar thumbnail dalam piksel yang disimpan di tembolok"
+msgstr "Tamanho máximo, em píxeis, das miniaturas a manter na cache"
 
 msgid "Number of positions to remember in the jumplist"
-msgstr "Jumlah posisi yang diingat pada jumplist"
+msgstr "Número de posições a memorizar na lista de saltos"
 
 msgid "Recoloring (dark color)"
-msgstr "Mewarnai ulang (warna gelap)"
+msgstr "Recoloração (cor escura)"
 
 msgid "Recoloring (light color)"
-msgstr "Mewarnai ulang (warna cerah)"
+msgstr "Recoloração (cor clara)"
 
 msgid "Color for highlighting"
-msgstr "Warna sorotan"
+msgstr "Cor de realce"
 
 msgid "Foreground color for highlighting"
-msgstr ""
+msgstr "Cor de primeiro plano do realce"
 
 msgid "Color for highlighting (active)"
-msgstr "Warna sorotan (aktif)"
+msgstr "Cor de realce (ativo)"
 
 msgid "'Loading ...' background color"
-msgstr "'Memuat ...; warna latar"
+msgstr "Cor de fundo de 'A carregar ...'"
 
 msgid "'Loading ...' foreground color"
-msgstr "'Memuat ...' warna depan"
+msgstr "Cor de primeiro plano de 'A carregar ...'"
 
 msgid "Color used to highlight valid signatures"
-msgstr ""
+msgstr "Cor usada para realçar assinaturas válidas"
 
 msgid "Color used to highlight signatures with warnings"
-msgstr ""
+msgstr "Cor usada para realçar assinaturas com avisos"
 
 msgid "Color used to highlight invalid signatures"
-msgstr ""
+msgstr "Cor usada para realçar assinaturas inválidas"
 
 msgid "Recolor pages"
-msgstr "Mewarnai ulang halaman"
+msgstr "Recolorir páginas"
 
 msgid "When recoloring keep original hue and adjust lightness only"
-msgstr "Ketika mewarnai ulang, jaga hue dan sesuaikan kecerahan saja"
+msgstr ""
+"Ao recolorir, manter a tonalidade original e ajustar apenas a luminosidade"
 
 msgid "When recoloring keep original image colors"
-msgstr "Warna citra tetap sama saat mewarnai ulang"
+msgstr "Ao recolorir, manter as cores originais das imagens"
 
 msgid "When recoloring adjust lightness"
-msgstr ""
+msgstr "Ao recolorir, ajustar a luminosidade"
 
 msgid "Wrap scrolling"
-msgstr "Lipat gulung"
+msgstr "Deslocamento circular"
 
 msgid "Advance number of pages per row"
-msgstr "Jumlah halaman per baris \"lanjutan\""
+msgstr "Avançar pelo número de páginas por linha"
 
 msgid "Horizontally centered zoom"
-msgstr "Pembesaran horisontal tengah"
+msgstr "Zoom centrado horizontalmente"
 
 msgid "Vertically center pages"
-msgstr ""
+msgstr "Centrar páginas verticalmente"
 
 msgid "Align link target to the left"
-msgstr "Ratakan tautan ke kiri"
+msgstr "Alinhar o destino da ligação à esquerda"
 
 msgid "Let zoom be changed when following links"
-msgstr "Biarkan pembesaran berubah saat mengikuti pranala"
+msgstr "Permitir a alteração do zoom ao seguir ligações"
 
 msgid "Center result horizontally"
-msgstr "Tengah-horisontalkan hasil"
+msgstr "Centrar resultados horizontalmente"
 
 msgid "Render 'Loading ...'"
-msgstr "Memuat Render..."
+msgstr "Renderizar 'A carregar ...'"
 
 msgid "Adjust to when opening file"
-msgstr "Menyesuaikan ketika membuka file"
+msgstr "Ajustar ao abrir o ficheiro"
 
 msgid "Show hidden files and directories"
-msgstr "Perlihatkan file dan direktori tersembunyi"
+msgstr "Mostrar ficheiros e diretórios ocultos"
 
 msgid "Show directories"
-msgstr "Perlihatkan direktori"
+msgstr "Mostrar diretórios"
 
 msgid "Show recent files"
-msgstr ""
+msgstr "Mostrar ficheiros recentes"
 
 msgid "Always open on first page"
-msgstr "Selalu buka halaman pertama"
+msgstr "Sempre abrir na primeira página"
 
 msgid "Disable highlighting of search results"
-msgstr ""
+msgstr "Desativar o realce dos resultados da pesquisa"
 
 msgid "Double click to follow links"
-msgstr ""
+msgstr "Duplo clique para seguir ligações"
 
 msgid "Enable incremental search"
-msgstr "Fungsikan pencarian berkelanjutan"
+msgstr "Ativar pesquisa incremental"
 
 msgid "Clear search results on abort"
-msgstr "Hapus hasil pencarian ketika batal mencari"
+msgstr "Limpar resultados da pesquisa ao cancelar"
 
 msgid "Use basename of the file in the window title"
-msgstr "Gunakan nama dasar file pada judul jendela"
+msgstr "Usar o nome base do ficheiro no título da janela"
 
 msgid "Use ~ instead of $HOME in the filename in the window title"
-msgstr ""
+msgstr "Usar ~ em vez de $HOME no nome do ficheiro no título da janela"
 
 msgid "Display the page number in the window title"
-msgstr "Tampilkan nomor laman pada jendela judul"
+msgstr "Mostrar o número da página no título da janela"
 
 msgid "Use basename of the file in the statusbar"
-msgstr "Gunakan nama dasar berkas pada statusbar"
+msgstr "Usar o nome base do ficheiro na barra de estado"
 
 msgid "Use ~ instead of $HOME in the filename in the statusbar"
-msgstr ""
+msgstr "Usar ~ em vez de $HOME no nome do ficheiro na barra de estado"
 
 msgid "Display (current page / total pages) as a percent in the statusbar"
 msgstr ""
+"Mostrar (página atual / total de páginas) como percentagem na barra de estado"
 
 msgid "Enable SyncTeX support"
-msgstr "Support SyncTeX"
+msgstr "Ativar suporte do SyncTeX"
 
 msgid "SyncTeX editor command"
-msgstr "Penyunting perintah SyncTeX"
+msgstr "Comando do editor SyncTeX"
 
 msgid "SyncTeX edit modifier"
-msgstr ""
+msgstr "Modificador de edição SyncTeX"
 
 msgid "Highlighter modifier"
-msgstr ""
+msgstr "Modificador do realçador"
 
 msgid "Enable D-Bus service"
-msgstr "Aktifkan layanan D-Bus"
+msgstr "Ativar serviço D-Bus"
 
 msgid "Raise window on certain D-Bus commands"
-msgstr ""
+msgstr "Elevar a janela em certos comandos D-Bus"
 
 msgid "Save history at each page change"
-msgstr ""
+msgstr "Guardar histórico a cada mudança de página"
 
 msgid "The clipboard into which mouse-selected data will be written"
-msgstr "Data yang dipilih tetikus akan ditulis ke clipboard"
+msgstr ""
+"A área de transferência onde serão escritos os dados selecionados com o rato"
 
 msgid "Enable notification after selecting text"
-msgstr "Aktifkan pemberitahuan setelah menyeleksi teks"
+msgstr "Ativar notificação após selecionar texto"
 
 msgid "Keep selection highlighted after mouse release"
-msgstr ""
+msgstr "Manter a seleção realçada após soltar o rato"
 
 msgid "Disable additional information for signatures embedded in the document."
 msgstr ""
+"Desativar informações adicionais para assinaturas incorporadas no documento."
 
 msgid "Enable prompt to confirm when opening links"
-msgstr ""
+msgstr "Ativar pedido de confirmação ao abrir ligações"
 
 #. define default inputbar commands
 msgid "Map a key sequence"
-msgstr ""
+msgstr "Mapear uma sequência de teclas"
 
 msgid "Set an option"
-msgstr ""
+msgstr "Definir uma opção"
 
 msgid "Run a shortcut"
-msgstr ""
+msgstr "Executar um atalho"
 
 msgid "Unmap a key sequence"
-msgstr ""
+msgstr "Desmapear uma sequência de teclas"
 
 msgid "Dump settings to a file"
-msgstr ""
+msgstr "Escrever as definições num ficheiro"
 
 msgid "Add a bookmark"
-msgstr "Tambahkan pada bookmark"
+msgstr "Adicionar um marcador"
 
 msgid "Delete a bookmark"
-msgstr "Hapus bookmark"
+msgstr "Eliminar um marcador"
 
 msgid "List all bookmarks"
-msgstr "Perlihatkan semua bookmark"
+msgstr "Listar todos os marcadores"
 
 msgid "Jump to bookmark"
-msgstr ""
+msgstr "Ir para o marcador"
 
 msgid "Show recent jumps in jumplist"
-msgstr ""
+msgstr "Mostrar saltos recentes na lista de saltos"
 
 msgid "Close current file"
-msgstr "Tutup file ini"
+msgstr "Fechar ficheiro atual"
 
 msgid "Show file information"
-msgstr "Informasi file"
+msgstr "Mostrar informações do ficheiro"
 
 msgid "Execute a command"
-msgstr "Jalankan perintah"
+msgstr "Executar um comando"
 
 #. like vim
 msgid "Show help"
-msgstr "Bantuan"
+msgstr "Mostrar ajuda"
 
 msgid "Open document"
-msgstr "Buka dokumen"
+msgstr "Abrir documento"
 
 msgid "Close zathura"
-msgstr "Tutup zathura"
+msgstr "Fechar zathura"
 
 msgid "Print document"
-msgstr "Cetak dokumen"
+msgstr "Imprimir documento"
 
 msgid "Save document"
-msgstr "Simpan dokumen"
+msgstr "Guardar documento"
 
 msgid "Save document (and force overwriting)"
-msgstr "Simpan dokumen (dan menimpa berkas)"
+msgstr "Guardar documento (e forçar substituição)"
 
 msgid "Save attachments"
-msgstr "Simpan lampiran"
+msgstr "Guardar anexos"
 
 msgid "Set page offset"
-msgstr "Set offset halaman"
+msgstr "Definir compensação da página"
 
 msgid "Mark current location within the document"
-msgstr "Tandai lokasi sekarang dalam dokumen"
+msgstr "Marcar a localização atual no documento"
 
 msgid "Delete the specified marks"
-msgstr "Hapus tanda terpilih"
+msgstr "Apagar as marcas especificadas"
 
 msgid "Remove highlights of current search results"
-msgstr ""
+msgstr "Remover realces dos resultados da pesquisa atual"
 
 msgid "Highlight current search results"
-msgstr "Sorot hasil pencarian sekarang"
+msgstr "Realçar resultados da pesquisa atual"
 
 msgid "Show version information"
-msgstr "Tunjukan informasi versi"
+msgstr "Mostrar informações sobre a versão"
 
 msgid "Source config file"
-msgstr ""
+msgstr "Carregar ficheiro de configuração"
 
 msgid "Failed to run xdg-open."
-msgstr "Gagal menjalankan program xdg-open"
+msgstr "Falha ao executar xdg-open."
 
 msgid "y"
-msgstr ""
+msgstr "s"
 
 msgid "Y"
-msgstr ""
+msgstr "S"
 
 msgid "Cancelled."
-msgstr ""
+msgstr "Cancelado."
 
 #, c-format
 msgid "Open external link <b>%s</b>? [Y/n]"
-msgstr ""
+msgstr "Abrir ligação externa <b>%s</b>? [S/n]"
 
 msgid "Opening external applications in strict sandbox mode is not permitted"
 msgstr ""
+"A abertura de aplicações externas não é permitida no modo de sandbox estrito"
 
 #, c-format
 msgid "Link: page %d"
-msgstr "Link: halaman %d"
+msgstr "Ligação: página %d"
 
 #, c-format
 msgid "Link: %s"
-msgstr "Link: %s"
+msgstr "Ligação: %s"
 
 msgid "Link: Invalid"
-msgstr "Link: Tidak valid"
+msgstr "Ligação: inválida"
 
 #, c-format
 msgid "Copied page number: %d"
-msgstr ""
+msgstr "Número da página copiado: %d"
 
 #, c-format
 msgid "Copied link: %s"
-msgstr ""
+msgstr "Ligação copiada: %s"
 
 msgid "Path to the config directory"
-msgstr "Path ke direktori konfigurasi"
+msgstr "Caminho para o diretório de configuração"
 
 msgid "Path to the data directory"
-msgstr "Path ke direktori data"
+msgstr "Caminho para o diretório de dados"
 
 msgid "Path to the cache directory"
-msgstr "Path ke direktori tembolok"
+msgstr "Caminho para o diretório de cache"
 
 msgid "Path to the directories containing plugins"
-msgstr "Path ke direktori plugin"
+msgstr "Caminhos para os diretórios que contêm plugins"
 
 msgid "Fork into the background"
-msgstr "Jalankan pada latar"
+msgstr "Bifurcar para segundo plano"
 
 msgid "Document password"
-msgstr "Kata sandi dokumen"
+msgstr "Palavra-passe do documento"
 
 msgid "Page number to go to"
-msgstr "Nomor halaman tujuan"
+msgstr "Número da página para onde ir"
 
 msgid "Log level (debug, info, warning, error)"
-msgstr "Tingkat log (debug, info, peringatan, error)"
+msgstr "Nível de registo (debug, info, warning, error)"
 
 msgid "Print version information"
-msgstr "Cetak informasi versi"
+msgstr "Imprimir informações sobre a versão"
 
 msgid "SyncTeX editor (forwarded to the synctex command)"
-msgstr "SyncTeX editor (diteruskan ke perintah SyncTeX)"
+msgstr "Editor SyncTeX (encaminhado para o comando synctex)"
 
 msgid "Move to given SyncTeX position"
-msgstr "Pindahkan ke posisi SyncTeX yang diberikan"
+msgstr "Mover para a posição SyncTeX indicada"
 
 msgid "Highlight given position in the given process"
-msgstr "Sorot posisi pada proses yang diberikan"
+msgstr "Realçar a posição indicada no processo indicado"
 
 msgid "Start in a non-default mode"
-msgstr "Mulai pada mode non-bawaan"
+msgstr "Iniciar num modo não predefinido"
 
 msgid "Bookmark to go to"
-msgstr ""
+msgstr "Marcador para onde ir"
 
 msgid "Search for the given phrase and display results"
-msgstr ""
+msgstr "Procurar a frase indicada e mostrar resultados"
 
 #, c-format
 msgid ""
@@ -1632,158 +1644,165 @@ msgid ""
 "  %s\n"
 "on %s."
 msgstr ""
+"A assinatura é válida.\n"
+"Este documento foi assinado por\n"
+"  %s\n"
+"em %s."
 
 msgid "Signature certificate is expired."
-msgstr ""
+msgstr "O certificado da assinatura expirou."
 
 msgid "Signature certificate is revoked."
-msgstr ""
+msgstr "O certificado da assinatura foi revogado."
 
 msgid "Signature certificate is not trusted."
-msgstr ""
+msgstr "O certificado da assinatura não é de confiança."
 
 msgid "Signature certificate is invalid."
-msgstr ""
+msgstr "O certificado da assinatura é inválido."
 
 msgid "Signature is invalid."
-msgstr ""
+msgstr "A assinatura é inválida."
 
 msgid "Loading..."
-msgstr "Memuat....."
+msgstr "A carregar..."
 
 msgid "Copy image"
-msgstr "Salin gambar"
+msgstr "Copiar imagem"
 
 msgid "Save image as"
-msgstr "Simpan gambar sebagai"
+msgstr "Guardar imagem como"
 
 #. Update statusbar.
 #, c-format
 msgid "Printing page %d ..."
-msgstr ""
+msgstr "A imprimir página %d ..."
 
 #, c-format
 msgid "Printing failed: %s"
-msgstr "Gagal mencetak: %s"
+msgstr "Falha ao imprimir: %s"
 
 #, c-format
 msgid "Invalid adjust mode: %d"
-msgstr ""
+msgstr "Modo de ajuste inválido: %d"
 
 #, c-format
 msgid "Copied file path to selection %s: %s"
-msgstr ""
+msgstr "Caminho do ficheiro copiado para a seleção %s: %s"
 
 msgid "This document does not contain any index"
-msgstr "Dokumen ini tidak mempunyai indeks"
+msgstr "Este documento não contém qualquer índice"
 
 msgid "Could not get path from file."
-msgstr ""
+msgstr "Não foi possível obter o caminho a partir do ficheiro."
 
 msgid "Open file"
-msgstr ""
+msgstr "Abrir ficheiro"
 
 msgid "Supported documents"
-msgstr ""
+msgstr "Documentos suportados"
 
 msgid "All files"
-msgstr ""
+msgstr "Todos os ficheiros"
 
 #, c-format
 msgid "[Search %d/%d]"
-msgstr ""
+msgstr "[Pesquisa %d/%d]"
 
 #, c-format
 msgid "Pattern not found: %s"
-msgstr ""
+msgstr "Padrão não encontrado: %s"
 
 msgid "[No name]"
-msgstr "[Tidak berjudul]"
+msgstr "[Sem nome]"
 
 msgid "Could not read file from stdin and write it to a temporary file."
 msgstr ""
-"Tidak dapat membaca berkas dari stdin dan menulisnya ke berkas sementar"
+"Não foi possível ler o ficheiro a partir de stdin e escrevê-lo num ficheiro "
+"temporário."
 
 msgid "Could not read file from GIO and copy it to a temporary file."
 msgstr ""
+"Não foi possível ler o ficheiro a partir de GIO e copiá-lo para um ficheiro "
+"temporário."
 
 msgid "Unsupported file type. Please install the necessary plugin."
-msgstr "Tipe berkas tidak didukung. Silakan memasang plugin yang dibutuhkan."
+msgstr "Tipo de ficheiro não suportado. Instale o plugin necessário."
 
 msgid "Document does not contain any pages"
-msgstr "Dokumen tidak mempunyai laman apapun"
+msgstr "O documento não contém quaisquer páginas"
 
 #, c-format
 msgid "File already exists: %s. Use :write! to overwrite it."
-msgstr ""
+msgstr "O ficheiro já existe: %s. Use :write! para o substituir."
 
 msgid "Failed to save document."
-msgstr "Gagal menyimpan dokumen"
+msgstr "Falha ao guardar o documento."
 
 msgid "Document saved."
-msgstr "Dokumen telah disimpan"
+msgstr "Documento guardado."
 
 #, c-format
 msgid "Invalid number of arguments passed: %zu instead of at least %u"
-msgstr ""
+msgstr "Número inválido de argumentos passados: %zu em vez de pelo menos %u"
 
 #, c-format
 msgid "Unregistered mode specified: %s"
-msgstr ""
+msgstr "Modo não registado especificado: %s"
 
 msgid "Invalid number of arguments passed"
-msgstr ""
+msgstr "Número inválido de argumentos passados"
 
 #, c-format
 msgid "Invalid modifier in %s"
-msgstr ""
+msgstr "Modificador inválido em %s"
 
 #, c-format
 msgid "Invalid special key value for %s"
-msgstr ""
+msgstr "Valor de tecla especial inválido para %s"
 
 #, c-format
 msgid "Invalid special key value or mode %s"
-msgstr ""
+msgstr "Valor de tecla especial inválido ou modo %s"
 
 #, c-format
 msgid "Not a valid shortcut function: %s"
-msgstr ""
+msgstr "Não é uma função de atalho válida: %s"
 
 msgid "Not enough arguments."
-msgstr ""
+msgstr "Argumentos insuficientes."
 
 #, c-format
 msgid "Unknown option: %s"
-msgstr ""
+msgstr "Opção desconhecida: %s"
 
 msgid "true"
-msgstr ""
+msgstr "verdadeiro"
 
 msgid "false"
-msgstr ""
+msgstr "falso"
 
 #, c-format
 msgid "No value defined for option: %s"
-msgstr ""
+msgstr "Nenhum valor definido para a opção: %s"
 
 #, c-format
 msgid "Unknown value for option: %s"
-msgstr ""
+msgstr "Valor desconhecido para a opção: %s"
 
 #, c-format
 msgid "Invalid value for option: %s"
-msgstr ""
+msgstr "Valor inválido para a opção: %s"
 
 #. unhandled command
 #, c-format
 msgid "Not a valid command: %s"
-msgstr ""
+msgstr "Não é um comando válido: %s"
 
 #, c-format
 msgid "Invalid number of arguments passed: %zu instead of 1"
-msgstr ""
+msgstr "Número inválido de argumentos passados: %zu em vez de 1"
 
 #, c-format
 msgid "Failed to write JSON: %s"
-msgstr ""
+msgstr "Falha ao escrever JSON: %s"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 15:44+0200\n"
+"POT-Creation-Date: 2026-06-20 20:14+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: Sebastian Rasmussen <sebras@gmail.com>, 2018-2020\n"
 "Language-Team: Swedish (http://app.transifex.com/pwmt/zathura/language/sv/)\n"
@@ -1472,13 +1472,14 @@ msgid "Enable notification after selecting text"
 msgstr "Aktivera avisering efter att ha markerat text"
 
 msgid "Keep selection highlighted after mouse release"
-msgstr ""
+msgstr "Behåll markering efter att musknappen släppts"
 
 msgid "Disable additional information for signatures embedded in the document."
 msgstr ""
+"Inaktivera ytterligare information för signaturer inbäddade i dokumentet."
 
 msgid "Enable prompt to confirm when opening links"
-msgstr ""
+msgstr "Aktivera bekräftelsefråga när länkar öppnas"
 
 #. define default inputbar commands
 msgid "Map a key sequence"
@@ -1488,7 +1489,7 @@ msgid "Set an option"
 msgstr "Ställ in ett alternativ"
 
 msgid "Run a shortcut"
-msgstr ""
+msgstr "Kör en genväg"
 
 msgid "Unmap a key sequence"
 msgstr "Avmappa en tangentsekvens"
@@ -1567,17 +1568,17 @@ msgid "Failed to run xdg-open."
 msgstr "Misslyckades med att köra xdg-open."
 
 msgid "y"
-msgstr ""
+msgstr "j"
 
 msgid "Y"
-msgstr ""
+msgstr "J"
 
 msgid "Cancelled."
-msgstr ""
+msgstr "Avbrutet."
 
 #, c-format
 msgid "Open external link <b>%s</b>? [Y/n]"
-msgstr ""
+msgstr "Öppna extern länk <b>%s</b>? [J/n]"
 
 msgid "Opening external applications in strict sandbox mode is not permitted"
 msgstr "Att öppna externa program i strikt sandlådeläge tillåts inte"
@@ -1697,26 +1698,26 @@ msgstr "Ogiltigt justeringsläge: %d"
 
 #, c-format
 msgid "Copied file path to selection %s: %s"
-msgstr ""
+msgstr "Kopierade filsökväg till markering %s: %s"
 
 msgid "This document does not contain any index"
 msgstr "Detta dokument innehåller inget index"
 
 msgid "Could not get path from file."
-msgstr ""
+msgstr "Kunde inte hämta sökväg från fil."
 
 msgid "Open file"
 msgstr "Öppna fil"
 
 msgid "Supported documents"
-msgstr ""
+msgstr "Dokument som stöds"
 
 msgid "All files"
-msgstr ""
+msgstr "Alla filer"
 
 #, c-format
 msgid "[Search %d/%d]"
-msgstr ""
+msgstr "[Sökning %d/%d]"
 
 #, c-format
 msgid "Pattern not found: %s"
@@ -1782,10 +1783,10 @@ msgid "Unknown option: %s"
 msgstr "Okänt alternativ: %s"
 
 msgid "true"
-msgstr ""
+msgstr "sant"
 
 msgid "false"
-msgstr ""
+msgstr "falskt"
 
 #, c-format
 msgid "No value defined for option: %s"
@@ -1797,7 +1798,7 @@ msgstr "Okänt värde för alternativet: %s"
 
 #, c-format
 msgid "Invalid value for option: %s"
-msgstr ""
+msgstr "Ogiltigt värde för alternativet: %s"
 
 #. unhandled command
 #, c-format

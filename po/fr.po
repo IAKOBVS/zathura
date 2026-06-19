@@ -53,16 +53,16 @@ msgid "Automatic document reloading."
 msgstr "Rafraîchissement automatique des documents."
 
 msgid "Reading a PDF file"
-msgstr ""
+msgstr "Lecture d'un fichier PDF"
 
 msgid "Opening a file with the `open` command"
-msgstr ""
+msgstr "Ouverture d'un fichier avec la commande `open`"
 
 msgid "Following links"
-msgstr ""
+msgstr "Suivi des liens"
 
 msgid "Listing and selecting bookmakrs"
-msgstr ""
+msgstr "Liste et sélection des favoris"
 
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
@@ -1011,7 +1011,7 @@ msgstr "Saisissez le mot de passe:"
 
 #, c-format
 msgid "Copied selected text to selection %s: %s"
-msgstr "Texte sélectionné copié dans la sélection %s:%s"
+msgstr "Texte sélectionné copié dans la sélection %s : %s"
 
 #, c-format
 msgid "Copied selected image to selection %s"
@@ -1055,17 +1055,17 @@ msgid "No such bookmark: %s"
 msgstr "Aucun favori correspondant : %s"
 
 msgid "Argument must be a nonzero number."
-msgstr ""
+msgstr "L'argument doit être un nombre non nul."
 
 #, c-format
 msgid "[%d]: page=<b>%2d</b>, x=%f, y=%f %s\n"
-msgstr ""
+msgstr "[%d] : page=<b>%2d</b>, x=%f, y=%f %s\n"
 
 msgid "(current)"
-msgstr ""
+msgstr "(actuel)"
 
 msgid "No jumplist available."
-msgstr ""
+msgstr "Aucune liste de sauts disponible."
 
 msgid "Title"
 msgstr "Titre"
@@ -1103,6 +1103,8 @@ msgstr "Aucune information disponible."
 msgid ""
 "Please check the man pages zathura(1) and zathurarc(5) for more information."
 msgstr ""
+"Veuillez consulter les pages de manuel zathura(1) et zathurarc(5) pour plus "
+"d'informations."
 
 msgid "Too many arguments."
 msgstr "Trop d'arguments."
@@ -1114,13 +1116,15 @@ msgid "Printing is not permitted in strict sandbox mode"
 msgstr "L'impression n'est pas autorisée en mode d'isolation stricte"
 
 msgid "Saving is not permitted in strict sandbox mode"
-msgstr ""
+msgstr "L'enregistrement n'est pas autorisé en mode d'isolation stricte"
 
 msgid "Invalid number of arguments."
 msgstr "Nombre d'arguments invalide."
 
 msgid "Exporting attachments is not permitted in strict sandbox mode"
 msgstr ""
+"L'exportation des pièces jointes n'est pas autorisée en mode d'isolation "
+"stricte"
 
 #, c-format
 msgid "Couldn't write attachment '%s' to '%s'."
@@ -1169,6 +1173,8 @@ msgstr "Images"
 
 msgid "Plugin does not support exporting attachments and images."
 msgstr ""
+"Le greffon ne prend pas en charge l'exportation des pièces jointes et des "
+"images."
 
 msgid "Document contains no images or attachments"
 msgstr "Le document ne contient ni images ni pièces jointes"
@@ -1470,6 +1476,7 @@ msgstr "Activer une notification après avoir sélectionné du texte"
 
 msgid "Keep selection highlighted after mouse release"
 msgstr ""
+"Conserver la sélection en surbrillance après le relâchement de la souris"
 
 msgid "Disable additional information for signatures embedded in the document."
 msgstr ""
@@ -1477,7 +1484,7 @@ msgstr ""
 "document"
 
 msgid "Enable prompt to confirm when opening links"
-msgstr ""
+msgstr "Demander une confirmation lors de l'ouverture des liens"
 
 #. define default inputbar commands
 msgid "Map a key sequence"
@@ -1487,7 +1494,7 @@ msgid "Set an option"
 msgstr "Placer une option"
 
 msgid "Run a shortcut"
-msgstr ""
+msgstr "Exécuter un raccourci"
 
 msgid "Unmap a key sequence"
 msgstr "Désassocier une séquence de touches"
@@ -1566,17 +1573,17 @@ msgid "Failed to run xdg-open."
 msgstr "Échec lors du lancement de xdg-open."
 
 msgid "y"
-msgstr ""
+msgstr "o"
 
 msgid "Y"
-msgstr ""
+msgstr "O"
 
 msgid "Cancelled."
-msgstr ""
+msgstr "Annulé."
 
 #, c-format
 msgid "Open external link <b>%s</b>? [Y/n]"
-msgstr ""
+msgstr "Ouvrir le lien externe <b>%s</b> ? [O/n]"
 
 msgid "Opening external applications in strict sandbox mode is not permitted"
 msgstr ""
@@ -1698,26 +1705,26 @@ msgstr "Mode d'ajustement invalide: %d"
 
 #, c-format
 msgid "Copied file path to selection %s: %s"
-msgstr ""
+msgstr "Chemin du fichier copié dans la sélection %s : %s"
 
 msgid "This document does not contain any index"
 msgstr "Ce document ne contient pas d'index"
 
 msgid "Could not get path from file."
-msgstr ""
+msgstr "Impossible d'obtenir le chemin depuis le fichier."
 
 msgid "Open file"
-msgstr ""
+msgstr "Ouvrir un fichier"
 
 msgid "Supported documents"
-msgstr ""
+msgstr "Documents pris en charge"
 
 msgid "All files"
-msgstr ""
+msgstr "Tous les fichiers"
 
 #, c-format
 msgid "[Search %d/%d]"
-msgstr ""
+msgstr "[Recherche %d/%d]"
 
 #, c-format
 msgid "Pattern not found: %s"
@@ -1803,7 +1810,7 @@ msgstr "Valeur inconnue pour l'option : %s"
 
 #, c-format
 msgid "Invalid value for option: %s"
-msgstr ""
+msgstr "Valeur invalide pour l'option : %s"
 
 #. unhandled command
 #, c-format

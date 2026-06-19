@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 15:44+0200\n"
+"POT-Creation-Date: 2026-06-20 20:14+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: TheLemonMan <segnalazionidalweb@gmail.com>, 2012,2015\n"
 "Language-Team: Italian (http://app.transifex.com/pwmt/zathura/language/it/)\n"
@@ -54,16 +54,16 @@ msgid "Automatic document reloading."
 msgstr "Ricarica automatica del documento."
 
 msgid "Reading a PDF file"
-msgstr ""
+msgstr "Lettura di un file PDF"
 
 msgid "Opening a file with the `open` command"
-msgstr ""
+msgstr "Apertura di un file con il comando `open`"
 
 msgid "Following links"
-msgstr ""
+msgstr "Seguire i link"
 
 msgid "Listing and selecting bookmakrs"
-msgstr ""
+msgstr "Elenco e selezione dei segnalibri"
 
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
@@ -1056,17 +1056,17 @@ msgid "No such bookmark: %s"
 msgstr "Nessun segnalibro corrispondente: %s"
 
 msgid "Argument must be a nonzero number."
-msgstr ""
+msgstr "L'argomento deve essere un numero diverso da zero."
 
 #, c-format
 msgid "[%d]: page=<b>%2d</b>, x=%f, y=%f %s\n"
-msgstr ""
+msgstr "[%d]: pagina=<b>%2d</b>, x=%f, y=%f %s\n"
 
 msgid "(current)"
-msgstr ""
+msgstr "(corrente)"
 
 msgid "No jumplist available."
-msgstr ""
+msgstr "Nessuna jumplist disponibile."
 
 msgid "Title"
 msgstr "Titolo"
@@ -1104,6 +1104,8 @@ msgstr "Nessun' informazione disponibile."
 msgid ""
 "Please check the man pages zathura(1) and zathurarc(5) for more information."
 msgstr ""
+"Consultare le pagine di manuale zathura(1) e zathurarc(5) per maggiori "
+"informazioni."
 
 msgid "Too many arguments."
 msgstr "Numero di argomenti eccessivo."
@@ -1115,13 +1117,15 @@ msgid "Printing is not permitted in strict sandbox mode"
 msgstr "La stampa non è consentita in modalità sandbox restrittiva"
 
 msgid "Saving is not permitted in strict sandbox mode"
-msgstr ""
+msgstr "Il salvataggio non è consentito in modalità sandbox restrittiva"
 
 msgid "Invalid number of arguments."
 msgstr "Numero di argomenti non valido."
 
 msgid "Exporting attachments is not permitted in strict sandbox mode"
 msgstr ""
+"L'esportazione degli allegati non è consentita in modalità sandbox "
+"restrittiva"
 
 #, c-format
 msgid "Couldn't write attachment '%s' to '%s'."
@@ -1169,10 +1173,10 @@ msgid "Images"
 msgstr "Immagini"
 
 msgid "Plugin does not support exporting attachments and images."
-msgstr ""
+msgstr "Il plugin non supporta l'esportazione di allegati e immagini."
 
 msgid "Document contains no images or attachments"
-msgstr ""
+msgstr "Il documento non contiene immagini né allegati"
 
 #. clang-format off
 #. settings
@@ -1247,10 +1251,10 @@ msgid "Index mode background color (active element)"
 msgstr "Modalità indice colore sfondo (elemento attivo)"
 
 msgid "Scrollbar foreground color"
-msgstr ""
+msgstr "Colore di primo piano della barra di scorrimento"
 
 msgid "Scrollbar background color"
-msgstr ""
+msgstr "Colore di sfondo della barra di scorrimento"
 
 msgid "Initial window width"
 msgstr "Larghezza iniziale della finestra"
@@ -1283,10 +1287,10 @@ msgid "Zoom step"
 msgstr "Passo di zoom"
 
 msgid "Horizontal padding between pages"
-msgstr ""
+msgstr "Spaziatura orizzontale tra le pagine"
 
 msgid "Vertical padding between pages"
-msgstr ""
+msgstr "Spaziatura verticale tra le pagine"
 
 msgid "Number of pages per row"
 msgstr "Numero di pagine per riga"
@@ -1343,13 +1347,13 @@ msgid "'Loading ...' foreground color"
 msgstr "'Caricamento ...' colore primo piano"
 
 msgid "Color used to highlight valid signatures"
-msgstr ""
+msgstr "Colore usato per evidenziare firme valide"
 
 msgid "Color used to highlight signatures with warnings"
-msgstr ""
+msgstr "Colore usato per evidenziare firme con avvisi"
 
 msgid "Color used to highlight invalid signatures"
-msgstr ""
+msgstr "Colore usato per evidenziare firme non valide"
 
 msgid "Recolor pages"
 msgstr "Ricolora le pagine"
@@ -1363,7 +1367,7 @@ msgid "When recoloring keep original image colors"
 msgstr "Quando si ricolora mantieni colori dell'immagine originale"
 
 msgid "When recoloring adjust lightness"
-msgstr ""
+msgstr "Quando si ricolora regolare la luminosità"
 
 msgid "Wrap scrolling"
 msgstr "Scrolling continuo"
@@ -1405,10 +1409,10 @@ msgid "Always open on first page"
 msgstr "Apri sempre alla prima pagina"
 
 msgid "Disable highlighting of search results"
-msgstr ""
+msgstr "Disabilita l'evidenziazione dei risultati della ricerca"
 
 msgid "Double click to follow links"
-msgstr ""
+msgstr "Doppio clic per seguire i link"
 
 msgid "Enable incremental search"
 msgstr "Abilita la ricerca incrementale"
@@ -1442,10 +1446,10 @@ msgid "SyncTeX editor command"
 msgstr "Comando dell'editor SyncTeX"
 
 msgid "SyncTeX edit modifier"
-msgstr ""
+msgstr "Modificatore di modifica SyncTeX"
 
 msgid "Highlighter modifier"
-msgstr ""
+msgstr "Modificatore dell'evidenziatore"
 
 msgid "Enable D-Bus service"
 msgstr "Abilita il servizio D-Bus"
@@ -1463,13 +1467,14 @@ msgid "Enable notification after selecting text"
 msgstr "Attiva la notifica dopo aver selezionato del testo"
 
 msgid "Keep selection highlighted after mouse release"
-msgstr ""
+msgstr "Mantieni la selezione evidenziata dopo il rilascio del mouse"
 
 msgid "Disable additional information for signatures embedded in the document."
 msgstr ""
+"Disabilita le informazioni aggiuntive per le firme incorporate nel documento."
 
 msgid "Enable prompt to confirm when opening links"
-msgstr ""
+msgstr "Abilita la richiesta di conferma all'apertura dei link"
 
 #. define default inputbar commands
 msgid "Map a key sequence"
@@ -1479,13 +1484,13 @@ msgid "Set an option"
 msgstr "Imposta un opzione"
 
 msgid "Run a shortcut"
-msgstr ""
+msgstr "Esegui una scorciatoia"
 
 msgid "Unmap a key sequence"
 msgstr "Cancella mappatura di una sequenza di tasti"
 
 msgid "Dump settings to a file"
-msgstr ""
+msgstr "Scrivi le impostazioni in un file"
 
 msgid "Add a bookmark"
 msgstr "Aggiungi un segnalibro"
@@ -1497,10 +1502,10 @@ msgid "List all bookmarks"
 msgstr "Mostra i segnalibri"
 
 msgid "Jump to bookmark"
-msgstr ""
+msgstr "Vai al segnalibro"
 
 msgid "Show recent jumps in jumplist"
-msgstr ""
+msgstr "Mostra i salti recenti nella jumplist"
 
 msgid "Close current file"
 msgstr "Chiudi il file corrente"
@@ -1543,7 +1548,7 @@ msgid "Delete the specified marks"
 msgstr "Elimina i segni specificati"
 
 msgid "Remove highlights of current search results"
-msgstr ""
+msgstr "Rimuovi le evidenziazioni dei risultati della ricerca in corso"
 
 msgid "Highlight current search results"
 msgstr "Evidenzia i risultati della ricerca in corso"
@@ -1558,17 +1563,17 @@ msgid "Failed to run xdg-open."
 msgstr "Impossibile eseguire xdg-open."
 
 msgid "y"
-msgstr ""
+msgstr "s"
 
 msgid "Y"
-msgstr ""
+msgstr "S"
 
 msgid "Cancelled."
-msgstr ""
+msgstr "Annullato."
 
 #, c-format
 msgid "Open external link <b>%s</b>? [Y/n]"
-msgstr ""
+msgstr "Aprire il link esterno <b>%s</b>? [S/n]"
 
 msgid "Opening external applications in strict sandbox mode is not permitted"
 msgstr ""
@@ -1646,21 +1651,25 @@ msgid ""
 "  %s\n"
 "on %s."
 msgstr ""
+"La firma è valida.\n"
+"Questo documento è firmato da\n"
+"  %s\n"
+"il %s."
 
 msgid "Signature certificate is expired."
-msgstr ""
+msgstr "Il certificato della firma è scaduto."
 
 msgid "Signature certificate is revoked."
-msgstr ""
+msgstr "Il certificato della firma è stato revocato."
 
 msgid "Signature certificate is not trusted."
-msgstr ""
+msgstr "Il certificato della firma non è attendibile."
 
 msgid "Signature certificate is invalid."
-msgstr ""
+msgstr "Il certificato della firma non è valido."
 
 msgid "Signature is invalid."
-msgstr ""
+msgstr "La firma non è valida."
 
 msgid "Loading..."
 msgstr "Caricamento..."
@@ -1686,26 +1695,26 @@ msgstr "Modalità di regolazione non valida: %d"
 
 #, c-format
 msgid "Copied file path to selection %s: %s"
-msgstr ""
+msgstr "Percorso del file copiato nella selezione %s: %s"
 
 msgid "This document does not contain any index"
 msgstr "Questo documento non contiene l' indice"
 
 msgid "Could not get path from file."
-msgstr ""
+msgstr "Impossibile ottenere il percorso dal file."
 
 msgid "Open file"
-msgstr ""
+msgstr "Apri file"
 
 msgid "Supported documents"
-msgstr ""
+msgstr "Documenti supportati"
 
 msgid "All files"
-msgstr ""
+msgstr "Tutti i file"
 
 #, c-format
 msgid "[Search %d/%d]"
-msgstr ""
+msgstr "[Ricerca %d/%d]"
 
 #, c-format
 msgid "Pattern not found: %s"
@@ -1788,7 +1797,7 @@ msgstr "Valore sconosciuto per l' opzione: %s"
 
 #, c-format
 msgid "Invalid value for option: %s"
-msgstr ""
+msgstr "Valore non valido per l'opzione: %s"
 
 #. unhandled command
 #, c-format
@@ -1801,4 +1810,4 @@ msgstr "Numero degli argomenti non valido: %zu immessi, 1 attesi"
 
 #, c-format
 msgid "Failed to write JSON: %s"
-msgstr ""
+msgstr "Impossibile scrivere JSON: %s"
