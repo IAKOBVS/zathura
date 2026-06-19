@@ -67,7 +67,7 @@
     <control>touch</control>
   </recommends>
   <releases>
-    <release version="TODO" date="2026-XX-XX">
+    <release version="TODO" date="2026-07-01">
       <description>
         <p>Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window embedding is no longer supported. Also, the setting 'window-icon-document' has been removed.</p>
         <p>Fix issues with forking on macOS (#907)</p>
