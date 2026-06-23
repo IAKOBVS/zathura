@@ -12,7 +12,7 @@
 #include "utils.h"
 
 /* version of the database layout */
-#define DATABASE_VERSION 3
+#define DATABASE_VERSION 4
 
 static char* sqlite3_column_text_dup(sqlite3_stmt* stmt, int col) {
   return g_strdup((const char*)sqlite3_column_text(stmt, col));
@@ -193,7 +193,7 @@ static void sqlite_db_check_layout(sqlite3* session, const int database_version,
                                           "position_y FLOAT,"
                                           "time TIMESTAMP,"
                                           "page_right_to_left INTEGER,"
-                                          "sha256 BLOB,"
+                                          "hash BLOB,"
                                           "adjust_mode INTEGER"
                                           ");";
 
@@ -229,6 +229,10 @@ static void sqlite_db_check_layout(sqlite3* session, const int database_version,
 
   /* update fileinfo table (part 6) */
   static const char SQL_FILEINFO_ALTER6[] = "ALTER TABLE fileinfo ADD COLUMN sha256 BLOB;";
+
+  /* update fileinfo table (part 7) */
+  static const char SQL_FILEINFO_ALTER7[] = "ALTER TABLE fileinfo DROP COLUMN sha256;"
+                                            "ALTER TABLE fileinfo ADD COLUMN hash BLOB;";
 
   /* update bookmark table */
   static const char SQL_BOOKMARK_ALTER[] = "ALTER TABLE bookmarks ADD COLUMN hadj_ratio FLOAT;"
@@ -339,6 +343,12 @@ static void sqlite_db_check_layout(sqlite3* session, const int database_version,
   if (database_version < 2) {
     if (sqlite3_exec(session, SQL_FILEINFO_ALTER6, NULL, 0, NULL) != SQLITE_OK) {
       girara_warning("failed to update database table layout: sha256");
+      all_updates_ok = false;
+    }
+  }
+  if (database_version < 4) {
+    if (sqlite3_exec(session, SQL_FILEINFO_ALTER7, NULL, 0, NULL) != SQLITE_OK) {
+      girara_warning("failed to update database table layout: hash");
       all_updates_ok = false;
     }
   }
@@ -754,7 +764,7 @@ static bool sqlite_set_fileinfo(zathura_database_t* db, const char* file, const 
 
   static const char SQL_FILEINFO_SET[] =
       "REPLACE INTO fileinfo (file, page, offset, zoom, rotation, pages_per_row, first_page_column, position_x, "
-      "position_y, time, page_right_to_left, sha256) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, DATETIME('now'), ?, ?);";
+      "position_y, time, page_right_to_left, hash) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, DATETIME('now'), ?, ?);";
 
   sqlite3_stmt* stmt = prepare_statement(priv->session, SQL_FILEINFO_SET);
   if (stmt == NULL) {
@@ -771,7 +781,7 @@ static bool sqlite_set_fileinfo(zathura_database_t* db, const char* file, const 
       sqlite3_bind_double(stmt, 8, file_info->position_x) != SQLITE_OK ||
       sqlite3_bind_double(stmt, 9, file_info->position_y) != SQLITE_OK ||
       sqlite3_bind_int(stmt, 10, file_info->page_right_to_left) != SQLITE_OK ||
-      sqlite3_bind_blob(stmt, 11, hash_sha256, 32, SQLITE_STATIC) != SQLITE_OK) {
+      sqlite3_bind_blob(stmt, 11, hash_sha256, 16, SQLITE_STATIC) != SQLITE_OK) {
     sqlite3_finalize(stmt);
     girara_error("Failed to bind arguments.");
     return false;
@@ -794,7 +804,7 @@ static bool sqlite_get_fileinfo(zathura_database_t* db, const char* file, const 
 
   static const char SQL_FILEINFO_GET[] =
       "SELECT page, offset, zoom, rotation, pages_per_row, first_page_column, position_x, position_y, "
-      "page_right_to_left FROM fileinfo WHERE file = ? OR sha256 = ? ORDER BY time DESC LIMIT 1;";
+      "page_right_to_left FROM fileinfo WHERE file = ? OR hash = ? ORDER BY time DESC LIMIT 1;";
 
   sqlite3_stmt* stmt = prepare_statement(priv->session, SQL_FILEINFO_GET);
   if (stmt == NULL) {
@@ -802,7 +812,7 @@ static bool sqlite_get_fileinfo(zathura_database_t* db, const char* file, const 
   }
 
   if (sqlite3_bind_text(stmt, 1, file, -1, SQLITE_STATIC) != SQLITE_OK ||
-      sqlite3_bind_blob(stmt, 2, hash_sha256, 32, SQLITE_STATIC) != SQLITE_OK) {
+      sqlite3_bind_blob(stmt, 2, hash_sha256, 16, SQLITE_STATIC) != SQLITE_OK) {
     sqlite3_finalize(stmt);
     girara_error("Failed to bind arguments.");
     return false;
