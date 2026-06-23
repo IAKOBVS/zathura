@@ -753,9 +753,9 @@ static girara_list_t* sqlite_load_quickmarks(zathura_database_t* db, const char*
   return quickmarks;
 }
 
-static bool sqlite_set_fileinfo(zathura_database_t* db, const char* file, const uint8_t* hash_sha256,
+static bool sqlite_set_fileinfo(zathura_database_t* db, const char* file, const uint8_t* hash,
                                 zathura_fileinfo_t* file_info) {
-  if (db == NULL || file == NULL || hash_sha256 == NULL || file_info == NULL) {
+  if (db == NULL || file == NULL || hash == NULL || file_info == NULL) {
     return false;
   }
 
@@ -781,7 +781,7 @@ static bool sqlite_set_fileinfo(zathura_database_t* db, const char* file, const 
       sqlite3_bind_double(stmt, 8, file_info->position_x) != SQLITE_OK ||
       sqlite3_bind_double(stmt, 9, file_info->position_y) != SQLITE_OK ||
       sqlite3_bind_int(stmt, 10, file_info->page_right_to_left) != SQLITE_OK ||
-      sqlite3_bind_blob(stmt, 11, hash_sha256, 16, SQLITE_STATIC) != SQLITE_OK) {
+      sqlite3_bind_blob(stmt, 11, hash, DOCUMENT_DIGEST_SIZE, SQLITE_STATIC) != SQLITE_OK) {
     sqlite3_finalize(stmt);
     girara_error("Failed to bind arguments.");
     return false;
@@ -793,9 +793,9 @@ static bool sqlite_set_fileinfo(zathura_database_t* db, const char* file, const 
   return (res == SQLITE_DONE) ? true : false;
 }
 
-static bool sqlite_get_fileinfo(zathura_database_t* db, const char* file, const uint8_t* hash_sha256,
+static bool sqlite_get_fileinfo(zathura_database_t* db, const char* file, const uint8_t* hash,
                                 zathura_fileinfo_t* file_info) {
-  if (db == NULL || file == NULL || hash_sha256 == NULL || file_info == NULL) {
+  if (db == NULL || file == NULL || hash == NULL || file_info == NULL) {
     return false;
   }
 
@@ -812,7 +812,7 @@ static bool sqlite_get_fileinfo(zathura_database_t* db, const char* file, const 
   }
 
   if (sqlite3_bind_text(stmt, 1, file, -1, SQLITE_STATIC) != SQLITE_OK ||
-      sqlite3_bind_blob(stmt, 2, hash_sha256, 16, SQLITE_STATIC) != SQLITE_OK) {
+      sqlite3_bind_blob(stmt, 2, hash, DOCUMENT_DIGEST_SIZE, SQLITE_STATIC) != SQLITE_OK) {
     sqlite3_finalize(stmt);
     girara_error("Failed to bind arguments.");
     return false;
@@ -930,18 +930,23 @@ static girara_list_t* sqlite_get_recent_files(zathura_database_t* db, int max, c
   return list;
 }
 
+static bool supports_hash_queries(zathura_database_t* GIRARA_UNUSED(db)) {
+  return false;
+}
+
 static void zathura_database_interface_init(ZathuraDatabaseInterface* iface) {
   /* initialize interface */
-  iface->add_bookmark     = sqlite_add_bookmark;
-  iface->remove_bookmark  = sqlite_remove_bookmark;
-  iface->load_bookmarks   = sqlite_load_bookmarks;
-  iface->load_jumplist    = sqlite_load_jumplist;
-  iface->save_jumplist    = sqlite_save_jumplist;
-  iface->set_fileinfo     = sqlite_set_fileinfo;
-  iface->get_fileinfo     = sqlite_get_fileinfo;
-  iface->get_recent_files = sqlite_get_recent_files;
-  iface->load_quickmarks  = sqlite_load_quickmarks;
-  iface->save_quickmarks  = sqlite_save_quickmarks;
+  iface->add_bookmark          = sqlite_add_bookmark;
+  iface->remove_bookmark       = sqlite_remove_bookmark;
+  iface->load_bookmarks        = sqlite_load_bookmarks;
+  iface->load_jumplist         = sqlite_load_jumplist;
+  iface->save_jumplist         = sqlite_save_jumplist;
+  iface->set_fileinfo          = sqlite_set_fileinfo;
+  iface->get_fileinfo          = sqlite_get_fileinfo;
+  iface->get_recent_files      = sqlite_get_recent_files;
+  iface->load_quickmarks       = sqlite_load_quickmarks;
+  iface->save_quickmarks       = sqlite_save_quickmarks;
+  iface->supports_hash_queries = supports_hash_queries;
 }
 
 static void io_interface_init(GiraraInputHistoryIOInterface* iface) {

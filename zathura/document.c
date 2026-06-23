@@ -20,8 +20,6 @@
 #include "content-type.h"
 #include "internal.h"
 
-#define DIGEST_SIZE 16
-
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(XXH3_state_t, XXH3_freeState)
 
 /**
@@ -32,7 +30,7 @@ struct zathura_document_s {
   char* file_path;                         /**< File path of the document */
   char* uri;                               /**< URI of the document */
   char* basename;                          /**< Basename of the document */
-  uint8_t hash[DIGEST_SIZE];               /**< XXH3 hash of the document */
+  uint8_t hash[DOCUMENT_DIGEST_SIZE];      /**< XXH3 hash of the document */
   bool hash_computed;                      /**< Whether the hash has been computed yet */
   const char* password;                    /**< Password of the document */
   unsigned int current_page_number;        /**< Current page number */
@@ -89,7 +87,7 @@ static bool hash_file(uint8_t* dst, const char* path) {
 
   XXH128_canonical_t canonical;
   XXH128_canonicalFromHash(&canonical, XXH3_128bits_digest(state));
-  memcpy(dst, canonical.digest, DIGEST_SIZE);
+  memcpy(dst, canonical.digest, DOCUMENT_DIGEST_SIZE);
   return true;
 }
 
