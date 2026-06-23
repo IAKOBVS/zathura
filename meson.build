@@ -82,6 +82,9 @@ flags = cc.get_supported_arguments(flags)
 synctex = dependency('synctex', version: '>=2', required: get_option('synctex'))
 seccomp = dependency('libseccomp', required: get_option('seccomp'))
 landlock = cc.check_header('linux/landlock.h', required: get_option('landlock'))
+if landlock
+  landlock = cc.has_member('struct landlock_ruleset_attr', 'scoped', args: ['-D_GNU_SOURCE'], prefix: ['#include <linux/landlock.h>'])
+endif
 
 if synctex.found()
   build_dependencies += synctex
