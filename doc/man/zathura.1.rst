@@ -153,6 +153,8 @@ General
     Goto quickmark saved at letter or number X
   q
     Quit
+  s
+    Toggle single-page mode
 
 
 Fullscreen mode

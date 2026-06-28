@@ -636,8 +636,9 @@ void config_load_default(zathura_t* zathura) {
 
   /* Normal mode */
   /* shortcuts */
-  girara_shortcut_add(gsession, 0,                GDK_KEY_F5,          NULL, sc_toggle_presentation,    NORMAL, 0, NULL);
-  girara_shortcut_add(gsession, 0,                GDK_KEY_F11,         NULL, sc_toggle_fullscreen,      NORMAL, 0, NULL);
+  girara_shortcut_add(gsession, 0, GDK_KEY_F5,  NULL, sc_toggle_presentation,     NORMAL, 0, NULL);
+  girara_shortcut_add(gsession, 0, GDK_KEY_F11, NULL, sc_toggle_fullscreen,       NORMAL, 0, NULL);
+  girara_shortcut_add(gsession, 0, GDK_KEY_s,   NULL, sc_toggle_single_page_mode, NORMAL, 0, NULL );
 
   add_default_shortcuts(gsession, NORMAL);
 
