@@ -610,7 +610,7 @@ void config_load_default(zathura_t* zathura) {
   bool_value = true;
   girara_setting_add(gsession, "open-link-confirm",          &bool_value,  BOOLEAN, false, _("Enable prompt to confirm when opening links"), NULL, NULL);
   bool_value = false;
-  girara_setting_add(gsession, "single-page-mode",           &bool_value,  BOOLEAN, false, _("Display a single page at a time"), NULL, NULL);
+  girara_setting_add(gsession, "single-page-mode",           &bool_value,  BOOLEAN, false, _("Open documents in single-page mode"), NULL, NULL);
 
   // clang-format on
   // apply some color settings that need their callbacks to run

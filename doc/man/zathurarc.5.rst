@@ -961,6 +961,12 @@ The settings described here can be changed with ``set``.
   * Value type: String
   * Default value: rgba(100%,84%,0%,0.9)
 
+*single-page-mode*
+  Defines if documents should be opened in single-page view mode.
+
+  * Value type: Boolean
+  * Default value: false
+
 *show-directories*
   Defines if the directories should be displayed in completion.
 
