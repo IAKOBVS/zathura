@@ -153,7 +153,7 @@ General
     Goto quickmark saved at letter or number X
   q
     Quit
-  s
+  w
     Toggle single-page mode
 
 
