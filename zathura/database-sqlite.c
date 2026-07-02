@@ -228,7 +228,7 @@ static void sqlite_db_check_layout(sqlite3* session, const int database_version,
   static const char SQL_FILEINFO_ALTER5[] = "ALTER TABLE fileinfo ADD COLUMN page_right_to_left INTEGER;";
 
   /* update fileinfo table (part 6) */
-  static const char SQL_FILEINFO_ALTER6[] = "ALTER TABLE fileinfo ADD COLUMN sha256 BLOB;";
+  static const char SQL_FILEINFO_ALTER6[] = "ALTER TABLE fileinfo ADD COLUMN hash BLOB;";
 
   /* update fileinfo table (part 7) */
   static const char SQL_FILEINFO_ALTER7[] = "ALTER TABLE fileinfo DROP COLUMN sha256;"
@@ -346,7 +346,7 @@ static void sqlite_db_check_layout(sqlite3* session, const int database_version,
       all_updates_ok = false;
     }
   }
-  if (database_version < 4) {
+  if (database_version < 4 && database_version >= 2) {
     if (sqlite3_exec(session, SQL_FILEINFO_ALTER7, NULL, 0, NULL) != SQLITE_OK) {
       girara_warning("failed to update database table layout: hash");
       all_updates_ok = false;
