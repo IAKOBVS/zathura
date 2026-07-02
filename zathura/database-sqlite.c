@@ -931,7 +931,7 @@ static girara_list_t* sqlite_get_recent_files(zathura_database_t* db, int max, c
 }
 
 static bool supports_hash_queries(zathura_database_t* GIRARA_UNUSED(db)) {
-  return false;
+  return true;
 }
 
 static void zathura_database_interface_init(ZathuraDatabaseInterface* iface) {

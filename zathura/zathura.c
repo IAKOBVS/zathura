@@ -896,9 +896,10 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   bool known_file = file_info_p != NULL;
   if (file_info_p) {
     file_info = *file_info_p;
-  } else if (zathura_db_supports_hash_queries(zathura->database)) {
-    const uint8_t* file_hash = zathura_document_get_hash(document);
-    known_file               = zathura_db_get_fileinfo(zathura->database, file_path, file_hash, &file_info);
+  } else {
+    const uint8_t* file_hash =
+        zathura_db_supports_hash_queries(zathura->database) ? zathura_document_get_hash(document) : NULL;
+    known_file = zathura_db_get_fileinfo(zathura->database, file_path, file_hash, &file_info);
   }
   girara_debug("checking file info: found = %s", known_file ? "true" : "false");
 
