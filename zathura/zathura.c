@@ -881,7 +881,6 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   zathura->document = document;
 
   /* read history file */
-  girara_debug("checking for existing file info");
   zathura_fileinfo_t file_info = {
       .current_page           = 0,
       .page_offset            = 0,
@@ -901,6 +900,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
     const uint8_t* file_hash = zathura_document_get_hash(document);
     known_file               = zathura_db_get_fileinfo(zathura->database, file_path, file_hash, &file_info);
   }
+  girara_debug("checking file info: found = %s", known_file ? "true" : "false");
 
   /* set page offset */
   zathura_document_set_page_offset(document, file_info.page_offset);
