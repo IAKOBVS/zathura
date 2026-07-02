@@ -303,7 +303,7 @@ static void link_confirm(zathura_t* zathura, zathura_link_type_t type, const cha
   ctx->type    = type;
   ctx->value   = g_strdup(value);
 
-  gdk_threads_add_idle(link_confirm_spawn, ctx);
+  g_idle_add(link_confirm_spawn, ctx);
 }
 #endif
 
@@ -330,10 +330,17 @@ void zathura_link_evaluate(zathura_t* zathura, zathura_link_t* link) {
     girara_debug("Going to remote destination: %s", link->target.value);
     link_confirm(zathura, link->type, link->target.value);
     break;
-  case ZATHURA_LINK_URI:
+  case ZATHURA_LINK_URI: {
+    bool confirm = true;
+    girara_setting_get(zathura->ui.session, "open-link-confirm", &confirm);
     girara_debug("Opening URI: %s", link->target.value);
-    link_confirm(zathura, link->type, link->target.value);
+    if (confirm) {
+      link_confirm(zathura, link->type, link->target.value);
+    } else {
+      link_launch(zathura, link->target.value);
+    }
     break;
+  }
   case ZATHURA_LINK_LAUNCH:
     girara_debug("Launching link: %s", link->target.value);
     link_confirm(zathura, link->type, link->target.value);
@@ -365,13 +372,13 @@ void zathura_link_display(zathura_t* zathura, zathura_link_t* link) {
   }
 }
 
-void zathura_link_copy(zathura_t* zathura, zathura_link_t* link, GdkAtom* selection) {
+void zathura_link_copy(zathura_t* zathura, zathura_link_t* link, GdkClipboard* selection) {
   zathura_link_type_t type     = zathura_link_get_type(link);
   zathura_link_target_t target = zathura_link_get_target(link);
   switch (type) {
   case ZATHURA_LINK_GOTO_DEST: {
     g_autofree gchar* tmp = g_strdup_printf("%d", target.page_number);
-    gtk_clipboard_set_text(gtk_clipboard_get(*selection), tmp, -1);
+    gdk_clipboard_set_text(selection, tmp);
     girara_notify(zathura->ui.session, GIRARA_INFO, _("Copied page number: %d"), target.page_number);
     break;
   }
@@ -379,7 +386,7 @@ void zathura_link_copy(zathura_t* zathura, zathura_link_t* link, GdkAtom* select
   case ZATHURA_LINK_URI:
   case ZATHURA_LINK_LAUNCH:
   case ZATHURA_LINK_NAMED: {
-    gtk_clipboard_set_text(gtk_clipboard_get(*selection), target.value, -1);
+    gdk_clipboard_set_text(selection, target.value);
     g_autofree gchar* escaped_value = g_markup_escape_text(target.value, -1);
     girara_notify(zathura->ui.session, GIRARA_INFO, _("Copied link: %s"), escaped_value);
     break;

@@ -16,8 +16,9 @@
 #include <sys/ioctl.h>   /* for TIOCSTI */
 #include <termios.h>
 
+#include <gtk/gtk.h>
 #ifdef GDK_WINDOWING_X11
-#include <gtk/gtkx.h>
+#include <gdk/x11/gdkx.h>
 #endif
 
 #define ADD_RULE(str_action, action, call, ...)                                                                        \
@@ -169,7 +170,7 @@ int seccomp_enable_strict_filter(zathura_t* zathura) {
   ALLOW_RULE(writev);
 #endif
   /*  ALLOW_RULE(writev); X11 only */
-  /*  ALLOW_RULE(wait4); unused? */
+  ALLOW_RULE(wait4); /* used by SIGSTOP signal */
 
   /* required for testing only */
   ALLOW_RULE(timer_create);

@@ -9,12 +9,13 @@ Requirements
 
 The following dependencies are required:
 
-* `gtk3` (>= 3.24)
+* `gtk4` (>= 4.12)
 * `glib` (>= 2.76)
 * `girara` (>= 2026.01.30)
 * `libmagic` from file(1): for mime-type detection
 * `json-glib`
-* `sqlite3` (>= 3.6.23): sqlite3 database backend
+* `sqlite3` (>= 3.25.0): sqlite3 database backend
+* `libxxhash`: file hashing
 
 The following dependencies are optional:
 * `libsynctex` from TeXLive (>= 2): SyncTeX support
