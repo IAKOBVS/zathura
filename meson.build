@@ -19,6 +19,7 @@ conf_data = configuration_data()
 conf_data.set('ZVMAJOR', version_array[0])
 conf_data.set('ZVMINOR', version_array[1])
 conf_data.set('ZVREV', version_array[2])
+conf_data.set('ZVFULL', version)
 conf_data.set('ZVAPI', plugin_api_version)
 conf_data.set('ZVABI', plugin_abi_version)
 
