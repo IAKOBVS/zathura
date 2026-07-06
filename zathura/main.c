@@ -301,7 +301,7 @@ GIRARA_VISIBLE int main(int argc, char* argv[]) {
     return -1;
   }
 
-  zathura_set_log_level(loglevel);
+  girara_set_log_level_from_string(loglevel);
 
 #if defined(WITH_SYNCTEX) && !defined(WITH_SANDBOX)
   /* handle synctex forward synchronization */

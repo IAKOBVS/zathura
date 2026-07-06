@@ -318,14 +318,6 @@ void zathura_set_argv(zathura_t* zathura, char** argv);
 void zathura_update_view_ppi(zathura_t* zathura);
 
 /**
- * Set log level
- *
- * If no loglevel is given, an argument of "info" is assumed.
- *
- * @param Log level
- */
-void zathura_set_log_level(const char* loglevel);
-/**
  * Opens a file
  *
  * @param zathura The zathura session

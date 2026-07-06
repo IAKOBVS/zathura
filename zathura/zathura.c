@@ -1672,18 +1672,6 @@ void zathura_show_signature_information(zathura_t* zathura, bool show) {
   }
 }
 
-void zathura_set_log_level(const char* loglevel) {
-  if (loglevel == NULL || g_strcmp0(loglevel, "info") == 0) {
-    girara_set_log_level(GIRARA_INFO);
-  } else if (g_strcmp0(loglevel, "warning") == 0) {
-    girara_set_log_level(GIRARA_WARNING);
-  } else if (g_strcmp0(loglevel, "error") == 0) {
-    girara_set_log_level(GIRARA_ERROR);
-  } else if (g_strcmp0(loglevel, "debug") == 0) {
-    girara_set_log_level(GIRARA_DEBUG);
-  }
-}
-
 bool zathura_has_document(zathura_t* zathura) {
   return zathura != NULL && zathura->document != NULL;
 }
