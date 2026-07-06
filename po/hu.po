@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 15:33+0200\n"
+"POT-Creation-Date: 2026-07-06 17:57+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: Sebastian Ramacher <sebastian+dev@ramacher.at>\n"
 "Language-Team: Hungarian (http://app.transifex.com/pwmt/zathura/language/"
@@ -17,8 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Zathura"
+msgstr "Zathura"
+
 msgid "Minimalistic document viewer"
 msgstr "Minimalista dokumentummegjelenítő"
+
+#. Translators: Search terms to find this application. Do not translate or
+#. localize the semicolons. The list must also end with a semicolon.
+msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
+msgstr "PDF;PS;PostScript;DjVU;dokumentum;bemutató;megjelenítő;"
 
 msgid ""
 "Zathura is a highly customizable and functional document viewer. It provides "
@@ -61,8 +69,8 @@ msgstr "Könyvjelzők listázása és kiválasztása"
 
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
-"embedding is no longer supported. Also, the setting 'window-icon-document' "
-"has been removed."
+"embedding is no longer supported (#216, #432). Also, the setting 'window-"
+"icon-document' has been removed."
 msgstr ""
 
 msgid "Fix issues with forking on macOS (#907)"
@@ -72,6 +80,18 @@ msgid "Fix first-page-column handling regression (#948)"
 msgstr ""
 
 msgid "Support SIGSTOP in sandbox (#945)"
+msgstr ""
+
+msgid "Add setting to open documents in single-page mode"
+msgstr ""
+
+msgid "Bind toggle-single-page to w (#966)"
+msgstr ""
+
+msgid "Make link confirmation optional"
+msgstr ""
+
+msgid "Replace use of SHA256 with XXH3-128 for faster file hashing"
 msgstr ""
 
 msgid "Fix sandbox on X11 (#928)"
@@ -981,13 +1001,73 @@ msgstr ""
 msgid "Initial release"
 msgstr ""
 
-msgid "Zathura"
-msgstr "Zathura"
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of at least %u"
+msgstr "Érvénytelen számú argumentum lett átadva: %zu legalább %u helyett"
 
-#. Translators: Search terms to find this application. Do not translate or
-#. localize the semicolons. The list must also end with a semicolon.
-msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
-msgstr "PDF;PS;PostScript;DjVU;dokumentum;bemutató;megjelenítő;"
+#, c-format
+msgid "Unregistered mode specified: %s"
+msgstr "Nem regisztrált mód lett megadva: %s"
+
+msgid "Invalid number of arguments passed"
+msgstr "Érvénytelen számú argumentum lett átadva"
+
+#, c-format
+msgid "Invalid modifier in %s"
+msgstr "Érvénytelen módosító itt: %s"
+
+#, c-format
+msgid "Invalid special key value for %s"
+msgstr "Érvénytelen speciális billentyűérték ehhez: %s"
+
+#, c-format
+msgid "Invalid special key value or mode %s"
+msgstr "Érvénytelen speciális billentyűérték vagy mód: %s"
+
+#, c-format
+msgid "Not a valid shortcut function: %s"
+msgstr "Nem érvényes gyorsbillentyű-függvény: %s"
+
+msgid "Not enough arguments."
+msgstr "Nincs elég argumentum."
+
+msgid "Too many arguments."
+msgstr "Túl sok argumentum."
+
+#, c-format
+msgid "Unknown option: %s"
+msgstr "Ismeretlen beállítás: %s"
+
+msgid "true"
+msgstr "igaz"
+
+msgid "false"
+msgstr "hamis"
+
+#, c-format
+msgid "No value defined for option: %s"
+msgstr "Nincs érték megadva a beállításhoz: %s"
+
+#, c-format
+msgid "Unknown value for option: %s"
+msgstr "Ismeretlen érték a beállításhoz: %s"
+
+#, c-format
+msgid "Invalid value for option: %s"
+msgstr "Érvénytelen érték a beállításhoz: %s"
+
+#. unhandled command
+#, c-format
+msgid "Not a valid command: %s"
+msgstr "Nem érvényes parancs: %s"
+
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of 1"
+msgstr "Érvénytelen számú argumentum lett átadva: %zu 1 helyett"
+
+#, c-format
+msgid "Failed to write JSON: %s"
+msgstr "Nem sikerült JSON-t írni: %s"
 
 #, c-format
 msgid "'%s' must not be 0. Set to 1."
@@ -1100,9 +1180,6 @@ msgid ""
 msgstr ""
 "További információkért nézze meg a zathura(1) és zathurarc(5) "
 "kézikönyvoldalakat."
-
-msgid "Too many arguments."
-msgstr "Túl sok argumentum."
 
 msgid "No arguments given."
 msgstr "Nincs megadva argumentum."
@@ -1466,6 +1543,9 @@ msgstr "A dokumentumba ágyazott aláírások további információinak letiltá
 msgid "Enable prompt to confirm when opening links"
 msgstr "Megerősítő kérdés engedélyezése hivatkozások megnyitásakor"
 
+msgid "Open documents in single-page mode"
+msgstr ""
+
 #. define default inputbar commands
 msgid "Map a key sequence"
 msgstr "Billentyűsorozat hozzárendelése"
@@ -1733,68 +1813,3 @@ msgstr "Nem sikerült menteni a dokumentumot."
 
 msgid "Document saved."
 msgstr "Dokumentum mentve."
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of at least %u"
-msgstr "Érvénytelen számú argumentum lett átadva: %zu legalább %u helyett"
-
-#, c-format
-msgid "Unregistered mode specified: %s"
-msgstr "Nem regisztrált mód lett megadva: %s"
-
-msgid "Invalid number of arguments passed"
-msgstr "Érvénytelen számú argumentum lett átadva"
-
-#, c-format
-msgid "Invalid modifier in %s"
-msgstr "Érvénytelen módosító itt: %s"
-
-#, c-format
-msgid "Invalid special key value for %s"
-msgstr "Érvénytelen speciális billentyűérték ehhez: %s"
-
-#, c-format
-msgid "Invalid special key value or mode %s"
-msgstr "Érvénytelen speciális billentyűérték vagy mód: %s"
-
-#, c-format
-msgid "Not a valid shortcut function: %s"
-msgstr "Nem érvényes gyorsbillentyű-függvény: %s"
-
-msgid "Not enough arguments."
-msgstr "Nincs elég argumentum."
-
-#, c-format
-msgid "Unknown option: %s"
-msgstr "Ismeretlen beállítás: %s"
-
-msgid "true"
-msgstr "igaz"
-
-msgid "false"
-msgstr "hamis"
-
-#, c-format
-msgid "No value defined for option: %s"
-msgstr "Nincs érték megadva a beállításhoz: %s"
-
-#, c-format
-msgid "Unknown value for option: %s"
-msgstr "Ismeretlen érték a beállításhoz: %s"
-
-#, c-format
-msgid "Invalid value for option: %s"
-msgstr "Érvénytelen érték a beállításhoz: %s"
-
-#. unhandled command
-#, c-format
-msgid "Not a valid command: %s"
-msgstr "Nem érvényes parancs: %s"
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of 1"
-msgstr "Érvénytelen számú argumentum lett átadva: %zu 1 helyett"
-
-#, c-format
-msgid "Failed to write JSON: %s"
-msgstr "Nem sikerült JSON-t írni: %s"

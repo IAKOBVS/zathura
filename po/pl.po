@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 15:33+0200\n"
+"POT-Creation-Date: 2026-07-06 17:57+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: wmlhwl <7q0dkmw6@anonaddy.me>, 2024\n"
 "Language-Team: Polish (http://app.transifex.com/pwmt/zathura/language/pl/)\n"
@@ -21,8 +21,16 @@ msgstr ""
 "(n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && "
 "n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
+msgid "Zathura"
+msgstr ""
+
 msgid "Minimalistic document viewer"
 msgstr "Minimalistyczny czytnik dokumentów"
+
+#. Translators: Search terms to find this application. Do not translate or
+#. localize the semicolons. The list must also end with a semicolon.
+msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
+msgstr "PDF;PS;PostScript;DjVU;dokument;czytnik;"
 
 msgid ""
 "Zathura is a highly customizable and functional document viewer. It provides "
@@ -65,8 +73,8 @@ msgstr ""
 
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
-"embedding is no longer supported. Also, the setting 'window-icon-document' "
-"has been removed."
+"embedding is no longer supported (#216, #432). Also, the setting 'window-"
+"icon-document' has been removed."
 msgstr ""
 
 msgid "Fix issues with forking on macOS (#907)"
@@ -76,6 +84,18 @@ msgid "Fix first-page-column handling regression (#948)"
 msgstr ""
 
 msgid "Support SIGSTOP in sandbox (#945)"
+msgstr ""
+
+msgid "Add setting to open documents in single-page mode"
+msgstr ""
+
+msgid "Bind toggle-single-page to w (#966)"
+msgstr ""
+
+msgid "Make link confirmation optional"
+msgstr ""
+
+msgid "Replace use of SHA256 with XXH3-128 for faster file hashing"
 msgstr ""
 
 msgid "Fix sandbox on X11 (#928)"
@@ -985,13 +1005,73 @@ msgstr ""
 msgid "Initial release"
 msgstr ""
 
-msgid "Zathura"
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of at least %u"
+msgstr "Nieprawidłowa liczba parametrów polecenia: %zu zamiast co najmniej %u"
+
+#, c-format
+msgid "Unregistered mode specified: %s"
+msgstr "Wybrano nieistniejący tryb: %s"
+
+msgid "Invalid number of arguments passed"
+msgstr "Nieprawidłowa liczba parametrów polecenia"
+
+#, c-format
+msgid "Invalid modifier in %s"
+msgstr "Nieprawidłowy klawisz modyfikujący: %s"
+
+#, c-format
+msgid "Invalid special key value for %s"
+msgstr "Nieprawidłowa wartość klawisza: %s"
+
+#, c-format
+msgid "Invalid special key value or mode %s"
+msgstr "Nieprawidłowa wartość klawisza lub trybu: %s"
+
+#, c-format
+msgid "Not a valid shortcut function: %s"
+msgstr "Nieprawidłowa funkcja skrótu: %s"
+
+msgid "Not enough arguments."
+msgstr "Za mało parametrów polecenia."
+
+msgid "Too many arguments."
+msgstr "Za dużo parametrów polecenia"
+
+#, c-format
+msgid "Unknown option: %s"
+msgstr "Nieznana opcja: %s"
+
+msgid "true"
+msgstr "prawda"
+
+msgid "false"
+msgstr "fałsz"
+
+#, c-format
+msgid "No value defined for option: %s"
+msgstr "Niezdefiniowana wartość opcji: %s"
+
+#, c-format
+msgid "Unknown value for option: %s"
+msgstr "Nieznana wartość opcji: %s"
+
+#, c-format
+msgid "Invalid value for option: %s"
 msgstr ""
 
-#. Translators: Search terms to find this application. Do not translate or
-#. localize the semicolons. The list must also end with a semicolon.
-msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
-msgstr "PDF;PS;PostScript;DjVU;dokument;czytnik;"
+#. unhandled command
+#, c-format
+msgid "Not a valid command: %s"
+msgstr "Nieprawidłowa funkcja skrótu: %s"
+
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of 1"
+msgstr ""
+
+#, c-format
+msgid "Failed to write JSON: %s"
+msgstr ""
 
 #, c-format
 msgid "'%s' must not be 0. Set to 1."
@@ -1102,9 +1182,6 @@ msgstr "Brak informacji o pliku"
 msgid ""
 "Please check the man pages zathura(1) and zathurarc(5) for more information."
 msgstr "Proszę zajrzeć do man zathura(1) i zathurarc(5) po więcej informacji."
-
-msgid "Too many arguments."
-msgstr "Za dużo parametrów polecenia"
 
 msgid "No arguments given."
 msgstr "Nie podano parametrów polecenia"
@@ -1467,6 +1544,9 @@ msgstr ""
 msgid "Enable prompt to confirm when opening links"
 msgstr ""
 
+msgid "Open documents in single-page mode"
+msgstr ""
+
 #. define default inputbar commands
 msgid "Map a key sequence"
 msgstr "Dowiąż sekwencję klawiszy"
@@ -1731,68 +1811,3 @@ msgstr "Błąd zapisu"
 
 msgid "Document saved."
 msgstr "Zapisano dokument"
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of at least %u"
-msgstr "Nieprawidłowa liczba parametrów polecenia: %zu zamiast co najmniej %u"
-
-#, c-format
-msgid "Unregistered mode specified: %s"
-msgstr "Wybrano nieistniejący tryb: %s"
-
-msgid "Invalid number of arguments passed"
-msgstr "Nieprawidłowa liczba parametrów polecenia"
-
-#, c-format
-msgid "Invalid modifier in %s"
-msgstr "Nieprawidłowy klawisz modyfikujący: %s"
-
-#, c-format
-msgid "Invalid special key value for %s"
-msgstr "Nieprawidłowa wartość klawisza: %s"
-
-#, c-format
-msgid "Invalid special key value or mode %s"
-msgstr "Nieprawidłowa wartość klawisza lub trybu: %s"
-
-#, c-format
-msgid "Not a valid shortcut function: %s"
-msgstr "Nieprawidłowa funkcja skrótu: %s"
-
-msgid "Not enough arguments."
-msgstr "Za mało parametrów polecenia."
-
-#, c-format
-msgid "Unknown option: %s"
-msgstr "Nieznana opcja: %s"
-
-msgid "true"
-msgstr "prawda"
-
-msgid "false"
-msgstr "fałsz"
-
-#, c-format
-msgid "No value defined for option: %s"
-msgstr "Niezdefiniowana wartość opcji: %s"
-
-#, c-format
-msgid "Unknown value for option: %s"
-msgstr "Nieznana wartość opcji: %s"
-
-#, c-format
-msgid "Invalid value for option: %s"
-msgstr ""
-
-#. unhandled command
-#, c-format
-msgid "Not a valid command: %s"
-msgstr "Nieprawidłowa funkcja skrótu: %s"
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of 1"
-msgstr ""
-
-#, c-format
-msgid "Failed to write JSON: %s"
-msgstr ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 15:33+0200\n"
+"POT-Creation-Date: 2026-07-06 17:57+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: norbux <manelsales@ono.com>, 2012\n"
 "Language-Team: Esperanto (http://app.transifex.com/pwmt/zathura/language/"
@@ -18,8 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Zathura"
+msgstr ""
+
 msgid "Minimalistic document viewer"
 msgstr "Malpeza dokumento spektanto"
+
+#. Translators: Search terms to find this application. Do not translate or
+#. localize the semicolons. The list must also end with a semicolon.
+msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
+msgstr ""
 
 msgid ""
 "Zathura is a highly customizable and functional document viewer. It provides "
@@ -56,8 +64,8 @@ msgstr ""
 
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
-"embedding is no longer supported. Also, the setting 'window-icon-document' "
-"has been removed."
+"embedding is no longer supported (#216, #432). Also, the setting 'window-"
+"icon-document' has been removed."
 msgstr ""
 
 msgid "Fix issues with forking on macOS (#907)"
@@ -67,6 +75,18 @@ msgid "Fix first-page-column handling regression (#948)"
 msgstr ""
 
 msgid "Support SIGSTOP in sandbox (#945)"
+msgstr ""
+
+msgid "Add setting to open documents in single-page mode"
+msgstr ""
+
+msgid "Bind toggle-single-page to w (#966)"
+msgstr ""
+
+msgid "Make link confirmation optional"
+msgstr ""
+
+msgid "Replace use of SHA256 with XXH3-128 for faster file hashing"
 msgstr ""
 
 msgid "Fix sandbox on X11 (#928)"
@@ -976,12 +996,72 @@ msgstr ""
 msgid "Initial release"
 msgstr ""
 
-msgid "Zathura"
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of at least %u"
+msgstr "Nevalida nombro da argumentoj transdonita: %zu anstataŭ de almenaŭ %u"
+
+#, c-format
+msgid "Unregistered mode specified: %s"
+msgstr "Neregistrita modo specifita: %s"
+
+msgid "Invalid number of arguments passed"
+msgstr "Nevalida nombro da argumentoj transdonita"
+
+#, c-format
+msgid "Invalid modifier in %s"
+msgstr "Nevalida modifilo en %s"
+
+#, c-format
+msgid "Invalid special key value for %s"
+msgstr "Nevalida speciala klavvaloro por %s"
+
+#, c-format
+msgid "Invalid special key value or mode %s"
+msgstr "Nevalida speciala klavvaloro aŭ reĝimo %s"
+
+#, c-format
+msgid "Not a valid shortcut function: %s"
+msgstr "Nevalida kurtnomo de funkcio: %s"
+
+msgid "Not enough arguments."
+msgstr "Ne sufiĉe da argumentoj."
+
+msgid "Too many arguments."
+msgstr "Tro multe da argumentoj."
+
+#, c-format
+msgid "Unknown option: %s"
+msgstr "Nekonata opcio: %s"
+
+msgid "true"
+msgstr "vero"
+
+msgid "false"
+msgstr "falso"
+
+#, c-format
+msgid "No value defined for option: %s"
+msgstr "Neniu valoro difinita por opcio: %s"
+
+#, c-format
+msgid "Unknown value for option: %s"
+msgstr "Nekonata valoro por opcio: %s"
+
+#, c-format
+msgid "Invalid value for option: %s"
 msgstr ""
 
-#. Translators: Search terms to find this application. Do not translate or
-#. localize the semicolons. The list must also end with a semicolon.
-msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
+#. unhandled command
+#, c-format
+msgid "Not a valid command: %s"
+msgstr "Nevalida kurtnomo de funkcio: %s"
+
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of 1"
+msgstr ""
+
+#, c-format
+msgid "Failed to write JSON: %s"
 msgstr ""
 
 #, c-format
@@ -1093,9 +1173,6 @@ msgstr "Neniu informacio disponebla."
 msgid ""
 "Please check the man pages zathura(1) and zathurarc(5) for more information."
 msgstr ""
-
-msgid "Too many arguments."
-msgstr "Tro multe da argumentoj."
 
 msgid "No arguments given."
 msgstr "Neniuj argumentoj uzata."
@@ -1457,6 +1534,9 @@ msgstr ""
 msgid "Enable prompt to confirm when opening links"
 msgstr ""
 
+msgid "Open documents in single-page mode"
+msgstr ""
+
 #. define default inputbar commands
 msgid "Map a key sequence"
 msgstr "Mapu klavan sinsekvon"
@@ -1719,68 +1799,3 @@ msgstr "Neeble konservi dokumenton."
 
 msgid "Document saved."
 msgstr "Dokumento konservita."
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of at least %u"
-msgstr "Nevalida nombro da argumentoj transdonita: %zu anstataŭ de almenaŭ %u"
-
-#, c-format
-msgid "Unregistered mode specified: %s"
-msgstr "Neregistrita modo specifita: %s"
-
-msgid "Invalid number of arguments passed"
-msgstr "Nevalida nombro da argumentoj transdonita"
-
-#, c-format
-msgid "Invalid modifier in %s"
-msgstr "Nevalida modifilo en %s"
-
-#, c-format
-msgid "Invalid special key value for %s"
-msgstr "Nevalida speciala klavvaloro por %s"
-
-#, c-format
-msgid "Invalid special key value or mode %s"
-msgstr "Nevalida speciala klavvaloro aŭ reĝimo %s"
-
-#, c-format
-msgid "Not a valid shortcut function: %s"
-msgstr "Nevalida kurtnomo de funkcio: %s"
-
-msgid "Not enough arguments."
-msgstr "Ne sufiĉe da argumentoj."
-
-#, c-format
-msgid "Unknown option: %s"
-msgstr "Nekonata opcio: %s"
-
-msgid "true"
-msgstr "vero"
-
-msgid "false"
-msgstr "falso"
-
-#, c-format
-msgid "No value defined for option: %s"
-msgstr "Neniu valoro difinita por opcio: %s"
-
-#, c-format
-msgid "Unknown value for option: %s"
-msgstr "Nekonata valoro por opcio: %s"
-
-#, c-format
-msgid "Invalid value for option: %s"
-msgstr ""
-
-#. unhandled command
-#, c-format
-msgid "Not a valid command: %s"
-msgstr "Nevalida kurtnomo de funkcio: %s"
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of 1"
-msgstr ""
-
-#, c-format
-msgid "Failed to write JSON: %s"
-msgstr ""

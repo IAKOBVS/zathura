@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 15:33+0200\n"
+"POT-Creation-Date: 2026-07-06 17:57+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: Sebastian Rasmussen <sebras@gmail.com>, 2018-2020\n"
 "Language-Team: Swedish (http://app.transifex.com/pwmt/zathura/language/sv/)\n"
@@ -17,8 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Zathura"
+msgstr ""
+
 msgid "Minimalistic document viewer"
 msgstr "Minimalistisk dokumentvisare"
+
+#. Translators: Search terms to find this application. Do not translate or
+#. localize the semicolons. The list must also end with a semicolon.
+msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
+msgstr "PDF;PS;PostScript;DjVU;dokument;presentation;visare;"
 
 msgid ""
 "Zathura is a highly customizable and functional document viewer. It provides "
@@ -62,8 +70,8 @@ msgstr "Lista och välja bokmärken"
 
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
-"embedding is no longer supported. Also, the setting 'window-icon-document' "
-"has been removed."
+"embedding is no longer supported (#216, #432). Also, the setting 'window-"
+"icon-document' has been removed."
 msgstr ""
 
 msgid "Fix issues with forking on macOS (#907)"
@@ -73,6 +81,18 @@ msgid "Fix first-page-column handling regression (#948)"
 msgstr ""
 
 msgid "Support SIGSTOP in sandbox (#945)"
+msgstr ""
+
+msgid "Add setting to open documents in single-page mode"
+msgstr ""
+
+msgid "Bind toggle-single-page to w (#966)"
+msgstr ""
+
+msgid "Make link confirmation optional"
+msgstr ""
+
+msgid "Replace use of SHA256 with XXH3-128 for faster file hashing"
 msgstr ""
 
 msgid "Fix sandbox on X11 (#928)"
@@ -999,13 +1019,73 @@ msgstr "Kommandokomplettering"
 msgid "Initial release"
 msgstr "Första utgåvan"
 
-msgid "Zathura"
-msgstr ""
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of at least %u"
+msgstr "Ogiltigt antal argument skickades: %zu i stället för minst %u"
 
-#. Translators: Search terms to find this application. Do not translate or
-#. localize the semicolons. The list must also end with a semicolon.
-msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
-msgstr "PDF;PS;PostScript;DjVU;dokument;presentation;visare;"
+#, c-format
+msgid "Unregistered mode specified: %s"
+msgstr "Oregistrerat läge angavs: %s"
+
+msgid "Invalid number of arguments passed"
+msgstr "Ogiltigt antal argument skickades"
+
+#, c-format
+msgid "Invalid modifier in %s"
+msgstr "Ogiltig modifierare i %s"
+
+#, c-format
+msgid "Invalid special key value for %s"
+msgstr "Ogiltigt specialtangentvärde för %s"
+
+#, c-format
+msgid "Invalid special key value or mode %s"
+msgstr "Ogiltigt specialtangentvärde eller läge %s"
+
+#, c-format
+msgid "Not a valid shortcut function: %s"
+msgstr "Inte en giltig genvägsfunktion: %s"
+
+msgid "Not enough arguments."
+msgstr "Inte tillräckligt med argument."
+
+msgid "Too many arguments."
+msgstr "Allt för många argument."
+
+#, c-format
+msgid "Unknown option: %s"
+msgstr "Okänt alternativ: %s"
+
+msgid "true"
+msgstr "sant"
+
+msgid "false"
+msgstr "falskt"
+
+#, c-format
+msgid "No value defined for option: %s"
+msgstr "Inget värde definierat för alternativet: %s"
+
+#, c-format
+msgid "Unknown value for option: %s"
+msgstr "Okänt värde för alternativet: %s"
+
+#, c-format
+msgid "Invalid value for option: %s"
+msgstr "Ogiltigt värde för alternativet: %s"
+
+#. unhandled command
+#, c-format
+msgid "Not a valid command: %s"
+msgstr "Inte ett giltigt kommando: %s"
+
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of 1"
+msgstr "Ogiltigt antal argument skickades: %zu i stället för 1"
+
+#, c-format
+msgid "Failed to write JSON: %s"
+msgstr "Misslyckades med att skriva JSON: %s"
 
 #, c-format
 msgid "'%s' must not be 0. Set to 1."
@@ -1116,9 +1196,6 @@ msgstr "Ingen information tillgänglig."
 msgid ""
 "Please check the man pages zathura(1) and zathurarc(5) for more information."
 msgstr "Se manualsidorna zathura(1) och zathurarc(5) för mer information."
-
-msgid "Too many arguments."
-msgstr "Allt för många argument."
 
 msgid "No arguments given."
 msgstr "Inga argument angivna."
@@ -1481,6 +1558,9 @@ msgstr ""
 msgid "Enable prompt to confirm when opening links"
 msgstr "Aktivera bekräftelsefråga när länkar öppnas"
 
+msgid "Open documents in single-page mode"
+msgstr ""
+
 #. define default inputbar commands
 msgid "Map a key sequence"
 msgstr "Mappa en tangentsekvens"
@@ -1747,68 +1827,3 @@ msgstr "Misslyckades med att spara dokument."
 
 msgid "Document saved."
 msgstr "Dokument sparat."
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of at least %u"
-msgstr "Ogiltigt antal argument skickades: %zu i stället för minst %u"
-
-#, c-format
-msgid "Unregistered mode specified: %s"
-msgstr "Oregistrerat läge angavs: %s"
-
-msgid "Invalid number of arguments passed"
-msgstr "Ogiltigt antal argument skickades"
-
-#, c-format
-msgid "Invalid modifier in %s"
-msgstr "Ogiltig modifierare i %s"
-
-#, c-format
-msgid "Invalid special key value for %s"
-msgstr "Ogiltigt specialtangentvärde för %s"
-
-#, c-format
-msgid "Invalid special key value or mode %s"
-msgstr "Ogiltigt specialtangentvärde eller läge %s"
-
-#, c-format
-msgid "Not a valid shortcut function: %s"
-msgstr "Inte en giltig genvägsfunktion: %s"
-
-msgid "Not enough arguments."
-msgstr "Inte tillräckligt med argument."
-
-#, c-format
-msgid "Unknown option: %s"
-msgstr "Okänt alternativ: %s"
-
-msgid "true"
-msgstr "sant"
-
-msgid "false"
-msgstr "falskt"
-
-#, c-format
-msgid "No value defined for option: %s"
-msgstr "Inget värde definierat för alternativet: %s"
-
-#, c-format
-msgid "Unknown value for option: %s"
-msgstr "Okänt värde för alternativet: %s"
-
-#, c-format
-msgid "Invalid value for option: %s"
-msgstr "Ogiltigt värde för alternativet: %s"
-
-#. unhandled command
-#, c-format
-msgid "Not a valid command: %s"
-msgstr "Inte ett giltigt kommando: %s"
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of 1"
-msgstr "Ogiltigt antal argument skickades: %zu i stället för 1"
-
-#, c-format
-msgid "Failed to write JSON: %s"
-msgstr "Misslyckades med att skriva JSON: %s"

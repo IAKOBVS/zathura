@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 15:33+0200\n"
+"POT-Creation-Date: 2026-07-06 17:57+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: Rivo Zängov <eraser@eraser.ee>, 2012\n"
 "Language-Team: Estonian (http://app.transifex.com/pwmt/zathura/language/"
@@ -18,8 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgid "Zathura"
+msgstr ""
+
 msgid "Minimalistic document viewer"
 msgstr "Minimalistlik dokumendivaataja"
+
+#. Translators: Search terms to find this application. Do not translate or
+#. localize the semicolons. The list must also end with a semicolon.
+msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
+msgstr "PDF;PS;PostScript;DjVU;dokument;presentation;viewer;"
 
 msgid ""
 "Zathura is a highly customizable and functional document viewer. It provides "
@@ -62,8 +70,8 @@ msgstr "Järjehoidjate loendamine ja valimine"
 
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
-"embedding is no longer supported. Also, the setting 'window-icon-document' "
-"has been removed."
+"embedding is no longer supported (#216, #432). Also, the setting 'window-"
+"icon-document' has been removed."
 msgstr ""
 
 msgid "Fix issues with forking on macOS (#907)"
@@ -73,6 +81,18 @@ msgid "Fix first-page-column handling regression (#948)"
 msgstr ""
 
 msgid "Support SIGSTOP in sandbox (#945)"
+msgstr ""
+
+msgid "Add setting to open documents in single-page mode"
+msgstr ""
+
+msgid "Bind toggle-single-page to w (#966)"
+msgstr ""
+
+msgid "Make link confirmation optional"
+msgstr ""
+
+msgid "Replace use of SHA256 with XXH3-128 for faster file hashing"
 msgstr ""
 
 msgid "Fix sandbox on X11 (#928)"
@@ -994,13 +1014,73 @@ msgstr "Käskude automaattäide"
 msgid "Initial release"
 msgstr "Esmane väljalase"
 
-msgid "Zathura"
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of at least %u"
+msgstr "Invalid number arguments passed: %zu asemel at least %u"
+
+#, c-format
+msgid "Unregistered mode specified: %s"
+msgstr "Unregistered režiim specified: %s"
+
+msgid "Invalid number of arguments passed"
+msgstr "Invalid number arguments passed"
+
+#, c-format
+msgid "Invalid modifier in %s"
+msgstr "Invalid modifier %s"
+
+#, c-format
+msgid "Invalid special key value for %s"
+msgstr "Invalid special key value jaoks %s"
+
+#, c-format
+msgid "Invalid special key value or mode %s"
+msgstr "Invalid special key value or režiim %s"
+
+#, c-format
+msgid "Not a valid shortcut function: %s"
+msgstr "Pole kehtiv kiirkäskluse funktsioon: %s"
+
+msgid "Not enough arguments."
+msgstr "Argumente pole piisavalt."
+
+msgid "Too many arguments."
+msgstr "Liiga palju argumente."
+
+#, c-format
+msgid "Unknown option: %s"
+msgstr "Tundmatu valik: %s"
+
+msgid "true"
+msgstr "true"
+
+msgid "false"
+msgstr "false"
+
+#, c-format
+msgid "No value defined for option: %s"
+msgstr "Valiku jaoks pole väärtust määratud: %s"
+
+#, c-format
+msgid "Unknown value for option: %s"
+msgstr "Valiku tundmatu väärtus: %s"
+
+#, c-format
+msgid "Invalid value for option: %s"
 msgstr ""
 
-#. Translators: Search terms to find this application. Do not translate or
-#. localize the semicolons. The list must also end with a semicolon.
-msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
-msgstr "PDF;PS;PostScript;DjVU;dokument;presentation;viewer;"
+#. unhandled command
+#, c-format
+msgid "Not a valid command: %s"
+msgstr "Pole kehtiv käsk: %s"
+
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of 1"
+msgstr "Invalid number arguments passed: %zu asemel 1"
+
+#, c-format
+msgid "Failed to write JSON: %s"
+msgstr "JSON-i kirjutamine ebaõnnestus: %s"
 
 #, c-format
 msgid "'%s' must not be 0. Set to 1."
@@ -1111,9 +1191,6 @@ msgstr "Teave puudub."
 msgid ""
 "Please check the man pages zathura(1) and zathurarc(5) for more information."
 msgstr "Lisateabe saamiseks vaata man-lehti zathura(1) ja zathurarc(5)."
-
-msgid "Too many arguments."
-msgstr "Liiga palju argumente."
 
 msgid "No arguments given."
 msgstr "Argumente ei antud."
@@ -1475,6 +1552,9 @@ msgstr "Keela dokumenti manustatud allkirjade lisainfo kuvamine."
 msgid "Enable prompt to confirm when opening links"
 msgstr ""
 
+msgid "Open documents in single-page mode"
+msgstr ""
+
 #. define default inputbar commands
 msgid "Map a key sequence"
 msgstr "Seo klahvijada"
@@ -1742,68 +1822,3 @@ msgstr "Failed et save dokument."
 
 msgid "Document saved."
 msgstr "Dokument salvestatud."
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of at least %u"
-msgstr "Invalid number arguments passed: %zu asemel at least %u"
-
-#, c-format
-msgid "Unregistered mode specified: %s"
-msgstr "Unregistered režiim specified: %s"
-
-msgid "Invalid number of arguments passed"
-msgstr "Invalid number arguments passed"
-
-#, c-format
-msgid "Invalid modifier in %s"
-msgstr "Invalid modifier %s"
-
-#, c-format
-msgid "Invalid special key value for %s"
-msgstr "Invalid special key value jaoks %s"
-
-#, c-format
-msgid "Invalid special key value or mode %s"
-msgstr "Invalid special key value or režiim %s"
-
-#, c-format
-msgid "Not a valid shortcut function: %s"
-msgstr "Pole kehtiv kiirkäskluse funktsioon: %s"
-
-msgid "Not enough arguments."
-msgstr "Argumente pole piisavalt."
-
-#, c-format
-msgid "Unknown option: %s"
-msgstr "Tundmatu valik: %s"
-
-msgid "true"
-msgstr "true"
-
-msgid "false"
-msgstr "false"
-
-#, c-format
-msgid "No value defined for option: %s"
-msgstr "Valiku jaoks pole väärtust määratud: %s"
-
-#, c-format
-msgid "Unknown value for option: %s"
-msgstr "Valiku tundmatu väärtus: %s"
-
-#, c-format
-msgid "Invalid value for option: %s"
-msgstr ""
-
-#. unhandled command
-#, c-format
-msgid "Not a valid command: %s"
-msgstr "Pole kehtiv käsk: %s"
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of 1"
-msgstr "Invalid number arguments passed: %zu asemel 1"
-
-#, c-format
-msgid "Failed to write JSON: %s"
-msgstr "JSON-i kirjutamine ebaõnnestus: %s"
