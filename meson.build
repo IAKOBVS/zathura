@@ -243,6 +243,4 @@ zathura_dependency = declare_dependency(link_with: zathura, include_directories:
 if get_option('manpages').allowed()
   subdir('doc')
 endif
-if get_option('tests').allowed()
-  subdir('tests')
-endif
+subdir('tests')
