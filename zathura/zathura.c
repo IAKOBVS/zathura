@@ -1074,11 +1074,11 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   }
 
   /* view mode */
-  unsigned int pages_per_row   = 1;
-  char* first_page_column_list = NULL;
-  unsigned int page_v_padding  = 1;
-  unsigned int page_h_padding  = 1;
-  bool page_right_to_left      = false;
+  unsigned int pages_per_row              = 1;
+  g_autofree char* first_page_column_list = NULL;
+  unsigned int page_v_padding             = 1;
+  unsigned int page_h_padding             = 1;
+  bool page_right_to_left                 = false;
 
   girara_setting_get(zathura->ui.session, "page-v-padding", &page_v_padding);
   girara_setting_get(zathura->ui.session, "page-h-padding", &page_h_padding);
@@ -1091,8 +1091,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
 
   /* read first_page_column list */
   if (file_info.first_page_column_list != NULL && *file_info.first_page_column_list != '\0') {
-    first_page_column_list           = file_info.first_page_column_list;
-    file_info.first_page_column_list = NULL;
+    first_page_column_list = g_steal_pointer(&file_info.first_page_column_list);
   } else {
     girara_setting_get(zathura->ui.session, "first-page-column", &first_page_column_list);
   }
@@ -1103,7 +1102,6 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   girara_setting_set(zathura->ui.session, "pages-per-row", &pages_per_row);
   girara_setting_set(zathura->ui.session, "first-page-column", first_page_column_list);
   g_free(file_info.first_page_column_list);
-  g_free(first_page_column_list);
 
   page_right_to_left = file_info.page_right_to_left;
 
