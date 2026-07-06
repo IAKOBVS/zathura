@@ -915,6 +915,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   /* check current page number */
   /* if it wasn't specified on the command-line, get it from file_info */
   if (page_number == ZATHURA_PAGE_NUMBER_UNSPECIFIED) {
+    girara_debug("using page from file info: %d", file_info.current_page);
     page_number = file_info.current_page;
   }
   if (page_number < 0) {
@@ -924,6 +925,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
     girara_warning("document info: '%s' has an invalid page number", file_path);
     zathura_document_set_current_page_number(document, 0);
   } else {
+    girara_debug("setting current page: %d", page_number);
     zathura_document_set_current_page_number(document, page_number);
   }
 
@@ -939,6 +941,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   bool always_first_page = false;
   girara_setting_get(zathura->ui.session, "open-first-page", &always_first_page);
   if (always_first_page == true) {
+    girara_debug("setting current page: 0 (always open first page)");
     zathura_document_set_current_page_number(document, 0);
   }
 
