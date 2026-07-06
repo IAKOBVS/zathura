@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: Zlib */
 
-#include "links.h"
+#include "links-internal.h"
 
 #include <glib.h>
 #include <glib/gi18n.h>

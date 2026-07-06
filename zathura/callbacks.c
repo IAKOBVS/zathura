@@ -13,7 +13,7 @@
 #include <glib/gi18n.h>
 #include <math.h>
 
-#include "links.h"
+#include "links-internal.h"
 #include "zathura.h"
 #include "render.h"
 #include "document.h"
