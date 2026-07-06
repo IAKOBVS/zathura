@@ -1032,6 +1032,10 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
     goto error_free;
   }
 
+  /* The blocks below change the current page number due to a range of callbacks that are being executed.
+   * So we store the page number here and reset it below. */
+  const unsigned int page = zathura_document_get_current_page_number(document);
+
   /* get view port size */
   GtkAdjustment* hadjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(zathura->ui.view));
   GtkAdjustment* vadjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(zathura->ui.view));
@@ -1147,7 +1151,6 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   }
 
   /* Set page */
-  const unsigned int page = zathura_document_get_current_page_number(document);
   girara_debug("Setting page: %u", page);
   page_set(zathura, page);
 
