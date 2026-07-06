@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include <locale.h>
 #include <girara/datastructures.h>
 #include <girara/utils.h>
 #include <girara-gtk/session.h>
@@ -1673,13 +1672,6 @@ void zathura_show_signature_information(zathura_t* zathura, bool show) {
   }
 }
 
-void zathura_init_locale(void) {
-  setlocale(LC_ALL, "");
-  bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
-  bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-  textdomain(GETTEXT_PACKAGE);
-}
-
 void zathura_set_log_level(const char* loglevel) {
   if (loglevel == NULL || g_strcmp0(loglevel, "info") == 0) {
     girara_set_log_level(GIRARA_INFO);
@@ -1703,11 +1695,9 @@ zathura_document_t* zathura_get_document(zathura_t* zathura) {
 }
 
 void zathura_modify_current_search_result(zathura_t* zathura, int diff) {
-  if (zathura->global.total_search_results == 0)
+  if (zathura->global.total_search_results == 0 || diff == 0) {
     return;
-
-  if (diff == 0)
-    return;
+  }
 
   int current = zathura->global.current_search_result;
   int total   = zathura->global.total_search_results;

@@ -3,10 +3,11 @@
 #include <girara-gtk/settings.h>
 #include <girara/log.h>
 
+#include <errno.h>
 #include <glib/gi18n.h>
 #include <glib/gstdio.h>
-#include <errno.h>
 #include <limits.h>
+#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -59,6 +60,13 @@ static int run_synctex_forward(const char* synctex_fwd, const char* filename, in
   return ret;
 }
 #endif
+
+static void init_locale(void) {
+  setlocale(LC_ALL, "");
+  bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
+  bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+  textdomain(GETTEXT_PACKAGE);
+}
 
 static zathura_t* init_zathura(const char* config_dir, const char* data_dir, const char* cache_dir,
                                const char* plugin_path, char** argv, const char* synctex_editor) {
@@ -224,7 +232,7 @@ static void start_process_group(void* GIRARA_UNUSED(data)) {
 
 /* main function */
 GIRARA_VISIBLE int main(int argc, char* argv[]) {
-  zathura_init_locale();
+  init_locale();
 
 #ifdef WITH_SANDBOX
   girara_debug("Running zathura-sandbox, disable IPC services");
