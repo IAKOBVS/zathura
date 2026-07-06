@@ -23,6 +23,16 @@ option('tests',
   value: 'auto',
   description: 'run tests'
 )
+option('tests-x11',
+  type: 'feature',
+  value: 'auto',
+  description: 'run tests with xfvb-run'
+)
+option('tests-wayland',
+  type: 'feature',
+  value: 'auto',
+  description: 'run tests with weston'
+)
 option('convert-icon',
   type: 'feature',
   value: 'auto',
