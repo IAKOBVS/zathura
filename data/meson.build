@@ -36,7 +36,7 @@ appdata = i18n.merge_file(
   po_dir: podir,
 )
 
-desktop_file_validate = find_program('desktop-file-validate', required: get_option('tests'), native: true)
+desktop_file_validate = find_program('desktop-file-validate', native: true)
 if desktop_file_validate.found()
   test('validate-desktop',
     desktop_file_validate,
@@ -44,7 +44,7 @@ if desktop_file_validate.found()
   )
 endif
 
-appstreamcli = find_program('appstreamcli', required: get_option('tests'), native: true)
+appstreamcli = find_program('appstreamcli', native: true)
 if appstreamcli.found()
   test(
     'validate-appdata',
