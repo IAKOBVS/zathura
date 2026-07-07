@@ -243,24 +243,10 @@ bool apply_equal_page_mode(zathura_t* zathura, zathura_equal_mode_t mode) {
   const unsigned int current_page = zathura_document_get_current_page_number(zathura->document);
 
   zathura_page_t* c_page = zathura_document_get_page(zathura->document, current_page);
-  zathura_page_set_zoom(c_page, 1.0);
 
   girara_debug("Setting page equal mode to: %d", mode);
-
-  if (mode == ZATHURA_EQUAL_NONE) {
-    for (unsigned int i = 0; i < npag; i++) {
-      zathura_page_t* p = zathura_document_get_page(zathura->document, i);
-      zathura_page_set_zoom(p, 1.0);
-    }
-
-    zathura_document_widget_render_all(zathura->ui.document_widget);
-    refresh_view(zathura);
-    return true;
-  }
-
   for (unsigned int i = 0; i != npag; i++) {
     zathura_page_t* page_i = zathura_document_get_page(zathura->document, i);
-    zathura_page_set_zoom(page_i, 1.0);
 
     switch (mode) {
     case ZATHURA_EQUAL_WIDTH:
@@ -269,6 +255,8 @@ bool apply_equal_page_mode(zathura_t* zathura, zathura_equal_mode_t mode) {
     case ZATHURA_EQUAL_HEIGHT:
       zathura_page_set_zoom(page_i, zathura_page_get_height(c_page) / zathura_page_get_height(page_i));
       break;
+    default:
+      zathura_page_set_zoom(page_i, 1.0);
     }
   }
 
