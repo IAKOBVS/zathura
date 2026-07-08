@@ -265,8 +265,7 @@ static void load_plugin(zathura_plugin_manager_t* plugin_manager, const char* pl
     zathura_plugin_free(plugin);
   } else {
     girara_debug("Successfully loaded plugin from '%s'.", plugin->path);
-    girara_debug("plugin %s: version %u.%u.%u", plugin_definition->name, plugin_definition->version.major,
-                 plugin_definition->version.minor, plugin_definition->version.rev);
+    girara_debug("plugin %s: version %s", plugin_definition->name, plugin_definition->version);
   }
 }
 
@@ -363,11 +362,10 @@ const char* zathura_plugin_get_path(const zathura_plugin_t* plugin) {
   }
 }
 
-zathura_plugin_version_t zathura_plugin_get_version(const zathura_plugin_t* plugin) {
-  if (plugin != NULL && plugin->definition != NULL) {
+const char* zathura_plugin_get_version(const zathura_plugin_t* plugin) {
+  if (plugin && plugin->definition && plugin->definition->version) {
     return plugin->definition->version;
   }
 
-  zathura_plugin_version_t version = {0, 0, 0};
-  return version;
+  return "unknown";
 }

@@ -309,18 +309,16 @@ char* zathura_get_version_string(const zathura_plugin_manager_t* plugin_manager,
   g_string_append(string, "zathura " ZATHURA_VERSION);
   g_string_append_printf(string, "\ngirara " GIRARA_VERSION " (runtime: %s)", girara_version());
 
-  const char* format =
-      (markup == true) ? "\n<i>(plugin)</i> %s (%d.%d.%d) <i>(%s)</i>" : "\n(plugin) %s (%d.%d.%d) (%s)";
+  const char* format = (markup == true) ? "\n<i>(plugin)</i> %s (%s) <i>(%s)</i>" : "\n(plugin) %s (%s) (%s)";
 
   /* plugin information */
   girara_list_t* plugins = zathura_plugin_manager_get_plugins(plugin_manager);
   if (plugins != NULL) {
     for (size_t idx = 0; idx != girara_list_size(plugins); ++idx) {
-      const zathura_plugin_t* plugin   = girara_list_nth(plugins, idx);
-      const char* name                 = zathura_plugin_get_name(plugin);
-      zathura_plugin_version_t version = zathura_plugin_get_version(plugin);
-      g_string_append_printf(string, format, (name == NULL) ? "-" : name, version.major, version.minor, version.rev,
-                             zathura_plugin_get_path(plugin));
+      const zathura_plugin_t* plugin = girara_list_nth(plugins, idx);
+      const char* name               = zathura_plugin_get_name(plugin);
+      const char* version            = zathura_plugin_get_version(plugin);
+      g_string_append_printf(string, format, (name == NULL) ? "-" : name, version, zathura_plugin_get_path(plugin));
     }
   }
 
