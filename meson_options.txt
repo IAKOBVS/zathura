@@ -18,10 +18,15 @@ option('manpages',
   value: 'auto',
   description: 'manual pages'
 )
-option('tests',
+option('tests-x11',
   type: 'feature',
   value: 'auto',
-  description: 'run tests'
+  description: 'run tests with xfvb-run'
+)
+option('tests-wayland',
+  type: 'feature',
+  value: 'auto',
+  description: 'run tests with weston'
 )
 option('convert-icon',
   type: 'feature',

@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include <locale.h>
 #include <girara/datastructures.h>
 #include <girara/utils.h>
 #include <girara-gtk/session.h>
@@ -915,6 +914,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   /* check current page number */
   /* if it wasn't specified on the command-line, get it from file_info */
   if (page_number == ZATHURA_PAGE_NUMBER_UNSPECIFIED) {
+    girara_debug("using page from file info: %d", file_info.current_page);
     page_number = file_info.current_page;
   }
   if (page_number < 0) {
@@ -924,6 +924,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
     girara_warning("document info: '%s' has an invalid page number", file_path);
     zathura_document_set_current_page_number(document, 0);
   } else {
+    girara_debug("setting current page: %d", page_number);
     zathura_document_set_current_page_number(document, page_number);
   }
 
@@ -939,6 +940,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   bool always_first_page = false;
   girara_setting_get(zathura->ui.session, "open-first-page", &always_first_page);
   if (always_first_page == true) {
+    girara_debug("setting current page: 0 (always open first page)");
     zathura_document_set_current_page_number(document, 0);
   }
 
@@ -1029,6 +1031,10 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
     goto error_free;
   }
 
+  /* The blocks below change the current page number due to a range of callbacks that are being executed.
+   * So we store the page number here and reset it below. */
+  const unsigned int page = zathura_document_get_current_page_number(document);
+
   /* get view port size */
   GtkAdjustment* hadjustment = gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(zathura->ui.view));
   GtkAdjustment* vadjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(zathura->ui.view));
@@ -1074,11 +1080,11 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   }
 
   /* view mode */
-  unsigned int pages_per_row   = 1;
-  char* first_page_column_list = NULL;
-  unsigned int page_v_padding  = 1;
-  unsigned int page_h_padding  = 1;
-  bool page_right_to_left      = false;
+  unsigned int pages_per_row              = 1;
+  g_autofree char* first_page_column_list = NULL;
+  unsigned int page_v_padding             = 1;
+  unsigned int page_h_padding             = 1;
+  bool page_right_to_left                 = false;
 
   girara_setting_get(zathura->ui.session, "page-v-padding", &page_v_padding);
   girara_setting_get(zathura->ui.session, "page-h-padding", &page_h_padding);
@@ -1091,8 +1097,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
 
   /* read first_page_column list */
   if (file_info.first_page_column_list != NULL && *file_info.first_page_column_list != '\0') {
-    first_page_column_list           = file_info.first_page_column_list;
-    file_info.first_page_column_list = NULL;
+    first_page_column_list = g_steal_pointer(&file_info.first_page_column_list);
   } else {
     girara_setting_get(zathura->ui.session, "first-page-column", &first_page_column_list);
   }
@@ -1103,7 +1108,6 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   girara_setting_set(zathura->ui.session, "pages-per-row", &pages_per_row);
   girara_setting_set(zathura->ui.session, "first-page-column", first_page_column_list);
   g_free(file_info.first_page_column_list);
-  g_free(first_page_column_list);
 
   page_right_to_left = file_info.page_right_to_left;
 
@@ -1146,7 +1150,6 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   }
 
   /* Set page */
-  const unsigned int page = zathura_document_get_current_page_number(document);
   girara_debug("Setting page: %u", page);
   page_set(zathura, page);
 
@@ -1160,6 +1163,17 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   girara_setting_get(zathura->ui.session, "show-signature-information", &show_signature_information);
   zathura_show_signature_information(zathura, show_signature_information);
   update_visible_pages(zathura);
+
+  /* apply default page mode */
+  g_autofree char* page_mode = NULL;
+  girara_setting_get(zathura->ui.session, "page-mode", &page_mode);
+  if (page_mode != NULL) {
+    if (g_strcmp0(page_mode, "equal_width") == 0) {
+      apply_equal_page_mode(zathura, ZATHURA_EQUAL_WIDTH);
+    } else if (g_strcmp0(page_mode, "equal_height") == 0) {
+      apply_equal_page_mode(zathura, ZATHURA_EQUAL_HEIGHT);
+    }
+  }
 
   zathura_update_view_ppi(zathura);
 
@@ -1669,25 +1683,6 @@ void zathura_show_signature_information(zathura_t* zathura, bool show) {
   }
 }
 
-void zathura_init_locale(void) {
-  setlocale(LC_ALL, "");
-  bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
-  bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-  textdomain(GETTEXT_PACKAGE);
-}
-
-void zathura_set_log_level(const char* loglevel) {
-  if (loglevel == NULL || g_strcmp0(loglevel, "info") == 0) {
-    girara_set_log_level(GIRARA_INFO);
-  } else if (g_strcmp0(loglevel, "warning") == 0) {
-    girara_set_log_level(GIRARA_WARNING);
-  } else if (g_strcmp0(loglevel, "error") == 0) {
-    girara_set_log_level(GIRARA_ERROR);
-  } else if (g_strcmp0(loglevel, "debug") == 0) {
-    girara_set_log_level(GIRARA_DEBUG);
-  }
-}
-
 bool zathura_has_document(zathura_t* zathura) {
   return zathura != NULL && zathura->document != NULL;
 }
@@ -1699,11 +1694,9 @@ zathura_document_t* zathura_get_document(zathura_t* zathura) {
 }
 
 void zathura_modify_current_search_result(zathura_t* zathura, int diff) {
-  if (zathura->global.total_search_results == 0)
+  if (zathura->global.total_search_results == 0 || diff == 0) {
     return;
-
-  if (diff == 0)
-    return;
+  }
 
   int current = zathura->global.current_search_result;
   int total   = zathura->global.total_search_results;

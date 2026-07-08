@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 15:33+0200\n"
+"POT-Creation-Date: 2026-07-06 17:57+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: HiTuX <hemza.dz@gmail.com>, 2026\n"
 "Language-Team: Arabic (http://app.transifex.com/pwmt/zathura/language/ar/)\n"
@@ -20,8 +20,16 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
+msgid "Zathura"
+msgstr ""
+
 msgid "Minimalistic document viewer"
 msgstr "عارض وثائق الحد الأدنى"
+
+#. Translators: Search terms to find this application. Do not translate or
+#. localize the semicolons. The list must also end with a semicolon.
+msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
+msgstr ""
 
 msgid ""
 "Zathura is a highly customizable and functional document viewer. It provides "
@@ -62,8 +70,8 @@ msgstr ""
 
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
-"embedding is no longer supported. Also, the setting 'window-icon-document' "
-"has been removed."
+"embedding is no longer supported (#216, #432). Also, the setting 'window-"
+"icon-document' has been removed."
 msgstr ""
 
 msgid "Fix issues with forking on macOS (#907)"
@@ -73,6 +81,18 @@ msgid "Fix first-page-column handling regression (#948)"
 msgstr ""
 
 msgid "Support SIGSTOP in sandbox (#945)"
+msgstr ""
+
+msgid "Add setting to open documents in single-page mode"
+msgstr ""
+
+msgid "Bind toggle-single-page to w (#966)"
+msgstr ""
+
+msgid "Make link confirmation optional"
+msgstr ""
+
+msgid "Replace use of SHA256 with XXH3-128 for faster file hashing"
 msgstr ""
 
 msgid "Fix sandbox on X11 (#928)"
@@ -982,13 +1002,73 @@ msgstr ""
 msgid "Initial release"
 msgstr ""
 
-msgid "Zathura"
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of at least %u"
 msgstr ""
 
-#. Translators: Search terms to find this application. Do not translate or
-#. localize the semicolons. The list must also end with a semicolon.
-msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
+#, c-format
+msgid "Unregistered mode specified: %s"
 msgstr ""
+
+msgid "Invalid number of arguments passed"
+msgstr ""
+
+#, c-format
+msgid "Invalid modifier in %s"
+msgstr ""
+
+#, c-format
+msgid "Invalid special key value for %s"
+msgstr ""
+
+#, c-format
+msgid "Invalid special key value or mode %s"
+msgstr ""
+
+#, c-format
+msgid "Not a valid shortcut function: %s"
+msgstr ""
+
+msgid "Not enough arguments."
+msgstr ""
+
+msgid "Too many arguments."
+msgstr "عدد الوسائط كبير."
+
+#, c-format
+msgid "Unknown option: %s"
+msgstr ""
+
+msgid "true"
+msgstr ""
+
+msgid "false"
+msgstr ""
+
+#, c-format
+msgid "No value defined for option: %s"
+msgstr ""
+
+#, c-format
+msgid "Unknown value for option: %s"
+msgstr ""
+
+#, c-format
+msgid "Invalid value for option: %s"
+msgstr ""
+
+#. unhandled command
+#, c-format
+msgid "Not a valid command: %s"
+msgstr ""
+
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of 1"
+msgstr "عدد الوسائط المُمرَّرة غير صالح: %zu بدلاً من 1"
+
+#, c-format
+msgid "Failed to write JSON: %s"
+msgstr "فشل في كتابة JSON: %s"
 
 #, c-format
 msgid "'%s' must not be 0. Set to 1."
@@ -1099,9 +1179,6 @@ msgstr "لا توجد معلومات متاحة."
 msgid ""
 "Please check the man pages zathura(1) and zathurarc(5) for more information."
 msgstr ""
-
-msgid "Too many arguments."
-msgstr "عدد الوسائط كبير."
 
 msgid "No arguments given."
 msgstr "لم تُعط وسائط."
@@ -1464,6 +1541,9 @@ msgstr "تعطيل المعلومات الإضافية للتواقيع المض
 msgid "Enable prompt to confirm when opening links"
 msgstr ""
 
+msgid "Open documents in single-page mode"
+msgstr ""
+
 #. define default inputbar commands
 msgid "Map a key sequence"
 msgstr ""
@@ -1726,71 +1806,3 @@ msgstr "فشل في حفظ المستند."
 
 msgid "Document saved."
 msgstr "تم حفظ المستند."
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of at least %u"
-msgstr ""
-
-#, c-format
-msgid "Unregistered mode specified: %s"
-msgstr ""
-
-msgid "Invalid number of arguments passed"
-msgstr ""
-
-#, c-format
-msgid "Invalid modifier in %s"
-msgstr ""
-
-#, c-format
-msgid "Invalid special key value for %s"
-msgstr ""
-
-#, c-format
-msgid "Invalid special key value or mode %s"
-msgstr ""
-
-#, c-format
-msgid "Not a valid shortcut function: %s"
-msgstr ""
-
-msgid "Not enough arguments."
-msgstr ""
-
-#, c-format
-msgid "Unknown option: %s"
-msgstr ""
-
-msgid "true"
-msgstr ""
-
-msgid "false"
-msgstr ""
-
-#, c-format
-msgid "No value defined for option: %s"
-msgstr ""
-
-#, c-format
-msgid "Unknown value for option: %s"
-msgstr ""
-
-#, c-format
-msgid "Invalid value for option: %s"
-msgstr ""
-
-#. unhandled command
-#, c-format
-msgid "Not a valid command: %s"
-msgstr ""
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of 1"
-msgstr "عدد الوسائط المُمرَّرة غير صالح: %zu بدلاً من 1"
-
-#, c-format
-msgid "Failed to write JSON: %s"
-msgstr "فشل في كتابة JSON: %s"
-
-#~ msgid "Use first page of a document as window icon"
-#~ msgstr "استخدم الصفحة الأولى من الوثيقة كرمز النافذة"

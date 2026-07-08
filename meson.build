@@ -1,5 +1,5 @@
 project('zathura', 'c',
-  version: '2026.07.02',
+  version: '2026.07.08',
   meson_version: '>=1.5',
   default_options: ['c_std=c23', 'warning_level=3'],
 )
@@ -19,6 +19,7 @@ conf_data = configuration_data()
 conf_data.set('ZVMAJOR', version_array[0])
 conf_data.set('ZVMINOR', version_array[1])
 conf_data.set('ZVREV', version_array[2])
+conf_data.set('ZVFULL', version)
 conf_data.set('ZVAPI', plugin_api_version)
 conf_data.set('ZVABI', plugin_abi_version)
 
@@ -43,7 +44,7 @@ cc.compiles('''#if !__has_attribute(cleanup)
 
 # required dependencies
 libm = cc.find_library('m', required: false)
-girara = dependency('girara', version: '>=2026.02.03')
+girara = dependency('girara', version: '>=2026.07.07')
 glib = dependency('glib-2.0', version: '>=2.76')
 gio = dependency('gio-unix-2.0', required: host_machine.system() != 'windows')
 gthread = dependency('gthread-2.0', version: '>=2.72')
@@ -242,6 +243,4 @@ zathura_dependency = declare_dependency(link_with: zathura, include_directories:
 if get_option('manpages').allowed()
   subdir('doc')
 endif
-if get_option('tests').allowed()
-  subdir('tests')
-endif
+subdir('tests')

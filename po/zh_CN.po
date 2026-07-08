@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 15:33+0200\n"
+"POT-Creation-Date: 2026-07-06 17:57+0200\n"
 "PO-Revision-Date: 2026-03-31 19:24+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/pwmt/zathura/"
@@ -17,8 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+msgid "Zathura"
+msgstr ""
+
 msgid "Minimalistic document viewer"
 msgstr "极简文档查看器"
+
+#. Translators: Search terms to find this application. Do not translate or
+#. localize the semicolons. The list must also end with a semicolon.
+msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
+msgstr "PDF;PS;PostScript;DjVU;文档;演示;查看器;"
 
 msgid ""
 "Zathura is a highly customizable and functional document viewer. It provides "
@@ -58,8 +66,8 @@ msgstr "列出并选择书签"
 
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
-"embedding is no longer supported. Also, the setting 'window-icon-document' "
-"has been removed."
+"embedding is no longer supported (#216, #432). Also, the setting 'window-"
+"icon-document' has been removed."
 msgstr ""
 
 msgid "Fix issues with forking on macOS (#907)"
@@ -69,6 +77,18 @@ msgid "Fix first-page-column handling regression (#948)"
 msgstr ""
 
 msgid "Support SIGSTOP in sandbox (#945)"
+msgstr ""
+
+msgid "Add setting to open documents in single-page mode"
+msgstr ""
+
+msgid "Bind toggle-single-page to w (#966)"
+msgstr ""
+
+msgid "Make link confirmation optional"
+msgstr ""
+
+msgid "Replace use of SHA256 with XXH3-128 for faster file hashing"
 msgstr ""
 
 msgid "Fix sandbox on X11 (#928)"
@@ -978,13 +998,73 @@ msgstr ""
 msgid "Initial release"
 msgstr ""
 
-msgid "Zathura"
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of at least %u"
+msgstr "传入的参数数量无效：%zu，至少应为 %u"
+
+#, c-format
+msgid "Unregistered mode specified: %s"
+msgstr "指定了未注册的模式：%s"
+
+msgid "Invalid number of arguments passed"
+msgstr "传入的参数数量无效"
+
+#, c-format
+msgid "Invalid modifier in %s"
+msgstr "%s 中有无效修饰键"
+
+#, c-format
+msgid "Invalid special key value for %s"
+msgstr "%s 的特殊按键值无效"
+
+#, c-format
+msgid "Invalid special key value or mode %s"
+msgstr "特殊按键值或模式 %s 无效"
+
+#, c-format
+msgid "Not a valid shortcut function: %s"
+msgstr "不是有效的快捷键函数：%s"
+
+msgid "Not enough arguments."
+msgstr "参数不足。"
+
+msgid "Too many arguments."
+msgstr "参数过多。"
+
+#, c-format
+msgid "Unknown option: %s"
+msgstr "未知选项：%s"
+
+msgid "true"
+msgstr "真"
+
+msgid "false"
+msgstr "假"
+
+#, c-format
+msgid "No value defined for option: %s"
+msgstr "选项没有定义值：%s"
+
+#, c-format
+msgid "Unknown value for option: %s"
+msgstr "选项的值未知：%s"
+
+#, c-format
+msgid "Invalid value for option: %s"
 msgstr ""
 
-#. Translators: Search terms to find this application. Do not translate or
-#. localize the semicolons. The list must also end with a semicolon.
-msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
-msgstr "PDF;PS;PostScript;DjVU;文档;演示;查看器;"
+#. unhandled command
+#, c-format
+msgid "Not a valid command: %s"
+msgstr "不是有效命令：%s"
+
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of 1"
+msgstr "传入的参数数量无效：%zu，应为 1"
+
+#, c-format
+msgid "Failed to write JSON: %s"
+msgstr "写入 JSON 失败：%s"
 
 #, c-format
 msgid "'%s' must not be 0. Set to 1."
@@ -1095,9 +1175,6 @@ msgstr "没有可用信息。"
 msgid ""
 "Please check the man pages zathura(1) and zathurarc(5) for more information."
 msgstr "请查看手册页 zathura(1) 和 zathurarc(5) 获取更多信息。"
-
-msgid "Too many arguments."
-msgstr "参数过多。"
 
 msgid "No arguments given."
 msgstr "未给定参数。"
@@ -1450,14 +1527,16 @@ msgstr "鼠标选中数据要写入的剪贴板"
 msgid "Enable notification after selecting text"
 msgstr "选择文本后启用通知"
 
-#, fuzzy
 msgid "Keep selection highlighted after mouse release"
-msgstr "补全高亮前景色"
+msgstr ""
 
 msgid "Disable additional information for signatures embedded in the document."
 msgstr "禁用文档内嵌签名的附加信息。"
 
 msgid "Enable prompt to confirm when opening links"
+msgstr ""
+
+msgid "Open documents in single-page mode"
 msgstr ""
 
 #. define default inputbar commands
@@ -1675,9 +1754,9 @@ msgstr "打印失败：%s"
 msgid "Invalid adjust mode: %d"
 msgstr "无效的适配模式：%d"
 
-#, fuzzy, c-format
+#, c-format
 msgid "Copied file path to selection %s: %s"
-msgstr "已将选中的文本复制到选择区 %s：%s"
+msgstr ""
 
 msgid "This document does not contain any index"
 msgstr "此文档不包含任何索引"
@@ -1688,9 +1767,8 @@ msgstr ""
 msgid "Open file"
 msgstr "打开文件"
 
-#, fuzzy
 msgid "Supported documents"
-msgstr "打开文档"
+msgstr ""
 
 msgid "All files"
 msgstr ""
@@ -1727,77 +1805,3 @@ msgstr "保存文档失败。"
 
 msgid "Document saved."
 msgstr "文档已保存。"
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of at least %u"
-msgstr "传入的参数数量无效：%zu，至少应为 %u"
-
-#, c-format
-msgid "Unregistered mode specified: %s"
-msgstr "指定了未注册的模式：%s"
-
-msgid "Invalid number of arguments passed"
-msgstr "传入的参数数量无效"
-
-#, c-format
-msgid "Invalid modifier in %s"
-msgstr "%s 中有无效修饰键"
-
-#, c-format
-msgid "Invalid special key value for %s"
-msgstr "%s 的特殊按键值无效"
-
-#, c-format
-msgid "Invalid special key value or mode %s"
-msgstr "特殊按键值或模式 %s 无效"
-
-#, c-format
-msgid "Not a valid shortcut function: %s"
-msgstr "不是有效的快捷键函数：%s"
-
-msgid "Not enough arguments."
-msgstr "参数不足。"
-
-#, c-format
-msgid "Unknown option: %s"
-msgstr "未知选项：%s"
-
-msgid "true"
-msgstr "真"
-
-msgid "false"
-msgstr "假"
-
-#, c-format
-msgid "No value defined for option: %s"
-msgstr "选项没有定义值：%s"
-
-#, c-format
-msgid "Unknown value for option: %s"
-msgstr "选项的值未知：%s"
-
-#, fuzzy, c-format
-msgid "Invalid value for option: %s"
-msgstr "选项的值未知：%s"
-
-#. unhandled command
-#, c-format
-msgid "Not a valid command: %s"
-msgstr "不是有效命令：%s"
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of 1"
-msgstr "传入的参数数量无效：%zu，应为 1"
-
-#, c-format
-msgid "Failed to write JSON: %s"
-msgstr "写入 JSON 失败：%s"
-
-#~ msgid "Window icon"
-#~ msgstr "窗口图标"
-
-#~ msgid "Use first page of a document as window icon"
-#~ msgstr "使用文档第一页作为窗口图标"
-
-#~ msgid "Reparents to window specified by xid (X11)"
-#~ msgstr "重新指定父窗口为 xid 指定的窗口（X11）"

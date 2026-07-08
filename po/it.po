@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 15:33+0200\n"
+"POT-Creation-Date: 2026-07-06 17:57+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: TheLemonMan <segnalazionidalweb@gmail.com>, 2012,2015\n"
 "Language-Team: Italian (http://app.transifex.com/pwmt/zathura/language/it/)\n"
@@ -22,8 +22,16 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
 "1 : 2;\n"
 
+msgid "Zathura"
+msgstr ""
+
 msgid "Minimalistic document viewer"
 msgstr "Visualizzatore di documenti minimalista"
+
+#. Translators: Search terms to find this application. Do not translate or
+#. localize the semicolons. The list must also end with a semicolon.
+msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
+msgstr "PDF;PS;PostScript;DjVU;documenti;presentazioni;lettore;"
 
 msgid ""
 "Zathura is a highly customizable and functional document viewer. It provides "
@@ -67,8 +75,8 @@ msgstr "Elenco e selezione dei segnalibri"
 
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
-"embedding is no longer supported. Also, the setting 'window-icon-document' "
-"has been removed."
+"embedding is no longer supported (#216, #432). Also, the setting 'window-"
+"icon-document' has been removed."
 msgstr ""
 
 msgid "Fix issues with forking on macOS (#907)"
@@ -78,6 +86,18 @@ msgid "Fix first-page-column handling regression (#948)"
 msgstr ""
 
 msgid "Support SIGSTOP in sandbox (#945)"
+msgstr ""
+
+msgid "Add setting to open documents in single-page mode"
+msgstr ""
+
+msgid "Bind toggle-single-page to w (#966)"
+msgstr ""
+
+msgid "Make link confirmation optional"
+msgstr ""
+
+msgid "Replace use of SHA256 with XXH3-128 for faster file hashing"
 msgstr ""
 
 msgid "Fix sandbox on X11 (#928)"
@@ -987,13 +1007,73 @@ msgstr ""
 msgid "Initial release"
 msgstr ""
 
-msgid "Zathura"
-msgstr ""
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of at least %u"
+msgstr "Numero degli argomenti non valido: %zu immessi, %u attesi"
 
-#. Translators: Search terms to find this application. Do not translate or
-#. localize the semicolons. The list must also end with a semicolon.
-msgid "PDF;PS;PostScript;DjVU;document;presentation;viewer;"
-msgstr "PDF;PS;PostScript;DjVU;documenti;presentazioni;lettore;"
+#, c-format
+msgid "Unregistered mode specified: %s"
+msgstr "Modalità non registrata: %s"
+
+msgid "Invalid number of arguments passed"
+msgstr "Numero degli argomenti non valido"
+
+#, c-format
+msgid "Invalid modifier in %s"
+msgstr "Modificatore invalido in %s"
+
+#, c-format
+msgid "Invalid special key value for %s"
+msgstr "Valore della chiave speciale %s non valido"
+
+#, c-format
+msgid "Invalid special key value or mode %s"
+msgstr "Valore della chiave speciale o modalità %s non valida"
+
+#, c-format
+msgid "Not a valid shortcut function: %s"
+msgstr "Scorciatoia invalida: %s"
+
+msgid "Not enough arguments."
+msgstr "Non abbastanza argomenti specificati."
+
+msgid "Too many arguments."
+msgstr "Numero di argomenti eccessivo."
+
+#, c-format
+msgid "Unknown option: %s"
+msgstr "Opzione sconosciuta: %s"
+
+msgid "true"
+msgstr "vero"
+
+msgid "false"
+msgstr "falso"
+
+#, c-format
+msgid "No value defined for option: %s"
+msgstr "Nessun valore definito per l' opzione: %s"
+
+#, c-format
+msgid "Unknown value for option: %s"
+msgstr "Valore sconosciuto per l' opzione: %s"
+
+#, c-format
+msgid "Invalid value for option: %s"
+msgstr "Valore non valido per l'opzione: %s"
+
+#. unhandled command
+#, c-format
+msgid "Not a valid command: %s"
+msgstr "Comando non valido: %s"
+
+#, c-format
+msgid "Invalid number of arguments passed: %zu instead of 1"
+msgstr "Numero degli argomenti non valido: %zu immessi, 1 attesi"
+
+#, c-format
+msgid "Failed to write JSON: %s"
+msgstr "Impossibile scrivere JSON: %s"
 
 #, c-format
 msgid "'%s' must not be 0. Set to 1."
@@ -1106,9 +1186,6 @@ msgid ""
 msgstr ""
 "Consultare le pagine di manuale zathura(1) e zathurarc(5) per maggiori "
 "informazioni."
-
-msgid "Too many arguments."
-msgstr "Numero di argomenti eccessivo."
 
 msgid "No arguments given."
 msgstr "Nessun argomento specificato."
@@ -1476,6 +1553,9 @@ msgstr ""
 msgid "Enable prompt to confirm when opening links"
 msgstr "Abilita la richiesta di conferma all'apertura dei link"
 
+msgid "Open documents in single-page mode"
+msgstr ""
+
 #. define default inputbar commands
 msgid "Map a key sequence"
 msgstr "Mappa una sequenza di tasti"
@@ -1746,68 +1826,3 @@ msgstr "Impossibile salvare il documento."
 
 msgid "Document saved."
 msgstr "Documento salvato."
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of at least %u"
-msgstr "Numero degli argomenti non valido: %zu immessi, %u attesi"
-
-#, c-format
-msgid "Unregistered mode specified: %s"
-msgstr "Modalità non registrata: %s"
-
-msgid "Invalid number of arguments passed"
-msgstr "Numero degli argomenti non valido"
-
-#, c-format
-msgid "Invalid modifier in %s"
-msgstr "Modificatore invalido in %s"
-
-#, c-format
-msgid "Invalid special key value for %s"
-msgstr "Valore della chiave speciale %s non valido"
-
-#, c-format
-msgid "Invalid special key value or mode %s"
-msgstr "Valore della chiave speciale o modalità %s non valida"
-
-#, c-format
-msgid "Not a valid shortcut function: %s"
-msgstr "Scorciatoia invalida: %s"
-
-msgid "Not enough arguments."
-msgstr "Non abbastanza argomenti specificati."
-
-#, c-format
-msgid "Unknown option: %s"
-msgstr "Opzione sconosciuta: %s"
-
-msgid "true"
-msgstr "vero"
-
-msgid "false"
-msgstr "falso"
-
-#, c-format
-msgid "No value defined for option: %s"
-msgstr "Nessun valore definito per l' opzione: %s"
-
-#, c-format
-msgid "Unknown value for option: %s"
-msgstr "Valore sconosciuto per l' opzione: %s"
-
-#, c-format
-msgid "Invalid value for option: %s"
-msgstr "Valore non valido per l'opzione: %s"
-
-#. unhandled command
-#, c-format
-msgid "Not a valid command: %s"
-msgstr "Comando non valido: %s"
-
-#, c-format
-msgid "Invalid number of arguments passed: %zu instead of 1"
-msgstr "Numero degli argomenti non valido: %zu immessi, 1 attesi"
-
-#, c-format
-msgid "Failed to write JSON: %s"
-msgstr "Impossibile scrivere JSON: %s"

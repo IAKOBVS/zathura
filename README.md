@@ -11,7 +11,7 @@ The following dependencies are required:
 
 * `gtk4` (>= 4.12)
 * `glib` (>= 2.76)
-* `girara` (>= 2026.01.30)
+* `girara` (>= 2026.07.07)
 * `libmagic` from file(1): for mime-type detection
 * `json-glib`
 * `sqlite3` (>= 3.25.0): sqlite3 database backend

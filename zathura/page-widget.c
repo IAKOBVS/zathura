@@ -11,7 +11,7 @@
 #include <glib/gi18n.h>
 #include <math.h>
 
-#include "links.h"
+#include "links-internal.h"
 #include "page.h"
 #include "render.h"
 #include "utils.h"
