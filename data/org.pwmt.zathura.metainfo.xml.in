@@ -72,7 +72,7 @@
         <p>Add page-mode setting</p>
         <p>Fix reloading of files (#969)</p>
         <p>Fix CSS handling (#970)</p>
-        <p>Replace test feature with test-x11 and test-wayland features</issue>
+        <p>Replace test feature with test-x11 and test-wayland features</p>
         <p>Various fixes and improvements</p>
       </description>
       <issues>
