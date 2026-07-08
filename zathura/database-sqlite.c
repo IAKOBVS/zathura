@@ -264,7 +264,8 @@ static void sqlite_db_check_layout(sqlite3* session, const int database_version,
 
     if (ret1 == true && res1 == false) {
       if (sqlite3_exec(session, SQL_FILEINFO_ALTER, NULL, 0, NULL) != SQLITE_OK) {
-        girara_warning("failed to update database table layout: pages_per_row, position_x, position_y");
+        girara_warning("failed to update database table layout (version %d): pages_per_row, position_x, position_y",
+                       database_version);
         all_updates_ok = false;
       }
     }
@@ -273,7 +274,7 @@ static void sqlite_db_check_layout(sqlite3* session, const int database_version,
 
     if (ret1 == true && res1 == false) {
       if (sqlite3_exec(session, SQL_FILEINFO_ALTER2, NULL, 0, NULL) != SQLITE_OK) {
-        girara_warning("failed to update database table layout: first_page_column");
+        girara_warning("failed to update database table layout (version %d): first_page_column", database_version);
         all_updates_ok = false;
       }
     }
@@ -282,7 +283,7 @@ static void sqlite_db_check_layout(sqlite3* session, const int database_version,
 
     if (ret1 == true && res1 == false) {
       if (sqlite3_exec(session, SQL_FILEINFO_ALTER3, NULL, 0, NULL) != SQLITE_OK) {
-        girara_warning("failed to update database table layout: time");
+        girara_warning("failed to update database table layout (version %d): time", database_version);
         all_updates_ok = false;
       }
     }
@@ -291,7 +292,7 @@ static void sqlite_db_check_layout(sqlite3* session, const int database_version,
 
     if (ret1 == true && res1 == false) {
       if (sqlite3_exec(session, SQL_FILEINFO_ALTER4, NULL, 0, NULL) != SQLITE_OK) {
-        girara_warning("failed to update database table layout: zoom");
+        girara_warning("failed to update database table layout (version %d): zoom", database_version);
         all_updates_ok = false;
       }
     }
@@ -300,7 +301,7 @@ static void sqlite_db_check_layout(sqlite3* session, const int database_version,
 
     if (ret1 == true && res1 == false) {
       if (sqlite3_exec(session, SQL_FILEINFO_ALTER5, NULL, 0, NULL) != SQLITE_OK) {
-        girara_warning("failed to update database table layout: pages_right_to_left");
+        girara_warning("failed to update database table layout (version %d): pages_right_to_left", database_version);
         all_updates_ok = false;
       }
     }
@@ -309,7 +310,7 @@ static void sqlite_db_check_layout(sqlite3* session, const int database_version,
 
     if (ret1 == true && res1 == false) {
       if (sqlite3_exec(session, SQL_BOOKMARK_ALTER, NULL, 0, NULL) != SQLITE_OK) {
-        girara_warning("failed to update database table layout: hadj_ratio, vadj_ratio");
+        girara_warning("failed to update database table layout (version %d): hadj_ratio, vadj_ratio", database_version);
         all_updates_ok = false;
       }
     }
@@ -332,20 +333,20 @@ static void sqlite_db_check_layout(sqlite3* session, const int database_version,
       g_strlcat(transaction, tx_end, sizeof(transaction));
 
       if (sqlite3_exec(session, transaction, NULL, 0, NULL) != SQLITE_OK) {
-        girara_warning("failed to update database table layout: first_page_column");
+        girara_warning("failed to update database table layout (version %d): first_page_column", database_version);
         all_updates_ok = false;
       }
     }
   }
   if (database_version < 2) {
     if (sqlite3_exec(session, SQL_FILEINFO_ALTER6, NULL, 0, NULL) != SQLITE_OK) {
-      girara_warning("failed to update database table layout: sha256");
+      girara_warning("failed to update database table layout (version %d): hash", database_version);
       all_updates_ok = false;
     }
   }
   if (database_version < 4 && database_version >= 2) {
     if (sqlite3_exec(session, SQL_FILEINFO_ALTER7, NULL, 0, NULL) != SQLITE_OK) {
-      girara_warning("failed to update database table layout: hash");
+      girara_warning("failed to update database table layout (version %d): hash", database_version);
       all_updates_ok = false;
     }
   }
