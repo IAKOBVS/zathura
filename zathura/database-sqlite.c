@@ -714,9 +714,7 @@ static girara_list_t* sqlite_load_quickmarks(zathura_database_t* db, const char*
 
 static bool sqlite_set_fileinfo(zathura_database_t* db, const char* file, const uint8_t* hash,
                                 zathura_fileinfo_t* file_info) {
-  if (db == NULL || file == NULL || hash == NULL || file_info == NULL) {
-    return false;
-  }
+  g_return_val_if_fail(hash != NULL, false);
 
   ZathuraSQLDatabase* sqldb       = ZATHURA_SQLDATABASE(db);
   ZathuraSQLDatabasePrivate* priv = zathura_sqldatabase_get_instance_private(sqldb);
@@ -750,9 +748,7 @@ static bool sqlite_set_fileinfo(zathura_database_t* db, const char* file, const 
 
 static bool sqlite_get_fileinfo(zathura_database_t* db, const char* file, const uint8_t* hash,
                                 zathura_fileinfo_t* file_info) {
-  if (db == NULL || file == NULL || hash == NULL || file_info == NULL) {
-    return false;
-  }
+  g_return_val_if_fail(hash != NULL, false);
 
   ZathuraSQLDatabase* sqldb       = ZATHURA_SQLDATABASE(db);
   ZathuraSQLDatabasePrivate* priv = zathura_sqldatabase_get_instance_private(sqldb);

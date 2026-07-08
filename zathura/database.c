@@ -38,14 +38,14 @@ bool zathura_db_save_jumplist(zathura_database_t* db, const char* file, girara_l
 
 bool zathura_db_set_fileinfo(zathura_database_t* db, const char* file, const uint8_t* hash,
                              zathura_fileinfo_t* file_info) {
-  g_return_val_if_fail(ZATHURA_IS_DATABASE(db) && file != NULL && hash != NULL && file_info != NULL, false);
+  g_return_val_if_fail(ZATHURA_IS_DATABASE(db) && file != NULL && file_info != NULL, false);
 
   return ZATHURA_DATABASE_GET_INTERFACE(db)->set_fileinfo(db, file, hash, file_info);
 }
 
 bool zathura_db_get_fileinfo(zathura_database_t* db, const char* file, const uint8_t* hash,
                              zathura_fileinfo_t* file_info) {
-  g_return_val_if_fail(ZATHURA_IS_DATABASE(db) && file != NULL && hash != NULL && file_info != NULL, false);
+  g_return_val_if_fail(ZATHURA_IS_DATABASE(db) && file != NULL && file_info != NULL, false);
 
   return ZATHURA_DATABASE_GET_INTERFACE(db)->get_fileinfo(db, file, hash, file_info);
 }
