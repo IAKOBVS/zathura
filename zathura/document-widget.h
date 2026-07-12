@@ -32,7 +32,7 @@ struct zathura_document_widget_class_s {
  *
  * @return the type
  */
-GType zathura_document_widget_get_type(void) G_GNUC_CONST;
+GType zathura_document_widget_get_type(void);
 
 /**
  * Create a document view widget.
