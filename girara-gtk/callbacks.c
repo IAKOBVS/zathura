@@ -373,18 +373,19 @@ gboolean girara_callback_view_scroll_event(GtkEventControllerScroll* controller,
   girara_event_t event = {.x = 0, .y = 0};
   scroll_event_position(controller, &event.x, &event.y);
 
+#ifdef __APPLE__
+  /* Apple has much higher deltas */
+  static const double surface_to_wheel = 0.02;
+#else
+  // Gtk 4 sends raw pixels; Gtk 3 devided by 10
+  static const double surface_to_wheel = 0.1;
+#endif
+
   /* only wheel units are discrete steps so touchpad deltas stay smooth */
   if (gtk_event_controller_scroll_get_unit(controller) != GDK_SCROLL_UNIT_WHEEL) {
     event.type = GIRARA_EVENT_SCROLL_BIDIRECTIONAL;
-#ifdef __APPLE__
-    /* Apple has much higher deltas */
-    const double surface_to_wheel = 50.0;
-#else
-    /* gtk4 sends raw pixels */
-    const double surface_to_wheel = 10.0;
-#endif
-    event.x = dx / surface_to_wheel;
-    event.y = dy / surface_to_wheel;
+    event.x    = dx * surface_to_wheel;
+    event.y    = dy * surface_to_wheel;
   } else if (dx == 0.0 && dy < 0.0) {
     event.type = GIRARA_EVENT_SCROLL_UP;
   } else if (dx == 0.0 && dy > 0.0) {
@@ -398,9 +399,8 @@ gboolean girara_callback_view_scroll_event(GtkEventControllerScroll* controller,
     event.x    = dx;
     event.y    = dy;
 #ifdef __APPLE__
-    /* Apple has much higher deltas */
-    event.x /= 50;
-    event.y /= 50;
+    event.x *= surface_to_wheel;
+    event.y *= surface_to_wheel;
 #endif
   }
 
