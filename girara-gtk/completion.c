@@ -71,6 +71,7 @@ girara_completion_group_t* girara_completion_group_create(girara_session_t* UNUS
   group->elements = girara_list_new_with_free(completion_element_free);
 
   if (group->elements == NULL) {
+    g_free(group->value);
     g_free(group);
     return NULL;
   }
