@@ -56,25 +56,32 @@ static void completion_element_free(void* data) {
 }
 
 girara_completion_t* girara_completion_init(void) {
-  girara_completion_t* completion = g_malloc(sizeof(girara_completion_t));
-  completion->groups              = girara_list_new_with_free((girara_free_function_t)girara_completion_group_free);
-
-  return completion;
-}
-
-girara_completion_group_t* girara_completion_group_create(const char* name) {
-  girara_completion_group_t* group = g_malloc(sizeof(girara_completion_group_t));
-
-  group->value    = g_strdup(name);
-  group->elements = girara_list_new_with_free(completion_element_free);
-
-  if (group->elements == NULL) {
-    g_free(group->value);
-    g_free(group);
+  g_autoptr(girara_completion_t) completion = g_try_malloc0(sizeof(girara_completion_t));
+  if (!completion) {
     return NULL;
   }
 
-  return group;
+  completion->groups = girara_list_new_with_free((girara_free_function_t)girara_completion_group_free);
+  if (!completion->groups) {
+    return NULL;
+  }
+
+  return g_steal_pointer(&completion);
+}
+
+girara_completion_group_t* girara_completion_group_create(const char* name) {
+  g_autoptr(girara_completion_group_t) group = g_try_malloc0(sizeof(girara_completion_group_t));
+  if (!group) {
+    return NULL;
+  }
+
+  group->value    = g_strdup(name);
+  group->elements = girara_list_new_with_free(completion_element_free);
+  if (group->elements == NULL) {
+    return NULL;
+  }
+
+  return g_steal_pointer(&group);
 }
 
 void girara_completion_add_group(girara_completion_t* completion, girara_completion_group_t* group) {
@@ -527,8 +534,8 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
     }
 
     /* update text */
-    char* temp;
-    char* escaped_value =
+    g_autofree char* temp = NULL;
+    g_autofree char* escaped_value =
         girara_escape_string(((girara_internal_completion_entry_t*)priv->completion.entries_current->data)->value);
     if (priv->completion.command_mode == true) {
       char* space = (n_elements == 1) ? " " : "";
@@ -539,7 +546,6 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
 
     gtk_editable_set_text(GTK_EDITABLE(session->gtk.inputbar_entry), temp);
     gtk_editable_set_position(GTK_EDITABLE(session->gtk.inputbar_entry), -1);
-    g_free(escaped_value);
 
     /* update previous */
     g_free(priv->completion.previous_parameter);
@@ -554,7 +560,6 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
                      ? current_parameter
                      : ((girara_internal_completion_entry_t*)priv->completion.entries_current->data)->value);
     priv->completion.previous_length = strlen(temp);
-    g_free(temp);
   }
 
   g_free(current_parameter);
