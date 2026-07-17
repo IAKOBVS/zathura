@@ -52,4 +52,7 @@ void girara_completion_free(girara_completion_t* completion);
  */
 void girara_completion_group_add_element(girara_completion_group_t* group, const char* value, const char* description);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(girara_completion_t, girara_completion_free)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(girara_completion_group_t, girara_completion_group_free)
+
 #endif

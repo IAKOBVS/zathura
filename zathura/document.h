@@ -355,4 +355,6 @@ ZATHURA_PLUGIN_API zathura_error_t zathura_document_attachment_save(zathura_docu
 ZATHURA_PLUGIN_API girara_list_t* zathura_document_get_information(zathura_document_t* document,
                                                                    zathura_error_t* error);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(zathura_document_t, zathura_document_free)
+
 #endif // DOCUMENT_H

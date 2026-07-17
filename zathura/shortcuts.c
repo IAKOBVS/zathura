@@ -1267,7 +1267,7 @@ bool sc_toggle_index(girara_session_t* session, girara_argument_t* UNUSED(argume
     /* create new index widget */
     zathura->ui.index = gtk_scrolled_window_new();
     if (zathura->ui.index == NULL) {
-      goto error_ret;
+      return false;
     }
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(zathura->ui.index), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
@@ -1325,7 +1325,7 @@ error_free:
     }
     zathura->ui.index = NULL;
   }
-error_ret:
+
   return false;
 }
 

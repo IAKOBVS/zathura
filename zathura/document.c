@@ -126,7 +126,7 @@ zathura_document_t* zathura_document_open(zathura_t* zathura, const char* path, 
     return NULL;
   }
 
-  zathura_document_t* document = g_try_malloc0(sizeof(zathura_document_t));
+  g_autoptr(zathura_document_t) document = g_try_malloc0(sizeof(zathura_document_t));
   if (document == NULL) {
     zathura_check_set_error(error, ZATHURA_ERROR_OUT_OF_MEMORY);
     return NULL;
@@ -159,34 +159,27 @@ zathura_document_t* zathura_document_open(zathura_t* zathura, const char* path, 
   if (int_error != ZATHURA_ERROR_OK) {
     zathura_check_set_error(error, int_error);
     girara_error("could not open document\n");
-    goto error_free;
+    return NULL;
   }
 
   /* read all pages */
   document->pages = g_try_malloc0_n(document->number_of_pages, sizeof(zathura_page_t*));
   if (document->pages == NULL) {
     zathura_check_set_error(error, ZATHURA_ERROR_OUT_OF_MEMORY);
-    goto error_free;
+    return NULL;
   }
 
   for (unsigned int page_id = 0; page_id < document->number_of_pages; page_id++) {
     zathura_page_t* page = zathura_page_new(document, page_id, NULL);
     if (page == NULL) {
       zathura_check_set_error(error, ZATHURA_ERROR_OUT_OF_MEMORY);
-      goto error_free;
+      return NULL;
     }
 
     document->pages[page_id] = page;
   }
 
-  return document;
-
-error_free:
-  if (document != NULL) {
-    zathura_document_free(document);
-  }
-
-  return NULL;
+  return g_steal_pointer(&document);
 }
 
 zathura_error_t zathura_document_free(zathura_document_t* document) {

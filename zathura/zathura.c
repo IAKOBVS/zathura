@@ -76,7 +76,7 @@ static void free_document_info(zathura_document_info_t* document_info) {
 
 /* function implementation */
 zathura_t* zathura_create(void) {
-  zathura_t* zathura = g_try_malloc0(sizeof(zathura_t));
+  g_autoptr(zathura_t) zathura = g_try_malloc0(sizeof(zathura_t));
   if (zathura == NULL) {
     return NULL;
   }
@@ -102,13 +102,13 @@ zathura_t* zathura_create(void) {
   /* plugins */
   zathura->plugins.manager = zathura_plugin_manager_new();
   if (zathura->plugins.manager == NULL) {
-    goto error_out;
+    return NULL;
   }
 
   /* UI */
   zathura->ui.session = girara_session_create();
   if (zathura->ui.session == NULL) {
-    goto error_out;
+    return NULL;
   }
 
 #ifdef G_OS_UNIX
@@ -121,12 +121,7 @@ zathura_t* zathura_create(void) {
 
   zathura->ui.session->global.data = zathura;
 
-  return zathura;
-
-error_out:
-  zathura_free(zathura);
-
-  return NULL;
+  return g_steal_pointer(&zathura);
 }
 
 #ifndef WITH_SANDBOX
@@ -848,7 +843,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
       girara_debug("Invalid or no password.");
       zathura_password_dialog_info_t* password_dialog_info = g_try_malloc0(sizeof(zathura_password_dialog_info_t));
       if (password_dialog_info == NULL) {
-        goto error_out;
+        return false;
       }
 
       password_dialog_info->zathura = zathura;
@@ -856,7 +851,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
       password_dialog_info->uri     = g_strdup(uri);
       if (password_dialog_info->path != NULL) {
         g_idle_add(document_open_password_dialog, password_dialog_info);
-        goto error_out;
+        return false;
       } else {
         g_free(password_dialog_info->uri);
         g_free(password_dialog_info);
@@ -866,7 +861,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
       girara_notify(zathura->ui.session, GIRARA_ERROR,
                     _("Unsupported file type. Please install the necessary plugin."));
     }
-    goto error_out;
+    return false;
   }
 
   const char* file_path        = zathura_document_get_path(document);
@@ -1079,42 +1074,42 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
                      zathura);
   }
 
-  /* view mode */
-  unsigned int pages_per_row              = 1;
-  g_autofree char* first_page_column_list = NULL;
-  unsigned int page_v_padding             = 1;
-  unsigned int page_h_padding             = 1;
-  bool page_right_to_left                 = false;
-
-  girara_setting_get(zathura->ui.session, "page-v-padding", &page_v_padding);
-  girara_setting_get(zathura->ui.session, "page-h-padding", &page_h_padding);
-
-  if (file_info.pages_per_row > 0) {
-    pages_per_row = file_info.pages_per_row;
-  } else {
-    girara_setting_get(zathura->ui.session, "pages-per-row", &pages_per_row);
-  }
-
-  /* read first_page_column list */
-  if (file_info.first_page_column_list != NULL && *file_info.first_page_column_list != '\0') {
-    first_page_column_list = g_steal_pointer(&file_info.first_page_column_list);
-  } else {
-    girara_setting_get(zathura->ui.session, "first-page-column", &first_page_column_list);
-  }
-
-  /* find value for first_page_column */
-  unsigned int first_page_column = find_first_page_column(first_page_column_list, pages_per_row);
-
-  girara_setting_set(zathura->ui.session, "pages-per-row", &pages_per_row);
-  girara_setting_set(zathura->ui.session, "first-page-column", first_page_column_list);
-  g_free(file_info.first_page_column_list);
-
-  page_right_to_left = file_info.page_right_to_left;
-
-  zathura_document_widget_set_page_layout(ZATHURA_DOCUMENT_WIDGET(zathura->ui.document_widget), page_v_padding,
-                                          page_h_padding, pages_per_row, first_page_column);
-
   {
+    /* view mode */
+    unsigned int pages_per_row  = 1;
+    unsigned int page_v_padding = 1;
+    unsigned int page_h_padding = 1;
+    bool page_right_to_left     = false;
+
+    girara_setting_get(zathura->ui.session, "page-v-padding", &page_v_padding);
+    girara_setting_get(zathura->ui.session, "page-h-padding", &page_h_padding);
+
+    if (file_info.pages_per_row > 0) {
+      pages_per_row = file_info.pages_per_row;
+    } else {
+      girara_setting_get(zathura->ui.session, "pages-per-row", &pages_per_row);
+    }
+
+    /* read first_page_column list */
+    g_autofree char* first_page_column_list = NULL;
+    if (file_info.first_page_column_list != NULL && *file_info.first_page_column_list != '\0') {
+      first_page_column_list = g_steal_pointer(&file_info.first_page_column_list);
+    } else {
+      girara_setting_get(zathura->ui.session, "first-page-column", &first_page_column_list);
+    }
+
+    /* find value for first_page_column */
+    unsigned int first_page_column = find_first_page_column(first_page_column_list, pages_per_row);
+
+    girara_setting_set(zathura->ui.session, "pages-per-row", &pages_per_row);
+    girara_setting_set(zathura->ui.session, "first-page-column", first_page_column_list);
+    g_free(file_info.first_page_column_list);
+
+    page_right_to_left = file_info.page_right_to_left;
+
+    zathura_document_widget_set_page_layout(ZATHURA_DOCUMENT_WIDGET(zathura->ui.document_widget), page_v_padding,
+                                            page_h_padding, pages_per_row, first_page_column);
+
     g_auto(GValue) page_right_to_left_value = G_VALUE_INIT;
     g_value_init(&page_right_to_left_value, G_TYPE_BOOLEAN);
     g_value_set_boolean(&page_right_to_left_value, page_right_to_left);
@@ -1165,13 +1160,15 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   update_visible_pages(zathura);
 
   /* apply default page mode */
-  g_autofree char* page_mode = NULL;
-  girara_setting_get(zathura->ui.session, "page-mode", &page_mode);
-  if (page_mode != NULL) {
-    if (g_strcmp0(page_mode, "equal_width") == 0) {
-      apply_equal_page_mode(zathura, ZATHURA_EQUAL_WIDTH);
-    } else if (g_strcmp0(page_mode, "equal_height") == 0) {
-      apply_equal_page_mode(zathura, ZATHURA_EQUAL_HEIGHT);
+  {
+    g_autofree char* page_mode = NULL;
+    girara_setting_get(zathura->ui.session, "page-mode", &page_mode);
+    if (page_mode != NULL) {
+      if (g_strcmp0(page_mode, "equal_width") == 0) {
+        apply_equal_page_mode(zathura, ZATHURA_EQUAL_WIDTH);
+      } else if (g_strcmp0(page_mode, "equal_height") == 0) {
+        apply_equal_page_mode(zathura, ZATHURA_EQUAL_HEIGHT);
+      }
     }
   }
 
@@ -1182,8 +1179,6 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
 error_free:
   zathura_document_free(document);
   zathura->document = NULL;
-
-error_out:
   return false;
 }
 
@@ -1454,13 +1449,13 @@ bool document_close(zathura_t* zathura, bool keep_monitor) {
 
 bool page_set(zathura_t* zathura, unsigned int page_id) {
   if (zathura_has_document(zathura) == false) {
-    goto error_out;
+    return false;
   }
 
   zathura_document_t* document = zathura_get_document(zathura);
   zathura_page_t* page         = zathura_document_get_page(document, page_id);
   if (page == NULL) {
-    goto error_out;
+    return false;
   }
 
   zathura_document_set_current_page_number(document, page_id);
@@ -1474,9 +1469,6 @@ bool page_set(zathura_t* zathura, unsigned int page_id) {
 
   /* negative position means auto */
   return position_set(zathura, -1, -1);
-
-error_out:
-  return false;
 }
 
 void statusbar_page_number_update(zathura_t* zathura) {
@@ -1588,13 +1580,13 @@ bool adjust_view(zathura_t* zathura) {
   g_return_val_if_fail(zathura != NULL, false);
   zathura_document_t* document = zathura_get_document(zathura);
   if (zathura->ui.document_widget == NULL || document == NULL) {
-    goto error_ret;
+    return false;
   }
 
   zathura_adjust_mode_t adjust_mode = zathura_document_get_adjust_mode(document);
   if (adjust_mode == ZATHURA_ADJUST_NONE) {
     /* there is nothing todo */
-    goto error_ret;
+    return true;
   }
 
   unsigned int cell_height = 0, cell_width = 0;
@@ -1610,7 +1602,7 @@ bool adjust_view(zathura_t* zathura) {
   zathura_document_get_viewport_size(document, &view_height, &view_width);
 
   if (view_height == 0 || view_width == 0 || cell_height == 0 || cell_width == 0 || document_width == 0) {
-    goto error_ret;
+    return false;
   }
 
   double page_ratio = (double)cell_height / (double)document_width;
@@ -1623,7 +1615,7 @@ bool adjust_view(zathura_t* zathura) {
   } else if (adjust_mode == ZATHURA_ADJUST_BESTFIT) {
     newzoom *= (double)view_height / (double)cell_height;
   } else {
-    goto error_ret;
+    return true;
   }
 
   /* save new zoom and recompute cell size */
@@ -1650,8 +1642,7 @@ bool adjust_view(zathura_t* zathura) {
     zathura_document_widget_compute_layout(ZATHURA_DOCUMENT_WIDGET(zathura->ui.document_widget));
   }
 
-error_ret:
-  return false;
+  return true;
 }
 
 #ifdef G_OS_UNIX

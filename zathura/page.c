@@ -34,7 +34,7 @@ zathura_page_t* zathura_page_new(zathura_document_t* document, unsigned int inde
   }
 
   /* init page */
-  zathura_page_t* page = g_try_malloc0(sizeof(zathura_page_t));
+  g_autoptr(zathura_page_t) page = g_try_malloc0(sizeof(zathura_page_t));
   if (page == NULL) {
     if (error != NULL) {
       *error = ZATHURA_ERROR_OUT_OF_MEMORY;
@@ -57,7 +57,7 @@ zathura_page_t* zathura_page_new(zathura_document_t* document, unsigned int inde
     if (error != NULL) {
       *error = ret;
     }
-    goto error_free;
+    return NULL;
   }
 
   /* get label if there is one */
@@ -67,7 +67,7 @@ zathura_page_t* zathura_page_new(zathura_document_t* document, unsigned int inde
       if (error != NULL) {
         *error = ret;
       }
-      goto error_free;
+      return NULL;
     }
 
     if (page->label != NULL) {
@@ -77,14 +77,7 @@ zathura_page_t* zathura_page_new(zathura_document_t* document, unsigned int inde
     }
   }
 
-  return page;
-
-error_free:
-  if (page != NULL) {
-    zathura_page_free(page);
-  }
-
-  return NULL;
+  return g_steal_pointer(&page);
 }
 
 zathura_error_t zathura_page_free(zathura_page_t* page) {
