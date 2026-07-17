@@ -344,6 +344,7 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
       if (g_list_length(priv->completion.entries) == 1) {
         girara_internal_completion_entry_t* entry = g_list_first(priv->completion.entries)->data;
 
+        g_free(current_command);
         /* unset command mode */
         priv->completion.command_mode = false;
         current_command               = entry->value;
@@ -355,8 +356,7 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
           entry->widget = NULL;
         }
 
-        priv->completion.entries =
-            g_list_remove(priv->completion.entries, g_list_first(priv->completion.entries)->data);
+        priv->completion.entries = g_list_remove(priv->completion.entries, entry);
         g_free(entry);
       }
 
