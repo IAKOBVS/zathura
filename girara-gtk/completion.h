@@ -19,7 +19,7 @@ girara_completion_t* girara_completion_init(void);
  * @return Completion object
  * @return NULL An error occurred
  */
-girara_completion_group_t* girara_completion_group_create(girara_session_t* session, const char* name);
+girara_completion_group_t* girara_completion_group_create(const char* name);
 
 /**
  * Frees a completion group

@@ -187,16 +187,15 @@ girara_completion_t* girara_cc_set(girara_session_t* session, const char* input)
     return NULL;
   }
 
-  girara_completion_t* completion = girara_completion_init();
+  g_autoptr(girara_completion_t) completion = girara_completion_init();
   if (completion == NULL) {
     return NULL;
   }
-  girara_completion_group_t* group = girara_completion_group_create(session, NULL);
+  g_autoptr(girara_completion_group_t) group = girara_completion_group_create(NULL);
   if (group == NULL) {
-    girara_completion_free(completion);
     return NULL;
   }
-  girara_completion_add_group(completion, group);
+  girara_completion_add_group(completion, g_steal_pointer(&group));
 
   unsigned int input_length = strlen(input);
 
@@ -208,7 +207,7 @@ girara_completion_t* girara_cc_set(girara_session_t* session, const char* input)
     }
   }
 
-  return completion;
+  return g_steal_pointer(&completion);
 }
 
 static void dump_setting(JsonBuilder* builder, const girara_setting_t* setting) {

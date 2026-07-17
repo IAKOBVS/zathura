@@ -64,7 +64,7 @@ girara_completion_t* girara_completion_init(void) {
   return completion;
 }
 
-girara_completion_group_t* girara_completion_group_create(girara_session_t* UNUSED(session), const char* name) {
+girara_completion_group_t* girara_completion_group_create(const char* name) {
   girara_completion_group_t* group = g_malloc(sizeof(girara_completion_group_t));
 
   group->value    = g_strdup(name);

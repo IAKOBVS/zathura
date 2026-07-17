@@ -116,7 +116,7 @@ static void group_add_element(void* data, void* userdata) {
 static girara_completion_t* list_files_for_cc(zathura_t* zathura, const char* input, bool check_file_ext,
                                               int show_recent) {
   g_autoptr(girara_completion_t) completion  = girara_completion_init();
-  g_autoptr(girara_completion_group_t) group = girara_completion_group_create(zathura->ui.session, _("Files"));
+  g_autoptr(girara_completion_group_t) group = girara_completion_group_create(_("Files"));
 
   if (completion == NULL || group == NULL) {
     return NULL;
@@ -172,8 +172,7 @@ static girara_completion_t* list_files_for_cc(zathura_t* zathura, const char* in
   }
 
   if (show_recent > 0) {
-    g_autoptr(girara_completion_group_t) history_group =
-        girara_completion_group_create(zathura->ui.session, _("Recent files"));
+    g_autoptr(girara_completion_group_t) history_group = girara_completion_group_create(_("Recent files"));
     if (show_recent > 0) {
       return NULL;
     }
@@ -223,7 +222,7 @@ girara_completion_t* cc_bookmarks(girara_session_t* session, const char* input) 
   zathura_t* zathura = session->global.data;
 
   g_autoptr(girara_completion_t) completion  = girara_completion_init();
-  g_autoptr(girara_completion_group_t) group = girara_completion_group_create(session, NULL);
+  g_autoptr(girara_completion_group_t) group = girara_completion_group_create(NULL);
 
   if (completion == NULL || group == NULL) {
     return NULL;
@@ -263,7 +262,7 @@ girara_completion_t* cc_export(girara_session_t* session, const char* input) {
   bool added_attachment                = false;
   g_autoptr(girara_list_t) attachments = zathura_document_attachments_get(document, &attachment_error);
   if (attachments != NULL) {
-    g_autoptr(girara_completion_group_t) attachment_group = girara_completion_group_create(session, _("Attachments"));
+    g_autoptr(girara_completion_group_t) attachment_group = girara_completion_group_create(_("Attachments"));
     if (attachment_group == NULL) {
       return NULL;
     }
@@ -281,7 +280,7 @@ girara_completion_t* cc_export(girara_session_t* session, const char* input) {
   }
 
   /* add images */
-  g_autoptr(girara_completion_group_t) image_group = girara_completion_group_create(session, _("Images"));
+  g_autoptr(girara_completion_group_t) image_group = girara_completion_group_create(_("Images"));
   if (image_group == NULL) {
     return NULL;
   }
