@@ -116,7 +116,7 @@ static void group_add_element(void* data, void* userdata) {
 static girara_completion_t* list_files_for_cc(zathura_t* zathura, const char* input, bool check_file_ext,
                                               int show_recent) {
   g_autoptr(girara_completion_t) completion  = girara_completion_init();
-  g_autoptr(girara_completion_group_t) group = girara_completion_group_create(zathura->ui.session, "files");
+  g_autoptr(girara_completion_group_t) group = girara_completion_group_create(zathura->ui.session, _("Files"));
 
   if (completion == NULL || group == NULL) {
     return NULL;
@@ -173,7 +173,7 @@ static girara_completion_t* list_files_for_cc(zathura_t* zathura, const char* in
 
   if (show_recent > 0) {
     g_autoptr(girara_completion_group_t) history_group =
-        girara_completion_group_create(zathura->ui.session, "recent files");
+        girara_completion_group_create(zathura->ui.session, _("Recent files"));
     if (show_recent > 0) {
       return NULL;
     }
