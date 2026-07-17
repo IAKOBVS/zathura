@@ -1,19 +1,17 @@
 /* SPDX-License-Identifier: Zlib */
 
+#include "completion.h"
+
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
 #include <girara/datastructures.h>
 #include <girara/utils.h>
 
-#include "completion.h"
 #include "internal.h"
 #include "session.h"
 #include "settings.h"
 #include "shortcuts.h"
-
-static GtkWidget* girara_completion_row_create(const char*, const char*, bool);
-static void girara_completion_row_set_color(GtkWidget*, int);
 
 /* completion */
 struct girara_internal_completion_entry_s {
@@ -122,6 +120,67 @@ static unsigned int find_completion_group_index(GList* current_entry, unsigned i
   }
 
   return UINT_MAX;
+}
+
+static GtkWidget* girara_completion_row_create(const char* command, const char* description, bool group) {
+  GtkBox* col = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
+
+  GtkWidget* row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+
+  GtkLabel* show_command     = GTK_LABEL(gtk_label_new(NULL));
+  GtkLabel* show_description = GTK_LABEL(gtk_label_new(NULL));
+
+  gtk_widget_set_halign(GTK_WIDGET(show_command), GTK_ALIGN_START);
+  gtk_widget_set_valign(GTK_WIDGET(show_command), GTK_ALIGN_START);
+  gtk_widget_set_halign(GTK_WIDGET(show_description), GTK_ALIGN_END);
+  gtk_widget_set_valign(GTK_WIDGET(show_description), GTK_ALIGN_START);
+
+  gtk_label_set_use_markup(show_command, TRUE);
+  gtk_label_set_use_markup(show_description, TRUE);
+
+  gtk_label_set_ellipsize(show_command, PANGO_ELLIPSIZE_END);
+  gtk_label_set_ellipsize(show_description, PANGO_ELLIPSIZE_END);
+
+  g_autofree gchar* c = command ? g_markup_printf_escaped(FORMAT_COMMAND, command) : NULL;
+  g_autofree gchar* d = description ? g_markup_printf_escaped(FORMAT_DESCRIPTION, description) : NULL;
+  gtk_label_set_markup(show_command, command ? c : "");
+  gtk_label_set_markup(show_description, description ? d : "");
+
+  const char* class = group == true ? "completion-group" : "completion";
+  widget_add_class(GTK_WIDGET(show_command), class);
+  widget_add_class(GTK_WIDGET(show_description), class);
+  widget_add_class(GTK_WIDGET(row), class);
+  widget_add_class(GTK_WIDGET(col), class);
+
+  gtk_widget_set_hexpand(GTK_WIDGET(show_command), TRUE);
+  gtk_widget_set_hexpand(GTK_WIDGET(show_description), TRUE);
+  gtk_box_append(GTK_BOX(col), GTK_WIDGET(show_command));
+  gtk_box_append(GTK_BOX(col), GTK_WIDGET(show_description));
+
+  gtk_box_append(GTK_BOX(row), GTK_WIDGET(col));
+
+  return row;
+}
+
+static void girara_completion_row_set_color(GtkWidget* row, int mode) {
+  g_return_if_fail(row != NULL);
+
+  GtkWidget* col  = gtk_widget_get_first_child(row);
+  GtkWidget* cmd  = col ? gtk_widget_get_first_child(col) : NULL;
+  GtkWidget* desc = cmd ? gtk_widget_get_next_sibling(cmd) : NULL;
+  if (cmd == NULL || desc == NULL) {
+    return;
+  }
+
+  if (mode == GIRARA_HIGHLIGHT) {
+    gtk_widget_set_state_flags(cmd, GTK_STATE_FLAG_SELECTED, false);
+    gtk_widget_set_state_flags(desc, GTK_STATE_FLAG_SELECTED, false);
+    gtk_widget_set_state_flags(GTK_WIDGET(row), GTK_STATE_FLAG_SELECTED, false);
+  } else {
+    gtk_widget_unset_state_flags(cmd, GTK_STATE_FLAG_SELECTED);
+    gtk_widget_unset_state_flags(desc, GTK_STATE_FLAG_SELECTED);
+    gtk_widget_unset_state_flags(GTK_WIDGET(row), GTK_STATE_FLAG_SELECTED);
+  }
 }
 
 bool girara_isc_completion(girara_session_t* session, girara_argument_t* argument, girara_event_t* UNUSED(event),
@@ -504,65 +563,4 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
   g_strfreev(elements);
 
   return false;
-}
-
-static GtkWidget* girara_completion_row_create(const char* command, const char* description, bool group) {
-  GtkBox* col = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0));
-
-  GtkWidget* row = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-
-  GtkLabel* show_command     = GTK_LABEL(gtk_label_new(NULL));
-  GtkLabel* show_description = GTK_LABEL(gtk_label_new(NULL));
-
-  gtk_widget_set_halign(GTK_WIDGET(show_command), GTK_ALIGN_START);
-  gtk_widget_set_valign(GTK_WIDGET(show_command), GTK_ALIGN_START);
-  gtk_widget_set_halign(GTK_WIDGET(show_description), GTK_ALIGN_END);
-  gtk_widget_set_valign(GTK_WIDGET(show_description), GTK_ALIGN_START);
-
-  gtk_label_set_use_markup(show_command, TRUE);
-  gtk_label_set_use_markup(show_description, TRUE);
-
-  gtk_label_set_ellipsize(show_command, PANGO_ELLIPSIZE_END);
-  gtk_label_set_ellipsize(show_description, PANGO_ELLIPSIZE_END);
-
-  g_autofree gchar* c = command ? g_markup_printf_escaped(FORMAT_COMMAND, command) : NULL;
-  g_autofree gchar* d = description ? g_markup_printf_escaped(FORMAT_DESCRIPTION, description) : NULL;
-  gtk_label_set_markup(show_command, command ? c : "");
-  gtk_label_set_markup(show_description, description ? d : "");
-
-  const char* class = group == true ? "completion-group" : "completion";
-  widget_add_class(GTK_WIDGET(show_command), class);
-  widget_add_class(GTK_WIDGET(show_description), class);
-  widget_add_class(GTK_WIDGET(row), class);
-  widget_add_class(GTK_WIDGET(col), class);
-
-  gtk_widget_set_hexpand(GTK_WIDGET(show_command), TRUE);
-  gtk_widget_set_hexpand(GTK_WIDGET(show_description), TRUE);
-  gtk_box_append(GTK_BOX(col), GTK_WIDGET(show_command));
-  gtk_box_append(GTK_BOX(col), GTK_WIDGET(show_description));
-
-  gtk_box_append(GTK_BOX(row), GTK_WIDGET(col));
-
-  return row;
-}
-
-static void girara_completion_row_set_color(GtkWidget* row, int mode) {
-  g_return_if_fail(row != NULL);
-
-  GtkWidget* col  = gtk_widget_get_first_child(row);
-  GtkWidget* cmd  = col ? gtk_widget_get_first_child(col) : NULL;
-  GtkWidget* desc = cmd ? gtk_widget_get_next_sibling(cmd) : NULL;
-  if (cmd == NULL || desc == NULL) {
-    return;
-  }
-
-  if (mode == GIRARA_HIGHLIGHT) {
-    gtk_widget_set_state_flags(cmd, GTK_STATE_FLAG_SELECTED, false);
-    gtk_widget_set_state_flags(desc, GTK_STATE_FLAG_SELECTED, false);
-    gtk_widget_set_state_flags(GTK_WIDGET(row), GTK_STATE_FLAG_SELECTED, false);
-  } else {
-    gtk_widget_unset_state_flags(cmd, GTK_STATE_FLAG_SELECTED);
-    gtk_widget_unset_state_flags(desc, GTK_STATE_FLAG_SELECTED);
-    gtk_widget_unset_state_flags(GTK_WIDGET(row), GTK_STATE_FLAG_SELECTED);
-  }
 }
