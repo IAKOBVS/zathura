@@ -552,13 +552,13 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
     g_free(priv->completion.previous_command);
 
     priv->completion.previous_command =
-        g_strdup((priv->completion.command_mode)
-                     ? ((girara_internal_completion_entry_t*)priv->completion.entries_current->data)->value
-                     : current_command);
+        priv->completion.command_mode
+            ? g_strdup(((girara_internal_completion_entry_t*)priv->completion.entries_current->data)->value)
+            : g_steal_pointer(&current_command);
     priv->completion.previous_parameter =
-        g_strdup((priv->completion.command_mode)
-                     ? current_parameter
-                     : ((girara_internal_completion_entry_t*)priv->completion.entries_current->data)->value);
+        priv->completion.command_mode
+            ? g_steal_pointer(&current_parameter)
+            : g_strdup(((girara_internal_completion_entry_t*)priv->completion.entries_current->data)->value);
     priv->completion.previous_length = strlen(temp);
   }
 
