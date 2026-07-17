@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 17:57+0200\n"
+"POT-Creation-Date: 2026-07-17 19:40+0200\n"
 "PO-Revision-Date: 2026-02-21 13:30+0100\n"
 "Last-Translator: Sebastian Ramacher <sebastian+dev@ramacher.at>\n"
 "Language-Team: Georgian (http://app.transifex.com/pwmt/zathura/language/"
@@ -67,6 +67,21 @@ msgstr "ფოლლოვინგ ლინკს"
 msgid "Listing and selecting bookmarks"
 msgstr "ლისტინგ ანდ სელეკტინგ ბოოკმაკრს"
 
+msgid "Add page-mode setting"
+msgstr ""
+
+msgid "Fix reloading of files (#969)"
+msgstr ""
+
+msgid "Fix CSS handling (#970)"
+msgstr ""
+
+msgid "Replace test feature with test-x11 and test-wayland features"
+msgstr ""
+
+msgid "Various fixes and improvements"
+msgstr "ვარიოუს ფიქსეს ანდ იმპროვემენტს"
+
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
 "embedding is no longer supported (#216, #432). Also, the setting 'window-"
@@ -120,9 +135,6 @@ msgstr ""
 
 msgid "Fix more cases of flickering when rendering pages (#864)"
 msgstr ""
-
-msgid "Various fixes and improvements"
-msgstr "ვარიოუს ფიქსეს ანდ იმპროვემენტს"
 
 msgid "Add search result counter (#450)"
 msgstr ""
@@ -1233,6 +1245,12 @@ msgstr "ექსეკ ის ნოტ პერმიტტედ ინ ს�
 msgid "Argument must be a number."
 msgstr "არგუმენტ მუსტ ბე ა ნუმბერ."
 
+msgid "Files"
+msgstr ""
+
+msgid "Recent files"
+msgstr ""
+
 #, c-format
 msgid "Page %d"
 msgstr "გვერდი %d"
@@ -1466,6 +1484,9 @@ msgstr "რენდერ 'იტვირთება ...'"
 msgid "Adjust to when opening file"
 msgstr "ადჯუსტ ტო ვჰენ ოპენინგ ფაილი"
 
+msgid "Default page mode (none, equal_width, equal_height)"
+msgstr ""
+
 msgid "Show hidden files and directories"
 msgstr "ჩვენება ჰიდდენ ფილეს ანდ დირეკტორიეს"
 
@@ -1642,7 +1663,7 @@ msgid "Y"
 msgstr ""
 
 msgid "Cancelled."
-msgstr ""
+msgstr "გაუქმებულია."
 
 #, c-format
 msgid "Open external link <b>%s</b>? [Y/n]"
@@ -1772,7 +1793,7 @@ msgid "Could not get path from file."
 msgstr ""
 
 msgid "Open file"
-msgstr ""
+msgstr "ფაილის გახსნა"
 
 msgid "Supported documents"
 msgstr ""
@@ -1782,7 +1803,7 @@ msgstr ""
 
 #, c-format
 msgid "[Search %d/%d]"
-msgstr ""
+msgstr "[ძებნა %d/%d]"
 
 #, c-format
 msgid "Pattern not found: %s"

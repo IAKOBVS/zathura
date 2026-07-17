@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 17:57+0200\n"
-"PO-Revision-Date: 2026-03-31 19:24+0200\n"
+"POT-Creation-Date: 2026-07-17 19:40+0200\n"
+"PO-Revision-Date: 2026-07-17 19:46+0200\n"
 "Last-Translator: Sebastian Ramacher <sebastian+dev@ramacher.at>\n"
 "Language-Team: German (http://app.transifex.com/pwmt/zathura/language/de/)\n"
 "Language: de\n"
@@ -68,6 +68,21 @@ msgstr "Links folgen"
 msgid "Listing and selecting bookmarks"
 msgstr "Lesezeichen auflisten und auswählen"
 
+msgid "Add page-mode setting"
+msgstr "Füge Einstellung page-mode hinzu"
+
+msgid "Fix reloading of files (#969)"
+msgstr "Behebe des Neuladens von Dateien (#969)"
+
+msgid "Fix CSS handling (#970)"
+msgstr ""
+
+msgid "Replace test feature with test-x11 and test-wayland features"
+msgstr ""
+
+msgid "Various fixes and improvements"
+msgstr "Verschiedene Fehlerbehebungen und Verbesserungen"
+
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
 "embedding is no longer supported (#216, #432). Also, the setting 'window-"
@@ -121,9 +136,6 @@ msgstr ""
 
 msgid "Fix more cases of flickering when rendering pages (#864)"
 msgstr ""
-
-msgid "Various fixes and improvements"
-msgstr "Verschiedene Fehlerbehebungen und Verbesserungen"
 
 msgid "Add search result counter (#450)"
 msgstr ""
@@ -215,7 +227,7 @@ msgstr ""
 "verfügbar sind"
 
 msgid "Make index-* configurable after init (#799)"
-msgstr "index-* nach init konfigurierbar machen (#799)"
+msgstr "Erlaube index-* nach Initialisierung zu konfigurieren (#799)"
 
 msgid "Support numeric keypad mappings"
 msgstr "Zuordnungen für numerischen Tastenblock unterstützen"
@@ -372,7 +384,7 @@ msgid "Add foreground color for links"
 msgstr "Vordergrundfarbe für Links hinzufügen"
 
 msgid "Add :save and :save! aliases for :write and :write!"
-msgstr ":save- und :save!-Aliasse für :write und :write! hinzufügen"
+msgstr "Füge :save- und :save!-Aliasse für :write und :write! hinzu"
 
 msgid "Fix invalid zoom when opening document with 'adjust-open width' option"
 msgstr "Ungültigen Zoom beim Öffnen mit Option 'adjust-open width' beheben"
@@ -387,7 +399,7 @@ msgid "Fix step size for mouse wheel scrolling"
 msgstr "Schrittweite für Mausrad-Scrollen beheben"
 
 msgid "Lookup fileinfo from database by hash as fallback"
-msgstr "fileinfo als Fallback per Hash aus Datenbank nachschlagen"
+msgstr "Schlage fileinfo als Fallback per Hash aus Datenbank nach"
 
 msgid "Fix expansion of ~ and ~user when opening files"
 msgstr "Erweiterung von ~ und ~user beim Öffnen von Dateien beheben"
@@ -492,10 +504,10 @@ msgid "Introduce cache directory"
 msgstr "Cache-Verzeichnis einführen"
 
 msgid "Introduce smooth-scroll and smooth-zoom"
-msgstr "smooth-scroll und smooth-zoom einführen"
+msgstr "Führe smooth-scroll und smooth-zoom ein"
 
 msgid "Add vim style exec"
-msgstr "exec im vim-Stil hinzufügen"
+msgstr "Füge exec im vim-Stil hinzu"
 
 msgid "Option to ignore images while recoloring"
 msgstr "Option zum Ignorieren von Bildern beim Umfärben"
@@ -552,7 +564,7 @@ msgid "Center pages"
 msgstr "Seiten zentrieren"
 
 msgid "Replace glib memory functions with try version"
-msgstr "glib-Speicherfunktionen durch try-Version ersetzen"
+msgstr "Ersetze glib-Speicherfunktionen durch try-Version"
 
 msgid "Align highlighted rectangles correctly"
 msgstr "Hervorgehobene Rechtecke korrekt ausrichten"
@@ -684,7 +696,7 @@ msgid "SyncTeX backwards synchronisation"
 msgstr "SyncTeX-Rückwärtssynchronisation"
 
 msgid "Fix request-page-setup"
-msgstr "request-page-setup beheben"
+msgstr "Behebe request-page-setup"
 
 msgid "Fix window adustment"
 msgstr "Fensteranpassung beheben"
@@ -738,10 +750,10 @@ msgid "Changeable page-padding"
 msgstr "Änderbares page-padding"
 
 msgid "Introduced girara version check"
-msgstr "girara-Versionsprüfung eingeführt"
+msgstr "Führe girara-Versionsprüfung ein"
 
 msgid "Detect sqlite automatically"
-msgstr "sqlite automatisch erkennen"
+msgstr "Erkenne sqlite automatisch"
 
 msgid "Update window title"
 msgstr "Fenstertitel aktualisieren"
@@ -798,10 +810,10 @@ msgid "Ignoring MOD5 which is used on some keyboards"
 msgstr "MOD5 ignorieren, das auf einigen Tastaturen verwendet wird"
 
 msgid "Fix scroll_wrap (#52)"
-msgstr "scroll_wrap beheben (#52)"
+msgstr "Behebe scroll_wrap (#52)"
 
 msgid "Don't invert y coordinates (#42)"
-msgstr "y-Koordinaten nicht invertieren (#42)"
+msgstr "Invertiere y-Koordinaten nicht (#42)"
 
 msgid "Certain memory leaks and other small issues"
 msgstr "Einige Speicherlecks und andere kleine Probleme"
@@ -924,7 +936,7 @@ msgid "Define look with the set function"
 msgstr "Aussehen mit der Funktion set definieren"
 
 msgid "Implemented map function"
-msgstr "map-Funktion implementiert"
+msgstr "Implementiere map-Funktion"
 
 msgid "`zathurarc` file"
 msgstr "`zathurarc`-Datei"
@@ -1256,6 +1268,12 @@ msgstr "Im strikten Sandkastenmodus ist Anwendungen ausführen nicht erlaubt"
 msgid "Argument must be a number."
 msgstr "Das Argument ist keine Zahl."
 
+msgid "Files"
+msgstr "Dateien"
+
+msgid "Recent files"
+msgstr "Zuletzt geöffnete Dateien"
+
 #, c-format
 msgid "Page %d"
 msgstr "Seite %d"
@@ -1496,6 +1514,9 @@ msgstr "Zeige 'Lädt...'-Text beim Zeichnen einer Seite"
 msgid "Adjust to when opening file"
 msgstr "Seite einpassen"
 
+msgid "Default page mode (none, equal_width, equal_height)"
+msgstr ""
+
 msgid "Show hidden files and directories"
 msgstr "Zeige versteckte Dateien und Ordner an"
 
@@ -1674,7 +1695,7 @@ msgstr "Abgebrochen."
 
 #, c-format
 msgid "Open external link <b>%s</b>? [Y/n]"
-msgstr "Öffne externen Link <b>%<b>? [J/n]"
+msgstr "Öffne externen Link <b>%s<b>? [J/n]"
 
 msgid "Opening external applications in strict sandbox mode is not permitted"
 msgstr ""

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 17:57+0200\n"
+"POT-Creation-Date: 2026-07-17 19:40+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@fastmail.com>\n"
 "Language-Team: Dutch (http://app.transifex.com/pwmt/zathura/language/nl/)\n"
@@ -67,6 +67,21 @@ msgstr ""
 msgid "Listing and selecting bookmarks"
 msgstr ""
 
+msgid "Add page-mode setting"
+msgstr ""
+
+msgid "Fix reloading of files (#969)"
+msgstr ""
+
+msgid "Fix CSS handling (#970)"
+msgstr ""
+
+msgid "Replace test feature with test-x11 and test-wayland features"
+msgstr ""
+
+msgid "Various fixes and improvements"
+msgstr ""
+
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
 "embedding is no longer supported (#216, #432). Also, the setting 'window-"
@@ -119,9 +134,6 @@ msgid "Make shortcuts available as commands (#225)"
 msgstr ""
 
 msgid "Fix more cases of flickering when rendering pages (#864)"
-msgstr ""
-
-msgid "Various fixes and improvements"
 msgstr ""
 
 msgid "Add search result counter (#450)"
@@ -1229,6 +1241,12 @@ msgstr "Uitvoeren is niet toegestaan in de strenge sandboxmodus"
 msgid "Argument must be a number."
 msgstr "Het argument moet een getal zijn."
 
+msgid "Files"
+msgstr ""
+
+msgid "Recent files"
+msgstr ""
+
 #, c-format
 msgid "Page %d"
 msgstr "Pagina %d"
@@ -1464,6 +1482,9 @@ msgstr "‘Bezig met laden…’ tonen"
 
 msgid "Adjust to when opening file"
 msgstr "Aanpassen aan bij openen van bestand"
+
+msgid "Default page mode (none, equal_width, equal_height)"
+msgstr ""
 
 msgid "Show hidden files and directories"
 msgstr "Verborgen bestanden en mappen tonen"

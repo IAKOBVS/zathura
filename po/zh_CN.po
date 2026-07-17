@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 17:57+0200\n"
+"POT-Creation-Date: 2026-07-17 19:40+0200\n"
 "PO-Revision-Date: 2026-03-31 19:24+0200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Chinese (China) (http://app.transifex.com/pwmt/zathura/"
@@ -64,6 +64,21 @@ msgstr "跟随链接"
 msgid "Listing and selecting bookmarks"
 msgstr "列出并选择书签"
 
+msgid "Add page-mode setting"
+msgstr ""
+
+msgid "Fix reloading of files (#969)"
+msgstr ""
+
+msgid "Fix CSS handling (#970)"
+msgstr ""
+
+msgid "Replace test feature with test-x11 and test-wayland features"
+msgstr ""
+
+msgid "Various fixes and improvements"
+msgstr ""
+
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
 "embedding is no longer supported (#216, #432). Also, the setting 'window-"
@@ -116,9 +131,6 @@ msgid "Make shortcuts available as commands (#225)"
 msgstr ""
 
 msgid "Fix more cases of flickering when rendering pages (#864)"
-msgstr ""
-
-msgid "Various fixes and improvements"
 msgstr ""
 
 msgid "Add search result counter (#450)"
@@ -1225,6 +1237,12 @@ msgstr "严格沙盒模式下不允许执行外部命令"
 msgid "Argument must be a number."
 msgstr "参数必须是数字。"
 
+msgid "Files"
+msgstr ""
+
+msgid "Recent files"
+msgstr ""
+
 #, c-format
 msgid "Page %d"
 msgstr "第 %d 页"
@@ -1457,6 +1475,9 @@ msgstr "渲染 '正在加载 ...'"
 
 msgid "Adjust to when opening file"
 msgstr "打开文件时的适配方式"
+
+msgid "Default page mode (none, equal_width, equal_height)"
+msgstr ""
 
 msgid "Show hidden files and directories"
 msgstr "显示隐藏文件和目录"
