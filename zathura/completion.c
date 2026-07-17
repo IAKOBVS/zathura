@@ -173,7 +173,7 @@ static girara_completion_t* list_files_for_cc(zathura_t* zathura, const char* in
 
   if (show_recent > 0) {
     g_autoptr(girara_completion_group_t) history_group = girara_completion_group_create(_("Recent files"));
-    if (show_recent > 0) {
+    if (history_group == NULL) {
       return NULL;
     }
 
