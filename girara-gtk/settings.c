@@ -1,5 +1,7 @@
 /* SPDX-License-Identifier: Zlib */
 
+#include "settings.h"
+
 #include <assert.h>
 #include <stdlib.h>
 #include <glib.h>
@@ -9,7 +11,6 @@
 #include <girara/datastructures.h>
 #include <girara/utils.h>
 
-#include "settings.h"
 #include "completion.h"
 #include "session.h"
 #include "internal.h"

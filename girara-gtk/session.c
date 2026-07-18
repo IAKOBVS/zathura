@@ -2,6 +2,14 @@
 
 #include "session.h"
 
+#include <girara/datastructures.h>
+#include <girara/input-history.h>
+#include <girara/template.h>
+#include <girara/utils.h>
+#include <glib/gi18n-lib.h>
+#include <pango/pango-font.h>
+#include <stdlib.h>
+
 #include "callbacks.h"
 #include "commands.h"
 #include "config.h"
@@ -9,15 +17,6 @@
 #include "internal.h"
 #include "settings.h"
 #include "shortcuts.h"
-
-#include <girara/datastructures.h>
-#include <girara/input-history.h>
-#include <girara/template.h>
-#include <girara/utils.h>
-
-#include <glib/gi18n-lib.h>
-#include <pango/pango-font.h>
-#include <stdlib.h>
 
 static int cb_sort_settings(const void* data1, const void* data2) {
   const girara_setting_t* lhs = data1;

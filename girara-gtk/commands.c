@@ -2,16 +2,16 @@
 
 #include "commands.h"
 
-#include "internal.h"
-#include "session.h"
-#include "settings.h"
-#include "shortcuts.h"
-
 #include <girara/datastructures.h>
 #include <glib/gi18n-lib.h>
 #include <limits.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "internal.h"
+#include "session.h"
+#include "settings.h"
+#include "shortcuts.h"
 
 static void girara_cmd_display_shortcut(girara_session_t* session, const char* key_str, guint modifier, guint key,
                                         girara_mode_t mode) {
