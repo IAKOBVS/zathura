@@ -895,7 +895,7 @@ static bool render(render_job_t* job, ZathuraRenderRequest* request, ZathuraRend
 
 /* render a page synchronously and return its surface */
 cairo_surface_t* zathura_renderer_render_page(ZathuraRenderer* renderer, zathura_page_t* page) {
-  g_return_val_if_fail(ZATHURA_IS_RENDERER(renderer) == TRUE, NULL);
+  g_return_val_if_fail(ZATHURA_IS_RENDERER(renderer), NULL);
   g_return_val_if_fail(page != NULL, NULL);
 
   ZathuraRendererPrivate* priv = zathura_renderer_get_instance_private(renderer);

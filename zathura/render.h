@@ -31,7 +31,7 @@ struct zathura_renderer_class_s {
  * Returns the type of the renderer.
  * @return the type
  */
-GType zathura_renderer_get_type(void) G_GNUC_CONST;
+GType zathura_renderer_get_type(void);
 /**
  * Create a renderer.
  * @return a renderer object
@@ -165,7 +165,7 @@ struct zathura_render_request_class_s {
  * Returns the type of the render request.
  * @return the type
  */
-GType zathura_render_request_get_type(void) G_GNUC_CONST;
+GType zathura_render_request_get_type(void);
 /**
  * Create a render request object
  * @param renderer a renderer object

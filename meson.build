@@ -1,5 +1,5 @@
 project('zathura', 'c',
-  version: '2026.07.08',
+  version: '2026.07.18',
   meson_version: '>=1.5',
   default_options: ['c_std=c23', 'warning_level=3'],
 )
@@ -12,8 +12,8 @@ version_array = version.split('.')
 #   signature changes, bump both ABI and API.
 # * zathura_plugin_definition_t: If the struct changes in an ABI-incompatible
 #   way, bump the ABI.
-plugin_api_version = '7'
-plugin_abi_version = '8'
+plugin_api_version = '8'
+plugin_abi_version = '9'
 
 conf_data = configuration_data()
 conf_data.set('ZVMAJOR', version_array[0])
@@ -45,10 +45,10 @@ cc.compiles('''#if !__has_attribute(cleanup)
 # required dependencies
 libm = cc.find_library('m', required: false)
 girara = dependency('girara', version: '>=2026.07.07')
-glib = dependency('glib-2.0', version: '>=2.76')
-gio = dependency('gio-unix-2.0', required: host_machine.system() != 'windows')
-gthread = dependency('gthread-2.0', version: '>=2.72')
-gmodule = dependency('gmodule-no-export-2.0', version: '>=2.72')
+glib = dependency('glib-2.0', version: '>=2.84')
+gio = dependency('gio-unix-2.0', version: '>=2.84', required: host_machine.system() != 'windows')
+gthread = dependency('gthread-2.0', version: '>=2.84')
+gmodule = dependency('gmodule-no-export-2.0', version: '>=2.84')
 gtk4 = dependency('gtk4', version: '>=4.12', include_type: 'system')
 json_glib = dependency('json-glib-1.0')
 cairo = dependency('cairo')
@@ -230,7 +230,7 @@ pkg.generate(
   description: 'document viewer - plugin API',
   url: 'https://pwmt.org/projects/zathura',
   version: version,
-  requires: ['girara', 'gtk4', 'cairo'],
+  requires: ['girara', 'cairo'],
   variables: [
     'apiversion=@0@'.format(plugin_api_version),
     'abiversion=@0@'.format(plugin_abi_version),

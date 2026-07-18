@@ -13,7 +13,7 @@ void widget_add_class(GtkWidget* widget, const char* styleclass) {
     return;
   }
 
-  if (gtk_widget_has_css_class(widget, styleclass) == FALSE) {
+  if (!gtk_widget_has_css_class(widget, styleclass)) {
     gtk_widget_add_css_class(widget, styleclass);
   }
 }
@@ -23,7 +23,7 @@ void widget_remove_class(GtkWidget* widget, const char* styleclass) {
     return;
   }
 
-  if (gtk_widget_has_css_class(widget, styleclass) == TRUE) {
+  if (gtk_widget_has_css_class(widget, styleclass)) {
     gtk_widget_remove_css_class(widget, styleclass);
   }
 }

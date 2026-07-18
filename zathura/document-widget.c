@@ -312,10 +312,6 @@ void zathura_document_widget_update_mode(ZathuraDocumentWidget* document) {
     gtk_adjustment_set_value(priv->vadjustment, 0);
   } else {
     zathura_document_widget_compute_layout(document);
-    unsigned int pos_x = 0, pos_y = 0;
-    zathura_document_widget_get_cell_pos(document, page_id, &pos_x, &pos_y);
-    gtk_adjustment_set_value(priv->hadjustment, pos_x);
-    gtk_adjustment_set_value(priv->vadjustment, pos_y);
   }
 
   gtk_widget_queue_resize(GTK_WIDGET(document));
@@ -348,8 +344,8 @@ static void size_allocate_single(ZathuraDocumentWidget* document, int width, int
   const int x = ((int)page_width < width) ? (width - (int)page_width) / 2 : clamp_h;
   const int y = ((int)page_height < height) ? (height - (int)page_height) / 2 : clamp_v;
 
-  gtk_widget_size_allocate(
-      priv->grid, &(GtkAllocation){.x = x, .y = y, .width = (int)page_width, .height = (int)page_height}, baseline);
+  const GtkAllocation allocation = {.x = x, .y = y, .width = (int)page_width, .height = (int)page_height};
+  gtk_widget_size_allocate(priv->grid, &allocation, baseline);
 }
 
 static void zathura_document_widget_size_allocate(GtkWidget* widget, int width, int height, int baseline) {
@@ -399,10 +395,10 @@ static void zathura_document_widget_size_allocate(GtkWidget* widget, int width, 
       return;
     }
 
-    const int x = -(int)gtk_adjustment_get_value(priv->hadjustment);
-    const int y = -(int)gtk_adjustment_get_value(priv->vadjustment);
-    gtk_widget_size_allocate(priv->grid, &(GtkAllocation){.x = x, .y = y, .width = alloc_w, .height = alloc_h},
-                             baseline);
+    const int x                    = -(int)gtk_adjustment_get_value(priv->hadjustment);
+    const int y                    = -(int)gtk_adjustment_get_value(priv->vadjustment);
+    const GtkAllocation allocation = {.x = x, .y = y, .width = alloc_w, .height = alloc_h};
+    gtk_widget_size_allocate(priv->grid, &allocation, baseline);
   }
 }
 

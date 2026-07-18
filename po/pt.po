@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 17:57+0200\n"
+"POT-Creation-Date: 2026-07-17 19:40+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: Fernando Henrique <liquuid@gmail.com>, 2020\n"
 "Language-Team: Portuguese (http://app.transifex.com/pwmt/zathura/language/"
@@ -69,6 +69,21 @@ msgstr "Seguir ligações"
 msgid "Listing and selecting bookmarks"
 msgstr "Listar e selecionar marcadores"
 
+msgid "Add page-mode setting"
+msgstr ""
+
+msgid "Fix reloading of files (#969)"
+msgstr ""
+
+msgid "Fix CSS handling (#970)"
+msgstr ""
+
+msgid "Replace test feature with test-x11 and test-wayland features"
+msgstr ""
+
+msgid "Various fixes and improvements"
+msgstr ""
+
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
 "embedding is no longer supported (#216, #432). Also, the setting 'window-"
@@ -121,9 +136,6 @@ msgid "Make shortcuts available as commands (#225)"
 msgstr ""
 
 msgid "Fix more cases of flickering when rendering pages (#864)"
-msgstr ""
-
-msgid "Various fixes and improvements"
 msgstr ""
 
 msgid "Add search result counter (#450)"
@@ -1232,6 +1244,12 @@ msgstr "A execução de comandos não é permitida no modo de sandbox estrito"
 msgid "Argument must be a number."
 msgstr "O argumento deve ser um número."
 
+msgid "Files"
+msgstr ""
+
+msgid "Recent files"
+msgstr ""
+
 #, c-format
 msgid "Page %d"
 msgstr "Página %d"
@@ -1465,6 +1483,9 @@ msgstr "Renderizar 'A carregar ...'"
 
 msgid "Adjust to when opening file"
 msgstr "Ajustar ao abrir o ficheiro"
+
+msgid "Default page mode (none, equal_width, equal_height)"
+msgstr ""
 
 msgid "Show hidden files and directories"
 msgstr "Mostrar ficheiros e diretórios ocultos"

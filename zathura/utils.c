@@ -309,18 +309,16 @@ char* zathura_get_version_string(const zathura_plugin_manager_t* plugin_manager,
   g_string_append(string, "zathura " ZATHURA_VERSION);
   g_string_append_printf(string, "\ngirara " GIRARA_VERSION " (runtime: %s)", girara_version());
 
-  const char* format =
-      (markup == true) ? "\n<i>(plugin)</i> %s (%d.%d.%d) <i>(%s)</i>" : "\n(plugin) %s (%d.%d.%d) (%s)";
+  const char* format = (markup == true) ? "\n<i>(plugin)</i> %s (%s) <i>(%s)</i>" : "\n(plugin) %s (%s) (%s)";
 
   /* plugin information */
   girara_list_t* plugins = zathura_plugin_manager_get_plugins(plugin_manager);
   if (plugins != NULL) {
     for (size_t idx = 0; idx != girara_list_size(plugins); ++idx) {
-      const zathura_plugin_t* plugin   = girara_list_nth(plugins, idx);
-      const char* name                 = zathura_plugin_get_name(plugin);
-      zathura_plugin_version_t version = zathura_plugin_get_version(plugin);
-      g_string_append_printf(string, format, (name == NULL) ? "-" : name, version.major, version.minor, version.rev,
-                             zathura_plugin_get_path(plugin));
+      const zathura_plugin_t* plugin = girara_list_nth(plugins, idx);
+      const char* name               = zathura_plugin_get_name(plugin);
+      const char* version            = zathura_plugin_get_version(plugin);
+      g_string_append_printf(string, format, (name == NULL) ? "-" : name, version, zathura_plugin_get_path(plugin));
     }
   }
 
@@ -371,21 +369,19 @@ static unsigned int* parse_first_page_column_list(const char* first_page_column_
     return NULL;
   }
 
-  char** tokens       = g_strsplit(first_page_column_list, ":", 0);
-  unsigned int length = g_strv_length(tokens);
+  g_auto(GStrv) tokens = g_strsplit(first_page_column_list, ":", 0);
+  unsigned int length  = g_strv_length(tokens);
 
   unsigned int* settings = g_malloc_n(length, sizeof(unsigned int));
   for (unsigned int i = 0; i < length; i++) {
     guint64 column = 1;
 
-    if (g_ascii_string_to_unsigned(tokens[i], 10, 1, UINT_MAX, &column, NULL) == TRUE && column <= UINT_MAX) {
+    if (g_ascii_string_to_unsigned(tokens[i], 10, 1, UINT_MAX, &column, NULL) && column <= UINT_MAX) {
       settings[i] = (unsigned int)column;
     } else {
       settings[i] = 1;
     }
   }
-
-  g_strfreev(tokens);
 
   *size = length;
   return settings;
@@ -456,7 +452,7 @@ char* increment_first_page_column(const char* first_page_column_list, const unsi
 }
 
 bool parse_color(GdkRGBA* color, const char* str) {
-  if (gdk_rgba_parse(color, str) == FALSE) {
+  if (!gdk_rgba_parse(color, str)) {
     girara_warning("Failed to parse color string '%s'.", str);
     return false;
   }

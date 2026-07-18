@@ -59,7 +59,7 @@ struct _ZathuraDatabaseInterface {
   bool (*supports_hash_queries)(ZathuraDatabase* db);
 };
 
-GType zathura_database_get_type(void) G_GNUC_CONST;
+GType zathura_database_get_type(void);
 
 /**
  * Add or update bookmark in the database.

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: zathura\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 17:57+0200\n"
+"POT-Creation-Date: 2026-07-17 19:40+0200\n"
 "PO-Revision-Date: 2012-03-26 16:47+0000\n"
 "Last-Translator: Sebastian Rasmussen <sebras@gmail.com>, 2018-2020\n"
 "Language-Team: Swedish (http://app.transifex.com/pwmt/zathura/language/sv/)\n"
@@ -68,6 +68,22 @@ msgstr "Följa länkar"
 msgid "Listing and selecting bookmarks"
 msgstr "Lista och välja bokmärken"
 
+#, fuzzy
+msgid "Add page-mode setting"
+msgstr "Lade till inställningen first-page-colum"
+
+msgid "Fix reloading of files (#969)"
+msgstr ""
+
+msgid "Fix CSS handling (#970)"
+msgstr ""
+
+msgid "Replace test feature with test-x11 and test-wayland features"
+msgstr ""
+
+msgid "Various fixes and improvements"
+msgstr "Olika fixar och förbättringar"
+
 msgid ""
 "Port to Gtk 4 (#871). Note that due to changes between Gtk 3 and 4, window "
 "embedding is no longer supported (#216, #432). Also, the setting 'window-"
@@ -121,9 +137,6 @@ msgstr ""
 
 msgid "Fix more cases of flickering when rendering pages (#864)"
 msgstr ""
-
-msgid "Various fixes and improvements"
-msgstr "Olika fixar och förbättringar"
 
 msgid "Add search result counter (#450)"
 msgstr ""
@@ -1246,6 +1259,12 @@ msgstr "Exec tillåts inte i strikt sandlådeläge"
 msgid "Argument must be a number."
 msgstr "Argument måste vara ett nummer."
 
+msgid "Files"
+msgstr ""
+
+msgid "Recent files"
+msgstr ""
+
 #, c-format
 msgid "Page %d"
 msgstr "Sida %d"
@@ -1478,6 +1497,9 @@ msgstr "Rendera ”Läser in …”"
 
 msgid "Adjust to when opening file"
 msgstr "Justera till vid öppning av fil"
+
+msgid "Default page mode (none, equal_width, equal_height)"
+msgstr ""
 
 msgid "Show hidden files and directories"
 msgstr "Visa gömda filer och kataloger"

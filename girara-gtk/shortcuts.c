@@ -2,16 +2,16 @@
 
 #include "shortcuts.h"
 
-#include "callbacks.h"
-#include "internal.h"
-#include "session.h"
-#include "settings.h"
-
 #include <girara/datastructures.h>
 #include <girara/input-history.h>
 #include <girara/log.h>
 #include <gtk/gtk.h>
 #include <string.h>
+
+#include "callbacks.h"
+#include "internal.h"
+#include "session.h"
+#include "settings.h"
 
 bool girara_shortcut_add(girara_session_t* session, guint modifier, guint key, const char* buffer,
                          girara_shortcut_function_t function, girara_mode_t mode, int argument_n, void* argument_data) {
@@ -297,7 +297,7 @@ static void girara_toggle_widget_visibility(GtkWidget* widget) {
     return;
   }
 
-  if (gtk_widget_get_visible(widget) == TRUE) {
+  if (gtk_widget_get_visible(widget)) {
     gtk_widget_set_visible(widget, FALSE);
   } else {
     gtk_widget_set_visible(widget, TRUE);
@@ -323,25 +323,21 @@ bool girara_sc_toggle_statusbar(girara_session_t* session, girara_argument_t* UN
 }
 
 girara_list_t* argument_to_argument_list(girara_argument_t* argument) {
-  girara_list_t* argument_list = girara_list_new_with_free(g_free);
+  g_autoptr(girara_list_t) argument_list = girara_list_new_with_free(g_free);
   if (argument_list == NULL) {
     return NULL;
   }
 
-  gchar** argv = NULL;
-  gint argc    = 0;
-
-  if (g_shell_parse_argv((const gchar*)argument->data, &argc, &argv, NULL) != FALSE) {
+  g_auto(GStrv) argv = NULL;
+  gint argc          = 0;
+  if (g_shell_parse_argv((const gchar*)argument->data, &argc, &argv, NULL)) {
     for (int i = 0; i < argc; i++) {
       char* arg = g_strdup(argv[i]);
       girara_list_append(argument_list, arg);
     }
-    g_strfreev(argv);
-
-    return argument_list;
+    return g_steal_pointer(&argument_list);
   }
 
-  girara_list_free(argument_list);
   return NULL;
 }
 
@@ -375,13 +371,35 @@ static int update_state_by_keyval(int state, int keyval) {
   return state;
 }
 
+/* type one synthetic key into the inputbar entry */
+static void feed_key_to_inputbar(girara_session_t* session, guint keyval, guint state) {
+  if (girara_process_inputbar_key(session, keyval, state)) {
+    return;
+  }
+
+  GtkWidget* entry = GTK_WIDGET(session->gtk.inputbar_entry);
+  if (keyval == GDK_KEY_Return || keyval == GDK_KEY_KP_Enter) {
+    g_signal_emit_by_name(entry, "activate");
+    return;
+  }
+
+  const gunichar codepoint = gdk_keyval_to_unicode(keyval);
+  if (codepoint != 0 && g_unichar_isprint(codepoint)) {
+    char buffer[6];
+    const int length = g_unichar_to_utf8(codepoint, buffer);
+    int position     = gtk_editable_get_position(GTK_EDITABLE(entry));
+    gtk_editable_insert_text(GTK_EDITABLE(entry), buffer, length, &position);
+    gtk_editable_set_position(GTK_EDITABLE(entry), position);
+  }
+}
+
 bool girara_sc_feedkeys(girara_session_t* session, girara_argument_t* argument, girara_event_t* UNUSED(event),
                         unsigned int t) {
   if (session == NULL || argument == NULL) {
     return false;
   }
 
-  if (g_mutex_trylock(&session->private_data->feedkeys_mutex) == FALSE) {
+  if (!g_mutex_trylock(&session->private_data->feedkeys_mutex)) {
     girara_error("Recursive use of feedkeys detected. Aborting evaluation.");
     return false;
   }
@@ -453,7 +471,15 @@ bool girara_sc_feedkeys(girara_session_t* session, girara_argument_t* argument, 
 
     single_key:
       state = update_state_by_keyval(state, keyval);
-      girara_process_view_key(session, keyval, state);
+      /* send the key to the widget that would receive a real key press */
+      GtkWidget* entry = GTK_WIDGET(session->gtk.inputbar_entry);
+      GtkRoot* root    = gtk_widget_get_root(entry);
+      GtkWidget* focus = root != NULL ? gtk_root_get_focus(root) : NULL;
+      if (focus != NULL && (focus == entry || gtk_widget_is_ancestor(focus, entry))) {
+        feed_key_to_inputbar(session, keyval, state);
+      } else {
+        girara_process_view_key(session, keyval, state);
+      }
     }
   }
 

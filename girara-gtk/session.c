@@ -2,6 +2,14 @@
 
 #include "session.h"
 
+#include <girara/datastructures.h>
+#include <girara/input-history.h>
+#include <girara/template.h>
+#include <girara/utils.h>
+#include <glib/gi18n-lib.h>
+#include <pango/pango-font.h>
+#include <stdlib.h>
+
 #include "callbacks.h"
 #include "commands.h"
 #include "config.h"
@@ -9,15 +17,6 @@
 #include "internal.h"
 #include "settings.h"
 #include "shortcuts.h"
-
-#include <girara/datastructures.h>
-#include <girara/input-history.h>
-#include <girara/template.h>
-#include <girara/utils.h>
-
-#include <glib/gi18n-lib.h>
-#include <pango/pango-font.h>
-#include <stdlib.h>
 
 static int cb_sort_settings(const void* data1, const void* data2) {
   const girara_setting_t* lhs = data1;
@@ -76,7 +75,7 @@ void css_template_fill_font(GiraraTemplate* csstemplate, const char* font) {
     girara_template_set_variable_value(csstemplate, "font-size", "9pt");
   } else {
     g_autofree char* size = g_strdup_printf("%d%s", pango_font_description_get_size(descr) / PANGO_SCALE,
-                                            pango_font_description_get_size_is_absolute(descr) == FALSE ? "pt" : "");
+                                            pango_font_description_get_size_is_absolute(descr) ? "" : "pt");
     girara_template_set_variable_value(csstemplate, "font-size", size);
   }
 

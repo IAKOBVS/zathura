@@ -214,6 +214,24 @@ gboolean girara_process_view_key(girara_session_t* session, guint keyval, guint 
   return FALSE;
 }
 
+gboolean girara_process_inputbar_key(girara_session_t* session, guint keyval, guint clean) {
+  g_return_val_if_fail(session != NULL, FALSE);
+
+  for (size_t idx = 0; idx != girara_list_size(session->bindings.inputbar_shortcuts); ++idx) {
+    girara_inputbar_shortcut_t* inputbar_shortcut = girara_list_nth(session->bindings.inputbar_shortcuts, idx);
+    if (inputbar_shortcut->key == keyval && inputbar_shortcut->mask == clean) {
+      girara_debug("found shortcut for key %u and mask %x", keyval, clean);
+      if (inputbar_shortcut->function != NULL) {
+        inputbar_shortcut->function(session, &(inputbar_shortcut->argument), NULL, 0);
+      }
+
+      return TRUE;
+    }
+  }
+
+  return FALSE;
+}
+
 gboolean girara_callback_view_button_press_event(GtkGestureClick* gesture, gint n_press, gdouble x, gdouble y,
                                                  girara_session_t* session) {
   g_return_val_if_fail(session != NULL, false);
@@ -329,7 +347,7 @@ static void scroll_event_position(GtkEventControllerScroll* controller, double* 
   }
 
   double sx = 0.0, sy = 0.0;
-  if (gdk_event_get_position(event, &sx, &sy) == FALSE) {
+  if (!gdk_event_get_position(event, &sx, &sy)) {
     return;
   }
 
@@ -342,7 +360,7 @@ static void scroll_event_position(GtkEventControllerScroll* controller, double* 
   gtk_native_get_surface_transform(native, &nx, &ny);
   const graphene_point_t point = GRAPHENE_POINT_INIT((float)(sx - nx), (float)(sy - ny));
   graphene_point_t out         = {0};
-  if (gtk_widget_compute_point(GTK_WIDGET(native), widget, &point, &out) == TRUE) {
+  if (gtk_widget_compute_point(GTK_WIDGET(native), widget, &point, &out)) {
     *x = out.x;
     *y = out.y;
   }
@@ -355,16 +373,19 @@ gboolean girara_callback_view_scroll_event(GtkEventControllerScroll* controller,
   girara_event_t event = {.x = 0, .y = 0};
   scroll_event_position(controller, &event.x, &event.y);
 
+#ifdef __APPLE__
+  /* Apple has much higher deltas */
+  static const double surface_to_wheel = 0.02;
+#else
+  // Gtk 4 sends raw pixels; Gtk 3 devided by 10
+  static const double surface_to_wheel = 0.1;
+#endif
+
   /* only wheel units are discrete steps so touchpad deltas stay smooth */
   if (gtk_event_controller_scroll_get_unit(controller) != GDK_SCROLL_UNIT_WHEEL) {
     event.type = GIRARA_EVENT_SCROLL_BIDIRECTIONAL;
-    event.x    = dx;
-    event.y    = dy;
-#ifdef __APPLE__
-    /* Apple has much higher deltas */
-    event.x /= 50;
-    event.y /= 50;
-#endif
+    event.x    = dx * surface_to_wheel;
+    event.y    = dy * surface_to_wheel;
   } else if (dx == 0.0 && dy < 0.0) {
     event.type = GIRARA_EVENT_SCROLL_UP;
   } else if (dx == 0.0 && dy > 0.0) {
@@ -378,9 +399,8 @@ gboolean girara_callback_view_scroll_event(GtkEventControllerScroll* controller,
     event.x    = dx;
     event.y    = dy;
 #ifdef __APPLE__
-    /* Apple has much higher deltas */
-    event.x /= 50;
-    event.y /= 50;
+    event.x *= surface_to_wheel;
+    event.y *= surface_to_wheel;
 #endif
   }
 
@@ -498,21 +518,11 @@ gboolean girara_callback_inputbar_key_press_event(GtkEventControllerKey* control
   }
   girara_debug("Proccessing key %u with mask %x.", keyval, clean);
 
-  if (custom_ret == false) {
-    for (size_t idx = 0; idx != girara_list_size(session->bindings.inputbar_shortcuts); ++idx) {
-      girara_inputbar_shortcut_t* inputbar_shortcut = girara_list_nth(session->bindings.inputbar_shortcuts, idx);
-      if (inputbar_shortcut->key == keyval && inputbar_shortcut->mask == clean) {
-        girara_debug("found shortcut for key %u and mask %x", keyval, clean);
-        if (inputbar_shortcut->function != NULL) {
-          inputbar_shortcut->function(session, &(inputbar_shortcut->argument), NULL, 0);
-        }
-
-        return true;
-      }
-    }
+  if (custom_ret == false && girara_process_inputbar_key(session, keyval, clean)) {
+    return true;
   }
 
-  if ((session->gtk.results != NULL) && (gtk_widget_get_visible(GTK_WIDGET(session->gtk.results)) == TRUE) &&
+  if ((session->gtk.results != NULL) && (gtk_widget_get_visible(GTK_WIDGET(session->gtk.results))) &&
       (keyval == GDK_KEY_space)) {
     gtk_widget_set_visible(GTK_WIDGET(session->gtk.results), FALSE);
   }

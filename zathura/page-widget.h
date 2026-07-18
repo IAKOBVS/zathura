@@ -35,7 +35,7 @@ struct zathura_page_widget_class_s {
  * Returns the type of the page view widget.
  * @return the type
  */
-GType zathura_page_widget_get_type(void) G_GNUC_CONST;
+GType zathura_page_widget_get_type(void);
 /**
  * Create a page view widget.
  * @param zathura the zathura instance

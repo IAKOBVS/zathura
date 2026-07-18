@@ -81,14 +81,14 @@ static char* guess_type_magic(zathura_content_type_context_t* context, const cha
 }
 
 static char* guess_type_glib(const char* path) {
-  gboolean uncertain = FALSE;
-  char* content_type = g_content_type_guess(path, NULL, 0, &uncertain);
+  gboolean uncertain            = FALSE;
+  g_autofree char* content_type = g_content_type_guess(path, NULL, 0, &uncertain);
   if (content_type == NULL) {
     girara_debug("g_content_type failed\n");
   } else {
-    if (uncertain == FALSE) {
+    if (!uncertain) {
       girara_debug("g_content_type detected filetype: %s", content_type);
-      return content_type;
+      return g_steal_pointer(&content_type);
     }
     girara_debug("g_content_type is uncertain, guess: %s", content_type);
   }
@@ -105,22 +105,21 @@ static char* guess_type_glib(const char* path) {
                                       MIN(g_mapped_file_get_length(f), GT_MAX_READ), &uncertain);
   girara_debug("new guess: %s uncertain: %d", content_type, uncertain);
   g_mapped_file_unref(f);
-  if (uncertain == FALSE) {
-    return content_type;
+  if (!uncertain) {
+    return g_steal_pointer(&content_type);
   }
 
-  g_free(content_type);
   return NULL;
 }
 
 char* zathura_content_type_guess(zathura_content_type_context_t* context, const char* path,
                                  const girara_list_t* supported_content_types) {
   /* try libmagic first */
-  char* content_type = guess_type_magic(context, path);
+  g_autofree char* content_type = guess_type_magic(context, path);
   if (content_type != NULL) {
     if (supported_content_types == NULL ||
         girara_list_find(supported_content_types, list_cmpstr, content_type) != NULL) {
-      return content_type;
+      return g_steal_pointer(&content_type);
     }
     girara_debug("content type '%s' not supported, trying again", content_type);
     g_free(content_type);
@@ -130,10 +129,9 @@ char* zathura_content_type_guess(zathura_content_type_context_t* context, const 
   if (content_type != NULL) {
     if (supported_content_types == NULL ||
         girara_list_find(supported_content_types, list_cmpstr, content_type) != NULL) {
-      return content_type;
+      return g_steal_pointer(&content_type);
     }
     girara_debug("content type '%s' not supported", content_type);
-    g_free(content_type);
   }
   return NULL;
 }
