@@ -358,13 +358,13 @@ static void zathura_page_widget_set_property(GObject* object, guint prop_id, con
   case PROP_DRAW_LINKS:
     priv->links.draw = g_value_get_boolean(value);
     /* get links */
-    if (priv->links.draw == TRUE && priv->links.retrieved == FALSE) {
+    if (priv->links.draw && !priv->links.retrieved) {
       priv->links.list      = zathura_page_links_get(priv->page, NULL);
       priv->links.retrieved = TRUE;
       priv->links.n         = (priv->links.list == NULL) ? 0 : girara_list_size(priv->links.list);
     }
 
-    if (priv->links.retrieved == TRUE && priv->links.list != NULL) {
+    if (priv->links.retrieved && priv->links.list != NULL) {
       if (priv->drawing_area != NULL) {
         gtk_widget_queue_draw(priv->drawing_area);
       }
@@ -401,7 +401,7 @@ static void zathura_page_widget_set_property(GObject* object, guint prop_id, con
       priv->search.current = girara_list_size(priv->search.list);
     } else {
       priv->search.current = val;
-      if (priv->search.draw == TRUE && val >= 0 && val < (signed)girara_list_size(priv->search.list)) {
+      if (priv->search.draw && val >= 0 && val < (signed)girara_list_size(priv->search.list)) {
         if (priv->drawing_area != NULL) {
           gtk_widget_queue_draw(priv->drawing_area);
         }
@@ -428,12 +428,12 @@ static void zathura_page_widget_set_property(GObject* object, guint prop_id, con
   case PROP_DRAW_SIGNATURES:
     priv->signatures.draw = g_value_get_boolean(value);
     /* get links */
-    if (priv->signatures.draw == TRUE && priv->signatures.retrieved == FALSE) {
+    if (priv->signatures.draw && !priv->signatures.retrieved) {
       priv->signatures.list      = zathura_page_get_signatures(priv->page, NULL);
       priv->signatures.retrieved = TRUE;
     }
 
-    if (priv->signatures.retrieved == TRUE && priv->signatures.list != NULL) {
+    if (priv->signatures.retrieved && priv->signatures.list != NULL) {
       if (priv->drawing_area != NULL) {
         gtk_widget_queue_draw(priv->drawing_area);
       }

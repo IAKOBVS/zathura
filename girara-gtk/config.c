@@ -108,7 +108,7 @@ static bool config_parse(girara_session_t* session, const char* path) {
     g_autoptr(GError) error = NULL;
 
     /* parse current line */
-    if (g_shell_parse_argv(line, &argc, &argv, &error) != FALSE) {
+    if (g_shell_parse_argv(line, &argc, &argv, &error)) {
       for (int i = 1; i < argc; i++) {
         girara_list_append(argument_list, g_strdup(argv[i]));
       }
@@ -127,7 +127,7 @@ static bool config_parse(girara_session_t* session, const char* path) {
         girara_warning("Could not process line %d in '%s': usage: include path.", line_number, path);
       } else {
         g_autofree char* newpath = NULL;
-        if (g_path_is_absolute(argv[1]) == TRUE) {
+        if (g_path_is_absolute(argv[1])) {
           newpath = g_strdup(argv[1]);
         } else {
           g_autofree char* basename = g_path_get_dirname(path);

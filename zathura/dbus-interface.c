@@ -620,8 +620,8 @@ static int iterate_instances_call_synctex_view(const char* filename, const char*
 
   gchar* name    = NULL;
   bool found_one = false;
-  while (found_one == false && g_variant_iter_loop(iter, "s", &name) == TRUE) {
-    if (g_str_has_prefix(name, "org.pwmt.zathura.PID") == FALSE) {
+  while (found_one == false && g_variant_iter_loop(iter, "s", &name)) {
+    if (!g_str_has_prefix(name, "org.pwmt.zathura.PID")) {
       continue;
     }
     girara_debug("Found name: %s", name);

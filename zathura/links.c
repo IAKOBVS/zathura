@@ -193,7 +193,7 @@ static void link_remote(zathura_t* zathura, const char* file) {
   char* argv[] = {*zathura->global.arguments, uri, NULL};
 
   g_autoptr(GError) error = NULL;
-  if (g_spawn_async(dir, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &error) == FALSE) {
+  if (!g_spawn_async(dir, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &error)) {
     girara_error("Failed to execute command: %s", error->message);
   }
 }

@@ -101,7 +101,7 @@ void synctex_edit(zathura_t* zathura, const char* editor, zathura_page_t* page, 
 
     g_auto(GStrv) argv = NULL;
     gint argc          = 0;
-    if (g_shell_parse_argv(editor, &argc, &argv, NULL) == TRUE) {
+    if (g_shell_parse_argv(editor, &argc, &argv, NULL)) {
       for (gint i = 0; i != argc; ++i) {
         char* arg  = argv[i];
         char* temp = girara_replace_substring(arg, "%{line}", linestr);
@@ -123,7 +123,7 @@ void synctex_edit(zathura_t* zathura, const char* editor, zathura_page_t* page, 
       }
 
       g_autoptr(GError) error = NULL;
-      if (g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &error) == FALSE) {
+      if (!g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &error)) {
         girara_error("Failed to execute synctex command: %s", error->message);
       }
     }

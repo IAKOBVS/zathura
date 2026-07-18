@@ -684,7 +684,7 @@ static gchar* prepare_document_open_from_gfile(GFile* source) {
   girara_debug("Copying to temporary file: %s", tmpfile_path);
 
   gboolean rc = g_file_copy(source, tmpfile, G_FILE_COPY_OVERWRITE, NULL, NULL, NULL, &error);
-  if (rc == FALSE) {
+  if (!rc) {
     if (error != NULL) {
       girara_error("Can not copy to temporary file: %s", error->message);
     }
@@ -720,7 +720,7 @@ static gboolean document_info_open(gpointer data) {
       g_autofree char* tmp_path = *document_info->path == '~' ? girara_fix_path(document_info->path) : NULL;
       g_autoptr(GFile) gf       = g_file_new_for_commandline_arg(tmp_path != NULL ? tmp_path : document_info->path);
 
-      if (g_file_is_native(gf) == TRUE) {
+      if (g_file_is_native(gf)) {
         /* file was given as a native path */
         file = g_file_get_path(gf);
       } else {
@@ -1241,7 +1241,7 @@ bool document_save(zathura_t* zathura, const char* path, bool overwrite) {
 
   g_autofree gchar* file_path = girara_fix_path(path);
   /* use current basename if path points to a directory  */
-  if (g_file_test(file_path, G_FILE_TEST_IS_DIR) == TRUE) {
+  if (g_file_test(file_path, G_FILE_TEST_IS_DIR)) {
     g_autofree char* basename = g_path_get_basename(zathura_document_get_path(document));
     g_autofree char* tmp      = file_path;
     file_path                 = g_build_filename(file_path, basename, NULL);

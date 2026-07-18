@@ -347,7 +347,7 @@ static void scroll_event_position(GtkEventControllerScroll* controller, double* 
   }
 
   double sx = 0.0, sy = 0.0;
-  if (gdk_event_get_position(event, &sx, &sy) == FALSE) {
+  if (!gdk_event_get_position(event, &sx, &sy)) {
     return;
   }
 
@@ -360,7 +360,7 @@ static void scroll_event_position(GtkEventControllerScroll* controller, double* 
   gtk_native_get_surface_transform(native, &nx, &ny);
   const graphene_point_t point = GRAPHENE_POINT_INIT((float)(sx - nx), (float)(sy - ny));
   graphene_point_t out         = {0};
-  if (gtk_widget_compute_point(GTK_WIDGET(native), widget, &point, &out) == TRUE) {
+  if (gtk_widget_compute_point(GTK_WIDGET(native), widget, &point, &out)) {
     *x = out.x;
     *y = out.y;
   }
@@ -518,11 +518,11 @@ gboolean girara_callback_inputbar_key_press_event(GtkEventControllerKey* control
   }
   girara_debug("Proccessing key %u with mask %x.", keyval, clean);
 
-  if (custom_ret == false && girara_process_inputbar_key(session, keyval, clean) == TRUE) {
+  if (custom_ret == false && girara_process_inputbar_key(session, keyval, clean)) {
     return true;
   }
 
-  if ((session->gtk.results != NULL) && (gtk_widget_get_visible(GTK_WIDGET(session->gtk.results)) == TRUE) &&
+  if ((session->gtk.results != NULL) && (gtk_widget_get_visible(GTK_WIDGET(session->gtk.results))) &&
       (keyval == GDK_KEY_space)) {
     gtk_widget_set_visible(GTK_WIDGET(session->gtk.results), FALSE);
   }

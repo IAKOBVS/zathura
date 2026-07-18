@@ -113,11 +113,11 @@ void zathura_plugin_manager_set_dir(zathura_plugin_manager_t* plugin_manager, co
 
 static bool check_suffix(const char* path) {
 #ifdef __APPLE__
-  if (g_str_has_suffix(path, ".dylib") == TRUE) {
+  if (g_str_has_suffix(path, ".dylib")) {
     return true;
   }
 #else
-  if (g_str_has_suffix(path, ".so") == TRUE) {
+  if (g_str_has_suffix(path, ".so")) {
     return true;
   }
 #endif
@@ -208,7 +208,7 @@ static void load_plugin(zathura_plugin_manager_t* plugin_manager, const char* pl
 
   /* resolve symbols and check API and ABI version*/
   const zathura_plugin_definition_t* plugin_definition = NULL;
-  if (g_module_symbol(handle, G_STRINGIFY(ZATHURA_PLUGIN_DEFINITION_SYMBOL), (void**)&plugin_definition) == FALSE ||
+  if (!g_module_symbol(handle, G_STRINGIFY(ZATHURA_PLUGIN_DEFINITION_SYMBOL), (void**)&plugin_definition) ||
       plugin_definition == NULL) {
     girara_error("Could not find '%s' in plugin %s - is not a plugin or needs to be rebuilt.",
                  G_STRINGIFY(ZATHURA_PLUGIN_DEFINITION_SYMBOL), path);

@@ -806,7 +806,7 @@ bool girara_command_run(girara_session_t* session, const char* input) {
   gchar** argv = NULL;
   gint argc    = 0;
 
-  if (g_shell_parse_argv(input, &argc, &argv, NULL) == FALSE) {
+  if (!g_shell_parse_argv(input, &argc, &argv, NULL)) {
     girara_debug("Failed to parse argument.");
     return false;
   }

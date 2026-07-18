@@ -297,7 +297,7 @@ static void girara_toggle_widget_visibility(GtkWidget* widget) {
     return;
   }
 
-  if (gtk_widget_get_visible(widget) == TRUE) {
+  if (gtk_widget_get_visible(widget)) {
     gtk_widget_set_visible(widget, FALSE);
   } else {
     gtk_widget_set_visible(widget, TRUE);
@@ -331,7 +331,7 @@ girara_list_t* argument_to_argument_list(girara_argument_t* argument) {
   gchar** argv = NULL;
   gint argc    = 0;
 
-  if (g_shell_parse_argv((const gchar*)argument->data, &argc, &argv, NULL) != FALSE) {
+  if (g_shell_parse_argv((const gchar*)argument->data, &argc, &argv, NULL)) {
     for (int i = 0; i < argc; i++) {
       char* arg = g_strdup(argv[i]);
       girara_list_append(argument_list, arg);
@@ -377,7 +377,7 @@ static int update_state_by_keyval(int state, int keyval) {
 
 /* type one synthetic key into the inputbar entry */
 static void feed_key_to_inputbar(girara_session_t* session, guint keyval, guint state) {
-  if (girara_process_inputbar_key(session, keyval, state) == TRUE) {
+  if (girara_process_inputbar_key(session, keyval, state)) {
     return;
   }
 
@@ -388,7 +388,7 @@ static void feed_key_to_inputbar(girara_session_t* session, guint keyval, guint 
   }
 
   const gunichar codepoint = gdk_keyval_to_unicode(keyval);
-  if (codepoint != 0 && g_unichar_isprint(codepoint) == TRUE) {
+  if (codepoint != 0 && g_unichar_isprint(codepoint)) {
     char buffer[6];
     const int length = g_unichar_to_utf8(codepoint, buffer);
     int position     = gtk_editable_get_position(GTK_EDITABLE(entry));
@@ -403,7 +403,7 @@ bool girara_sc_feedkeys(girara_session_t* session, girara_argument_t* argument, 
     return false;
   }
 
-  if (g_mutex_trylock(&session->private_data->feedkeys_mutex) == FALSE) {
+  if (!g_mutex_trylock(&session->private_data->feedkeys_mutex)) {
     girara_error("Recursive use of feedkeys detected. Aborting evaluation.");
     return false;
   }

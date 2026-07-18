@@ -210,7 +210,7 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
   g_auto(GStrv) elements = NULL;
   gint n_parameter       = 0;
   if (input_length > 1) {
-    if (g_shell_parse_argv(input + 1, &n_parameter, &elements, NULL) == FALSE) {
+    if (!g_shell_parse_argv(input + 1, &n_parameter, &elements, NULL)) {
       return false;
     }
   } else {

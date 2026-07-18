@@ -146,7 +146,7 @@ static girara_completion_t* list_files_for_cc(zathura_t* zathura, const char* in
 
   /* Append a slash if the given argument is a directory */
   bool is_dir = path[strlen(path) - 1] == '/';
-  if ((g_file_test(path, G_FILE_TEST_IS_DIR) == TRUE) && is_dir == false) {
+  if ((g_file_test(path, G_FILE_TEST_IS_DIR)) && is_dir == false) {
     char* tmp_path = g_strdup_printf("%s/", path);
     g_free(path);
     path   = tmp_path;
@@ -161,7 +161,7 @@ static girara_completion_t* list_files_for_cc(zathura_t* zathura, const char* in
   const size_t current_file_length = strlen(current_file);
 
   /* read directory */
-  if (g_file_test(current_path, G_FILE_TEST_IS_DIR) == TRUE) {
+  if (g_file_test(current_path, G_FILE_TEST_IS_DIR)) {
     g_autoptr(girara_list_t) names =
         list_files(zathura, current_path, current_file, current_file_length, is_dir, check_file_ext);
     if (names == NULL) {

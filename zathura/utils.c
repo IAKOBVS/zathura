@@ -376,7 +376,7 @@ static unsigned int* parse_first_page_column_list(const char* first_page_column_
   for (unsigned int i = 0; i < length; i++) {
     guint64 column = 1;
 
-    if (g_ascii_string_to_unsigned(tokens[i], 10, 1, UINT_MAX, &column, NULL) == TRUE && column <= UINT_MAX) {
+    if (g_ascii_string_to_unsigned(tokens[i], 10, 1, UINT_MAX, &column, NULL) && column <= UINT_MAX) {
       settings[i] = (unsigned int)column;
     } else {
       settings[i] = 1;
@@ -454,7 +454,7 @@ char* increment_first_page_column(const char* first_page_column_list, const unsi
 }
 
 bool parse_color(GdkRGBA* color, const char* str) {
-  if (gdk_rgba_parse(color, str) == FALSE) {
+  if (!gdk_rgba_parse(color, str)) {
     girara_warning("Failed to parse color string '%s'.", str);
     return false;
   }

@@ -86,7 +86,7 @@ static char* guess_type_glib(const char* path) {
   if (content_type == NULL) {
     girara_debug("g_content_type failed\n");
   } else {
-    if (uncertain == FALSE) {
+    if (!uncertain) {
       girara_debug("g_content_type detected filetype: %s", content_type);
       return g_steal_pointer(&content_type);
     }
@@ -105,7 +105,7 @@ static char* guess_type_glib(const char* path) {
                                       MIN(g_mapped_file_get_length(f), GT_MAX_READ), &uncertain);
   girara_debug("new guess: %s uncertain: %d", content_type, uncertain);
   g_mapped_file_unref(f);
-  if (uncertain == FALSE) {
+  if (!uncertain) {
     return g_steal_pointer(&content_type);
   }
 
