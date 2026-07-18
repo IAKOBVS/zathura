@@ -463,17 +463,11 @@ bool cmd_search(girara_session_t* session, const char* input, girara_argument_t*
     zathura->global.total_search_results += girara_list_size(result);
   }
 
-  g_autofree girara_argument_t* arg = g_try_malloc0(sizeof(girara_argument_t));
-  if (arg == NULL) {
-    return false;
-  }
-
   bool inc_search = false;
   girara_setting_get(session, "incremental-search", &inc_search);
 
-  arg->n    = FORWARD;
-  arg->data = (void*)input;
-  search_document(zathura, arg, inc_search);
+  girara_argument_t arg = {.n = FORWARD, .data = (void*)input};
+  search_document(zathura, &arg, inc_search);
 
   return true;
 }
