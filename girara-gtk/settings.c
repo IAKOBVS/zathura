@@ -230,7 +230,7 @@ static void dump_setting(JsonBuilder* builder, const girara_setting_t* setting) 
     type = "int";
     break;
   case UINT:
-    static_assert(sizeof(gint64) > sizeof(unsigned int));
+    static_assert(sizeof(gint64) >= sizeof(unsigned int) && G_MAXINT64 >= UINT_MAX);
     json_builder_add_int_value(builder, g_value_get_uint(&setting->value));
     type = "uint";
     break;
