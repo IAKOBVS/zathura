@@ -99,8 +99,8 @@ void synctex_edit(zathura_t* zathura, const char* editor, zathura_page_t* page, 
     g_autofree char* linestr   = g_strdup_printf("%d", line);
     g_autofree char* columnstr = g_strdup_printf("%d", column);
 
-    gchar** argv = NULL;
-    gint argc    = 0;
+    g_auto(GStrv) argv = NULL;
+    gint argc          = 0;
     if (g_shell_parse_argv(editor, &argc, &argv, NULL) == TRUE) {
       for (gint i = 0; i != argc; ++i) {
         char* arg  = argv[i];
@@ -126,7 +126,6 @@ void synctex_edit(zathura_t* zathura, const char* editor, zathura_page_t* page, 
       if (g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &error) == FALSE) {
         girara_error("Failed to execute synctex command: %s", error->message);
       }
-      g_strfreev(argv);
     }
   } else {
     girara_warning("Failed to obtain data via SyncTeX or data is incomplete.");
