@@ -64,11 +64,10 @@ static void set_plugin_dir(zathura_plugin_manager_t* plugin_manager, const char*
     return;
   }
 
-  char** paths = g_strsplit(dir, ":", 0);
+  g_auto(GStrv) paths = g_strsplit(dir, ":", 0);
   for (size_t i = 0; paths[i] != NULL; ++i) {
     girara_list_append(plugin_manager->path, g_strdup(paths[i]));
   }
-  g_strfreev(paths);
 }
 
 static void set_default_dirs(zathura_plugin_manager_t* plugin_manager) {

@@ -369,8 +369,8 @@ static unsigned int* parse_first_page_column_list(const char* first_page_column_
     return NULL;
   }
 
-  char** tokens       = g_strsplit(first_page_column_list, ":", 0);
-  unsigned int length = g_strv_length(tokens);
+  g_auto(GStrv) tokens = g_strsplit(first_page_column_list, ":", 0);
+  unsigned int length  = g_strv_length(tokens);
 
   unsigned int* settings = g_malloc_n(length, sizeof(unsigned int));
   for (unsigned int i = 0; i < length; i++) {
@@ -382,8 +382,6 @@ static unsigned int* parse_first_page_column_list(const char* first_page_column_
       settings[i] = 1;
     }
   }
-
-  g_strfreev(tokens);
 
   *size = length;
   return settings;

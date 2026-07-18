@@ -803,8 +803,8 @@ void girara_command_free(girara_command_t* command) {
 
 bool girara_command_run(girara_session_t* session, const char* input) {
   /* parse input */
-  gchar** argv = NULL;
-  gint argc    = 0;
+  g_auto(GStrv) argv = NULL;
+  gint argc          = 0;
 
   if (!g_shell_parse_argv(input, &argc, &argv, NULL)) {
     girara_debug("Failed to parse argument.");
@@ -819,7 +819,6 @@ bool girara_command_run(girara_session_t* session, const char* input) {
     if ((g_strcmp0(cmd, binding_command->command) == 0) || (g_strcmp0(cmd, binding_command->abbr) == 0)) {
       g_autoptr(girara_list_t) argument_list = girara_list_new();
       if (argument_list == NULL) {
-        g_strfreev(argv);
         return false;
       }
 
@@ -828,8 +827,6 @@ bool girara_command_run(girara_session_t* session, const char* input) {
       }
 
       binding_command->function(session, argument_list);
-
-      g_strfreev(argv);
 
       girara_isc_abort(session, NULL, NULL, 0);
 
@@ -844,7 +841,6 @@ bool girara_command_run(girara_session_t* session, const char* input) {
   /* check for unknown command event handler */
   if (session->events.unknown_command != NULL) {
     if (session->events.unknown_command(session, input) == true) {
-      g_strfreev(argv);
       girara_isc_abort(session, NULL, NULL, 0);
 
       if (session->global.autohide_inputbar == true) {
@@ -858,7 +854,6 @@ bool girara_command_run(girara_session_t* session, const char* input) {
 
   /* unhandled command */
   girara_notify(session, GIRARA_ERROR, _("Not a valid command: %s"), cmd);
-  g_strfreev(argv);
   girara_isc_abort(session, NULL, NULL, 0);
 
   return false;

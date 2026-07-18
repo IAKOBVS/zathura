@@ -74,6 +74,8 @@ static void free_document_info(zathura_document_info_t* document_info) {
   }
 }
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(zathura_document_info_t, free_document_info)
+
 /* function implementation */
 zathura_t* zathura_create(void) {
   g_autoptr(zathura_t) zathura = g_try_malloc0(sizeof(zathura_t));
@@ -695,25 +697,27 @@ static gchar* prepare_document_open_from_gfile(GFile* source) {
 }
 
 static gboolean document_info_open(gpointer data) {
-  zathura_document_info_t* document_info = data;
-  g_return_val_if_fail(document_info != NULL, FALSE);
-  g_autofree char* uri = NULL;
+  g_return_val_if_fail(data != NULL, FALSE);
 
-  if (document_info->zathura != NULL && document_info->path != NULL) {
+  g_autoptr(zathura_document_info_t) document_info = data;
+  g_autofree char* uri                             = NULL;
+  zathura_t* zathura                               = document_info->zathura;
+
+  if (zathura != NULL && document_info->path != NULL) {
     g_autofree char* file = NULL;
     if (g_strcmp0(document_info->path, "-") == 0 || g_str_has_prefix(document_info->path, "/proc/self/fd/") == true) {
 #ifdef G_OS_UNIX
       file = prepare_document_open_from_stdin(document_info->path);
 #endif
       if (file == NULL) {
-        girara_notify(document_info->zathura->ui.session, GIRARA_ERROR,
+        girara_notify(zathura->ui.session, GIRARA_ERROR,
                       _("Could not read file from stdin and write it to a temporary file."));
       } else {
-        if (document_info->zathura->stdin_support.file != NULL) {
-          g_unlink(document_info->zathura->stdin_support.file);
-          g_free(document_info->zathura->stdin_support.file);
+        if (zathura->stdin_support.file != NULL) {
+          g_unlink(zathura->stdin_support.file);
+          g_free(zathura->stdin_support.file);
         }
-        document_info->zathura->stdin_support.file = g_strdup(file);
+        zathura->stdin_support.file = g_strdup(file);
       }
     } else {
       /* expand ~ and ~user in paths if present */
@@ -728,30 +732,30 @@ static gboolean document_info_open(gpointer data) {
         uri  = g_file_get_uri(gf);
         file = prepare_document_open_from_gfile(gf);
         if (file == NULL) {
-          girara_notify(document_info->zathura->ui.session, GIRARA_ERROR,
+          girara_notify(zathura->ui.session, GIRARA_ERROR,
                         _("Could not read file from GIO and copy it to a temporary file."));
         } else {
-          if (document_info->zathura->stdin_support.file != NULL) {
-            g_unlink(document_info->zathura->stdin_support.file);
-            g_free(document_info->zathura->stdin_support.file);
+          if (zathura->stdin_support.file != NULL) {
+            g_unlink(zathura->stdin_support.file);
+            g_free(zathura->stdin_support.file);
           }
-          document_info->zathura->stdin_support.file = g_strdup(file);
+          zathura->stdin_support.file = g_strdup(file);
         }
       }
     }
 
     if (file != NULL) {
       if (document_info->synctex != NULL) {
-        document_open_synctex(document_info->zathura, file, uri, document_info->password, document_info->synctex);
+        document_open_synctex(zathura, file, uri, document_info->password, document_info->synctex);
       } else {
-        document_open(document_info->zathura, file, uri, document_info->password, document_info->page_number, NULL);
+        document_open(zathura, file, uri, document_info->password, document_info->page_number, NULL);
       }
 
       if (document_info->mode != NULL) {
         if (g_strcmp0(document_info->mode, "presentation") == 0) {
-          sc_toggle_presentation(document_info->zathura->ui.session, NULL, NULL, 0);
+          sc_toggle_presentation(zathura->ui.session, NULL, NULL, 0);
         } else if (g_strcmp0(document_info->mode, "fullscreen") == 0) {
-          sc_toggle_fullscreen(document_info->zathura->ui.session, NULL, NULL, 0);
+          sc_toggle_fullscreen(zathura->ui.session, NULL, NULL, 0);
         } else {
           girara_error("Unknown mode: %s", document_info->mode);
         }
@@ -760,19 +764,18 @@ static gboolean document_info_open(gpointer data) {
       if (document_info->bookmark_name != NULL) {
         g_autoptr(girara_list_t) arg_list = girara_list_new();
         girara_list_append(arg_list, document_info->bookmark_name);
-        cmd_bookmark_open(document_info->zathura->ui.session, arg_list);
+        cmd_bookmark_open(zathura->ui.session, arg_list);
       }
 
       if (document_info->search_string != NULL) {
         girara_argument_t search_arg;
         search_arg.n    = 1; // Forward search
         search_arg.data = NULL;
-        cmd_search(document_info->zathura->ui.session, document_info->search_string, &search_arg);
+        cmd_search(zathura->ui.session, document_info->search_string, &search_arg);
       }
     }
   }
 
-  free_document_info(document_info);
   return FALSE;
 }
 
@@ -1213,23 +1216,14 @@ void document_open_idle(zathura_t* zathura, const char* path, const char* passwo
   }
 
   document_info->zathura = zathura;
-  document_info->path    = g_strdup(path);
-  if (password != NULL) {
-    document_info->password = g_strdup(password);
-  }
-  document_info->page_number = page_number;
-  if (mode != NULL) {
-    document_info->mode = g_strdup(mode);
-  }
-  if (synctex != NULL) {
-    document_info->synctex = g_strdup(synctex);
-  }
-  if (bookmark_name != NULL) {
-    document_info->bookmark_name = g_strdup(bookmark_name);
-  }
-  if (search_string != NULL) {
-    document_info->search_string = g_strdup(search_string);
-  }
+  // there is no need to check if arguments are NULL before calling g_strdup since g_strdup(NULL) == NULL
+  document_info->path          = g_strdup(path);
+  document_info->password      = g_strdup(password);
+  document_info->mode          = g_strdup(mode);
+  document_info->synctex       = g_strdup(synctex);
+  document_info->bookmark_name = g_strdup(bookmark_name);
+  document_info->search_string = g_strdup(search_string);
+  document_info->page_number   = page_number;
 
   g_idle_add(document_info_open, document_info);
 }

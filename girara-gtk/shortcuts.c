@@ -323,25 +323,21 @@ bool girara_sc_toggle_statusbar(girara_session_t* session, girara_argument_t* UN
 }
 
 girara_list_t* argument_to_argument_list(girara_argument_t* argument) {
-  girara_list_t* argument_list = girara_list_new_with_free(g_free);
+  g_autoptr(girara_list_t) argument_list = girara_list_new_with_free(g_free);
   if (argument_list == NULL) {
     return NULL;
   }
 
-  gchar** argv = NULL;
-  gint argc    = 0;
-
+  g_auto(GStrv) argv = NULL;
+  gint argc          = 0;
   if (g_shell_parse_argv((const gchar*)argument->data, &argc, &argv, NULL)) {
     for (int i = 0; i < argc; i++) {
       char* arg = g_strdup(argv[i]);
       girara_list_append(argument_list, arg);
     }
-    g_strfreev(argv);
-
-    return argument_list;
+    return g_steal_pointer(&argument_list);
   }
 
-  girara_list_free(argument_list);
   return NULL;
 }
 
