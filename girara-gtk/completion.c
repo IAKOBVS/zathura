@@ -207,8 +207,8 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
     return false;
   }
 
-  gchar** elements = NULL;
-  gint n_parameter = 0;
+  g_auto(GStrv) elements = NULL;
+  gint n_parameter       = 0;
   if (input_length > 1) {
     if (g_shell_parse_argv(input + 1, &n_parameter, &elements, NULL) == FALSE) {
       return false;
@@ -226,8 +226,8 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
   }
 
   /* get current values */
-  gchar* current_command   = (elements[0] != NULL && elements[0][0] != '\0') ? g_strdup(elements[0]) : NULL;
-  gchar* current_parameter = (elements[0] != NULL && elements[1] != NULL) ? g_strdup(elements[1]) : NULL;
+  g_autofree gchar* current_command   = (elements[0] != NULL && elements[0][0] != '\0') ? g_strdup(elements[0]) : NULL;
+  g_autofree gchar* current_parameter = (elements[0] != NULL && elements[1] != NULL) ? g_strdup(elements[1]) : NULL;
 
   size_t current_command_length = current_command ? strlen(current_command) : 0;
 
@@ -290,11 +290,6 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
       g_free(priv->completion.previous_parameter);
       priv->completion.previous_parameter = NULL;
 
-      g_strfreev(elements);
-
-      g_free(current_parameter);
-      g_free(current_command);
-
       return false;
     }
   }
@@ -307,10 +302,6 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
     widget_add_class(GTK_WIDGET(session->gtk.results), "completion-box");
 
     if (session->gtk.results == NULL) {
-      g_free(current_parameter);
-      g_free(current_command);
-
-      g_strfreev(elements);
       return false;
     }
 
@@ -376,10 +367,6 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
       }
 
       if (command == NULL) {
-        g_free(current_command);
-        g_free(current_parameter);
-
-        g_strfreev(elements);
         return false;
       }
 
@@ -401,10 +388,6 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
         girara_completion_t* result = command->completion(session, current_parameter ? current_parameter : "");
 
         if (result == NULL || result->groups == NULL) {
-          g_free(current_parameter);
-          g_free(current_command);
-
-          g_strfreev(elements);
           return false;
         }
 
@@ -561,11 +544,6 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
             : g_strdup(((girara_internal_completion_entry_t*)priv->completion.entries_current->data)->value);
     priv->completion.previous_length = strlen(temp);
   }
-
-  g_free(current_parameter);
-  g_free(current_command);
-
-  g_strfreev(elements);
 
   return false;
 }
