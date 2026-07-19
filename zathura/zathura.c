@@ -1290,7 +1290,8 @@ zathura_fileinfo_t zathura_get_prefileinfo(zathura_t* zathura) {
 static void save_fileinfo_to_db(zathura_t* zathura) {
   zathura_document_t* document = zathura_get_document(zathura);
   const char* path             = zathura_document_get_path(document);
-  const uint8_t* file_hash     = zathura_document_get_hash(document);
+  const uint8_t* file_hash =
+      zathura_db_supports_hash_queries(zathura->database) ? zathura_document_get_hash(document) : NULL;
 
   zathura_fileinfo_t file_info = zathura_get_fileinfo(zathura);
 
