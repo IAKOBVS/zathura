@@ -1695,7 +1695,7 @@ msgstr "Abgebrochen."
 
 #, c-format
 msgid "Open external link <b>%s</b>? [Y/n]"
-msgstr "Öffne externen Link <b>%s<b>? [J/n]"
+msgstr "Öffne externen Link <b>%s</b>? [J/n]"
 
 msgid "Opening external applications in strict sandbox mode is not permitted"
 msgstr ""
