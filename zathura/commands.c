@@ -11,6 +11,7 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "adjustment.h"
 #include "bookmarks.h"
@@ -397,6 +398,16 @@ bool cmd_savef(girara_session_t* session, girara_list_t* argument_list) {
 #endif
 }
 
+static bool rect_equal(const zathura_rectangle_t* r1, const zathura_rectangle_t* r2) {
+  if (r1 == NULL || r2 == NULL) {
+    return false;
+  }
+  return (fabs(r1->x1 - r2->x1) < 1e-5 &&
+          fabs(r1->x2 - r2->x2) < 1e-5 &&
+          fabs(r1->y1 - r2->y1) < 1e-5 &&
+          fabs(r1->y2 - r2->y2) < 1e-5);
+}
+
 bool cmd_search(girara_session_t* session, const char* input, girara_argument_t* argument) {
   g_return_val_if_fail(session != NULL, false);
   g_return_val_if_fail(input != NULL, false);
@@ -419,6 +430,164 @@ bool cmd_search(girara_session_t* session, const char* input, girara_argument_t*
 
   zathura->global.total_search_results  = 0;
   zathura->global.current_search_result = 0;
+
+  g_free(zathura->global.search_query);
+  zathura->global.search_query = g_strdup(input);
+
+  bool search_first_only = false;
+  girara_setting_get(session, "search-first-only", &search_first_only);
+
+  if (search_first_only) {
+    bool has_current_highlight = false;
+    zathura_rectangle_t prev_highlight;
+    unsigned int current_highlight_page = 0;
+
+    if (zathura->global.search_is_navigation) {
+      for (unsigned int page_id = 0; page_id < number_of_pages; ++page_id) {
+        zathura_page_t* p = zathura_document_get_page(document, page_id);
+        if (p != NULL) {
+          GtkWidget* pw = zathura_page_get_widget(zathura, p);
+          girara_list_t* results = NULL;
+          g_object_get(G_OBJECT(pw), "search-results", &results, NULL);
+          if (results != NULL && girara_list_size(results) > 0) {
+            zathura_rectangle_t* rect = girara_list_nth(results, 0);
+            if (rect != NULL) {
+              prev_highlight = *rect;
+              current_highlight_page = page_id;
+              has_current_highlight = true;
+            }
+            break;
+          }
+        }
+      }
+    }
+
+    for (unsigned int page_id = 0; page_id < number_of_pages; ++page_id) {
+      zathura_page_t* p = zathura_document_get_page(document, page_id);
+      if (p != NULL) {
+        GtkWidget* pw = zathura_page_get_widget(zathura, p);
+        g_object_set(G_OBJECT(pw), "search-results", NULL, NULL);
+      }
+    }
+
+    bool found = false;
+    unsigned int target_page_index = 0;
+    size_t target_match_index = 0;
+    girara_list_t* target_results = NULL;
+
+    unsigned int start_page = has_current_highlight ? current_highlight_page : current_page_number;
+
+    for (unsigned int page_id = 0; page_id < number_of_pages; ++page_id) {
+      unsigned int index;
+      if (argument->n == BACKWARD) {
+        index = (start_page - page_id + number_of_pages) % number_of_pages;
+      } else {
+        index = (start_page + page_id) % number_of_pages;
+      }
+
+      zathura_page_t* page = zathura_document_get_page(document, index);
+      if (page == NULL) {
+        continue;
+      }
+
+      zathura_renderer_lock(zathura->sync.render_thread);
+      girara_list_t* result = zathura_page_search_text(page, input, &error);
+      zathura_renderer_unlock(zathura->sync.render_thread);
+
+      if (error == ZATHURA_ERROR_NOT_IMPLEMENTED) {
+        if (result != NULL) {
+          girara_list_free(result);
+        }
+        break;
+      }
+
+      if (result == NULL || girara_list_size(result) == 0) {
+        if (result != NULL) {
+          girara_list_free(result);
+        }
+        continue;
+      }
+
+      if (has_current_highlight && index == current_highlight_page && page_id == 0) {
+        int match_pos = -1;
+        for (size_t i = 0; i < girara_list_size(result); ++i) {
+          zathura_rectangle_t* rect = girara_list_nth(result, i);
+          if (rect_equal(rect, &prev_highlight)) {
+            match_pos = i;
+            break;
+          }
+        }
+
+        if (match_pos != -1) {
+          if (argument->n == FORWARD && match_pos + 1 < (int)girara_list_size(result)) {
+            target_page_index = index;
+            target_match_index = match_pos + 1;
+            target_results = result;
+            found = true;
+            break;
+          } else if (argument->n == BACKWARD && match_pos - 1 >= 0) {
+            target_page_index = index;
+            target_match_index = match_pos - 1;
+            target_results = result;
+            found = true;
+            break;
+          }
+        }
+        girara_list_free(result);
+      } else {
+        target_page_index = index;
+        target_match_index = (argument->n == BACKWARD) ? (girara_list_size(result) - 1) : 0;
+        target_results = result;
+        found = true;
+        break;
+      }
+    }
+
+    if (!found && has_current_highlight) {
+      zathura_page_t* page = zathura_document_get_page(document, current_highlight_page);
+      if (page != NULL) {
+        zathura_renderer_lock(zathura->sync.render_thread);
+        girara_list_t* result = zathura_page_search_text(page, input, &error);
+        zathura_renderer_unlock(zathura->sync.render_thread);
+
+        if (result != NULL && girara_list_size(result) > 0) {
+          target_page_index = current_highlight_page;
+          target_match_index = (argument->n == BACKWARD) ? (girara_list_size(result) - 1) : 0;
+          target_results = result;
+          found = true;
+        } else if (result != NULL) {
+          girara_list_free(result);
+        }
+      }
+    }
+
+    if (found) {
+      girara_list_t* single_result = girara_list_new_with_free(g_free);
+      zathura_rectangle_t* rect = girara_list_nth(target_results, target_match_index);
+      zathura_rectangle_t* new_rect = g_try_malloc(sizeof(zathura_rectangle_t));
+      if (new_rect != NULL) {
+        *new_rect = *rect;
+        girara_list_append(single_result, new_rect);
+      }
+      girara_list_free(target_results);
+
+      zathura_page_t* target_page = zathura_document_get_page(document, target_page_index);
+      GtkWidget* page_widget = zathura_page_get_widget(zathura, target_page);
+      GObject* obj_page_widget = G_OBJECT(page_widget);
+      g_object_set(obj_page_widget, "draw-links", FALSE, NULL);
+      g_object_set(obj_page_widget, "search-results", single_result, NULL);
+      g_object_set(obj_page_widget, "search-current", 0, NULL);
+      zathura->global.total_search_results = 1;
+    }
+
+    bool inc_search = false;
+    girara_setting_get(session, "incremental-search", &inc_search);
+
+    girara_argument_t arg = {.n = FORWARD, .data = (void*)input};
+    search_document(zathura, &arg, inc_search);
+
+    return true;
+  }
 
   /* reset search highlighting */
   bool nohlsearch = false;

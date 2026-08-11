@@ -150,6 +150,8 @@ struct zathura_s {
     guint current_index_position;         /**< current row in index */
     int current_search_result;
     int total_search_results;
+    char* search_query;                   /**< Last search query */
+    bool search_is_navigation;            /**< Whether currently navigating next/prev search */
   } global;
 
   struct {

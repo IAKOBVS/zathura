@@ -56,6 +56,27 @@ static void setting_callback(girara_session_t* session, const char* name, girara
   callback_called++;
 }
 
+static void test_search_first_only_setting(void) {
+  setup_logger();
+
+  girara_session_t* session = girara_session_create();
+  g_assert_nonnull(session);
+
+  bool val = false;
+  g_assert_true(girara_setting_add(session, "search-first-only", &val, BOOLEAN, false, NULL, NULL, NULL));
+
+  bool rval = true;
+  g_assert_true(girara_setting_get(session, "search-first-only", &rval));
+  g_assert_false(rval);
+
+  val = true;
+  g_assert_true(girara_setting_set(session, "search-first-only", &val));
+  g_assert_true(girara_setting_get(session, "search-first-only", &rval));
+  g_assert_true(rval);
+
+  girara_session_destroy(session);
+}
+
 static void test_settings_callback(void) {
   setup_logger();
 
@@ -75,6 +96,7 @@ int main(int argc, char* argv[]) {
   gtk_init();
   g_test_init(&argc, &argv, NULL);
   g_test_add_func("/settings/basic", test_settings_basic);
+  g_test_add_func("/settings/search_first_only", test_search_first_only_setting);
   g_test_add_func("/settings/callback", test_settings_callback);
   return g_test_run();
 }

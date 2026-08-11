@@ -977,6 +977,21 @@ bool sc_search(girara_session_t* session, girara_argument_t* argument, girara_ev
   g_return_val_if_fail(session->global.data != NULL, false);
   zathura_t* zathura = session->global.data;
 
+  bool search_first_only = false;
+  girara_setting_get(session, "search-first-only", &search_first_only);
+
+  if (search_first_only && zathura->global.search_query != NULL) {
+    int diff = argument->n == FORWARD ? 1 : -1;
+    if (zathura->global.search_direction == BACKWARD) {
+      diff = -diff;
+    }
+    girara_argument_t arg = { .n = (diff == 1) ? FORWARD : BACKWARD, .data = NULL };
+    zathura->global.search_is_navigation = true;
+    bool ret = cmd_search(session, zathura->global.search_query, &arg);
+    zathura->global.search_is_navigation = false;
+    return ret;
+  }
+
   return search_document(zathura, argument, false);
 }
 
