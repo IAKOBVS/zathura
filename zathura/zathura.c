@@ -535,6 +535,8 @@ void zathura_free(zathura_t* zathura) {
   /* free jumplist */
   zathura_jumplist_free(zathura);
 
+  g_free(zathura->global.search_query);
+
   g_free(zathura);
 }
 
