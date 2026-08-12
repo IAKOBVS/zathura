@@ -385,7 +385,8 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
          * XXX: the last argument should only be current_paramater ... but
          * therefore the completion functions would need to handle NULL correctly
          * (see cc_open in zathura). */
-        girara_completion_t* result = command->completion(session, current_parameter ? current_parameter : "");
+        g_autoptr(girara_completion_t) result =
+            command->completion(session, current_parameter ? current_parameter : "");
 
         if (result == NULL || result->groups == NULL) {
           return false;
@@ -422,7 +423,6 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
             gtk_box_append(GTK_BOX(session->gtk.results), GTK_WIDGET(entry->widget));
           }
         }
-        girara_completion_free(result);
 
         priv->completion.command_mode = false;
       }
