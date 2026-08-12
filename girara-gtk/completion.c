@@ -402,8 +402,8 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
           if (group->value != NULL) {
             girara_internal_completion_entry_t* entry = g_malloc(sizeof(girara_internal_completion_entry_t));
             entry->group                              = TRUE;
-            entry->value                              = g_strdup(group->value);
-            entry->widget                             = girara_completion_row_create(group->value, NULL, TRUE);
+            entry->value                              = g_steal_pointer(&group->value);
+            entry->widget                             = girara_completion_row_create(entry->value, NULL, TRUE);
 
             priv->completion.entries = g_list_append(priv->completion.entries, entry);
 
@@ -415,8 +415,8 @@ bool girara_isc_completion(girara_session_t* session, girara_argument_t* argumen
 
             girara_internal_completion_entry_t* entry = g_malloc(sizeof(girara_internal_completion_entry_t));
             entry->group                              = FALSE;
-            entry->value                              = g_strdup(element->value);
-            entry->widget = girara_completion_row_create(element->value, element->description, FALSE);
+            entry->value                              = g_steal_pointer(&element->value);
+            entry->widget = girara_completion_row_create(entry->value, element->description, FALSE);
 
             priv->completion.entries = g_list_append(priv->completion.entries, entry);
 
