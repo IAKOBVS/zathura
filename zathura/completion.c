@@ -222,7 +222,7 @@ girara_completion_t* cc_bookmarks(girara_session_t* session, const char* input) 
   zathura_t* zathura = session->global.data;
 
   g_autoptr(girara_completion_t) completion  = girara_completion_init();
-  g_autoptr(girara_completion_group_t) group = girara_completion_group_create(NULL);
+  g_autoptr(girara_completion_group_t) group = girara_completion_group_create(_("Bookmarks"));
 
   if (completion == NULL || group == NULL) {
     return NULL;
