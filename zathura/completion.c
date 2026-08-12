@@ -59,12 +59,11 @@ static girara_list_t* list_files(zathura_t* zathura, const char* current_path, c
       return NULL;
     }
 
-    size_t e_length = strlen(e_name);
-
     if (show_hidden == false && e_name[0] == '.') {
       continue;
     }
 
+    const size_t e_length = strlen(e_name);
     if ((current_file_length > e_length) || strncmp(current_file, e_name, current_file_length)) {
       continue;
     }
@@ -172,17 +171,17 @@ static girara_completion_t* list_files_for_cc(zathura_t* zathura, const char* in
   }
 
   if (show_recent > 0) {
-    g_autoptr(girara_completion_group_t) history_group = girara_completion_group_create(_("Recent files"));
-    if (history_group == NULL) {
-      return NULL;
-    }
-
     g_autoptr(girara_list_t) recent_files = zathura_db_get_recent_files(zathura->database, show_recent, path);
     if (recent_files == NULL) {
       return NULL;
     }
 
     if (girara_list_size(recent_files) != 0) {
+      g_autoptr(girara_completion_group_t) history_group = girara_completion_group_create(_("Recent files"));
+      if (history_group == NULL) {
+        return NULL;
+      }
+
       girara_list_foreach(recent_files, group_add_element, history_group);
       girara_completion_add_group(completion, g_steal_pointer(&history_group));
     }
@@ -296,13 +295,11 @@ girara_completion_t* cc_export(girara_session_t* session, const char* input) {
 
     g_autoptr(girara_list_t) images = zathura_page_images_get(page, &image_error);
     if (images != NULL) {
-      unsigned int image_number = 1;
       for (size_t idx = 0; idx != girara_list_size(images); ++idx) {
-        g_autofree char* image_string = g_strdup_printf("image-p%d-%d", page_id + 1, image_number);
+        g_autofree char* image_string = g_strdup_printf("image-p%d-%zu", page_id + 1, idx + 1);
         girara_completion_group_add_element(image_group, image_string, NULL);
 
         added_image = true;
-        image_number++;
       }
     } else if (image_error == ZATHURA_ERROR_NOT_IMPLEMENTED) {
       break;
