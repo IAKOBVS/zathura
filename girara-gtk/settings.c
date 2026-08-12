@@ -192,7 +192,7 @@ girara_completion_t* girara_cc_set(girara_session_t* session, const char* input)
   if (completion == NULL) {
     return NULL;
   }
-  g_autoptr(girara_completion_group_t) group = girara_completion_group_create(NULL);
+  g_autoptr(girara_completion_group_t) group = girara_completion_group_create(_("Settings"));
   if (group == NULL) {
     return NULL;
   }
