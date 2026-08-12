@@ -996,7 +996,7 @@ The settings described here can be changed with ``set``.
 
 *show-recent*
   Defines the number of recent files that should be displayed in completion.
-  If the value is negative, no upper bounds are applied. If the value is 0, no
+  If the value is negative, all recent files are shown. If the value is 0, no
   recent files are shown.
 
   * Value type: Integer
