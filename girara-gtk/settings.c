@@ -196,10 +196,8 @@ girara_completion_t* girara_cc_set(girara_session_t* session, const char* input)
   if (group == NULL) {
     return NULL;
   }
-  girara_completion_add_group(completion, g_steal_pointer(&group));
 
-  unsigned int input_length = strlen(input);
-
+  const unsigned int input_length = strlen(input);
   for (size_t idx = 0; idx != girara_list_size(session->private_data->settings); ++idx) {
     girara_setting_t* setting = girara_list_nth(session->private_data->settings, idx);
     if ((setting->init_only == false) && (input_length <= strlen(setting->name)) &&
@@ -208,6 +206,7 @@ girara_completion_t* girara_cc_set(girara_session_t* session, const char* input)
     }
   }
 
+  girara_completion_add_group(completion, g_steal_pointer(&group));
   return g_steal_pointer(&completion);
 }
 
