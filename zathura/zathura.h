@@ -144,6 +144,7 @@ struct zathura_s {
     girara_list_t* marks;                 /**< Marker */
     char** arguments;                     /**> Arguments that were passed at startup */
     int search_direction;                 /**< Current search direction (FORWARD or BACKWARD) */
+    char* search_string;                  /**< Pattern of the last search (for n/N) */
     GdkModifierType synctex_edit_modmask; /**< Modifier to trigger synctex edit */
     GdkModifierType highlighter_modmask;  /**< Modifier to draw with a highlighter */
     bool double_click_follow;             /**< Double/Single click to follow link */

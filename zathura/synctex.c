@@ -249,7 +249,8 @@ void synctex_highlight_rects(zathura_t* zathura, unsigned int page, girara_list_
     GObject* widget = G_OBJECT(zathura_page_get_widget_by_number(zathura, p));
 
     g_object_set(widget, "draw-links", FALSE, "search-results", rectangles[p], NULL);
-    if (p == page) {
+    if (p == page && rectangles[p] != NULL) {
+      /* the setter asserts on pages without a result list */
       g_object_set(widget, "search-current", 0, NULL);
     }
   }

@@ -172,8 +172,90 @@ girara_list_t* flatten_rectangles(girara_list_t* rectangles);
  * @param argument The used argument
  * @param disable_notify If true, don't notify no match found
  *
- * @return true if no error occurred otherwise false
+ * @return true if the view was moved to a search result
  */
 bool search_document(zathura_t* zathura, girara_argument_t* argument, bool disable_notify);
+
+/**
+ * How many pages are searched by a new search (/ and ?)
+ */
+typedef enum {
+  ZATHURA_SEARCH_LIMIT_ALL,   /* all pages */
+  ZATHURA_SEARCH_LIMIT_FIRST, /* stop after the first page with results */
+  ZATHURA_SEARCH_LIMIT_PAGE   /* like FIRST, but always search the current page completely */
+} zathura_search_limit_t;
+
+/**
+ * Parse a search limit setting value.
+ *
+ * @param[in] limit String to parse ("all", "first" or "page")
+ * @param[out] out The parsed value
+ *
+ * @return True if the string could be parsed, false otherwise
+ */
+bool parse_search_limit(const char* limit, zathura_search_limit_t* out);
+
+/**
+ * Decide whether a page-by-page search may stop after a page has been searched.
+ *
+ * @param[in] limit The active search limit
+ * @param[in] is_current_page Whether the searched page is the page the search started from
+ * @param[in] has_results Whether the searched page produced at least one result
+ *
+ * @return True if the search should stop
+ */
+bool search_limit_stops(zathura_search_limit_t limit, bool is_current_page, bool has_results);
+
+/**
+ * Compute the index of the i-th page visited by a page-by-page search.
+ *
+ * @param[in] num_pages Number of pages of the document
+ * @param[in] start The page the search starts from
+ * @param[in] step +1 or -1: direction of the search
+ * @param[in] i Number of steps from the start page (wraps around)
+ *
+ * @return Index of the page to search
+ */
+unsigned int search_page_index(unsigned int num_pages, unsigned int start, int step, unsigned int i);
+
+/**
+ * Decide whether search results stored on the page widgets belong to a
+ * different pattern than the given input and therefore must be discarded
+ * before running a new search.
+ *
+ * @param[in] last_pattern Pattern the stored results belong to (or NULL)
+ * @param[in] input The new pattern
+ *
+ * @return True if stored results are stale and must be cleared
+ */
+bool search_results_stale(const char* last_pattern, const char* input);
+
+/**
+ * Per-page search state as stored on the page widgets
+ */
+typedef struct {
+  int num_results; /**< Number of search results on the page */
+  int current;     /**< Currently selected result index or -1 */
+} zathura_page_search_state_t;
+
+/**
+ * Select the next search match when navigating with n/N or jumping after a
+ * fresh search. Pages are visited in scan order starting at current_page,
+ * moving in direction diff and wrapping around at the document borders.
+ *
+ * @param[in] pages Per-page state, indexed by page number
+ * @param[in] num_pages Number of entries in pages
+ * @param[in] current_page Page the navigation starts from
+ * @param[in] diff +1 or -1: direction of the navigation
+ * @param[in] new_search True right after a fresh search: jump to the first
+ *            (or last, when going backward) match of the nearest page with
+ *            results instead of advancing from the selected one
+ * @param[out] out_page Index of the selected page
+ * @param[out] out_idx Index of the selected result within that page
+ *
+ * @return True if a target was found, false if no (further) cached match exists
+ */
+bool search_select_target(const zathura_page_search_state_t* pages, unsigned int num_pages, unsigned int current_page,
+                          int diff, bool new_search, unsigned int* out_page, int* out_idx);
 
 #endif // UTILS_H

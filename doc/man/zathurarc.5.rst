@@ -938,6 +938,21 @@ The settings described here can be changed with ``set``.
   * Value type: Boolean
   * Default value: true
 
+*search-limit*
+  Defines how far a new search (``/`` and ``?``) searches the document.
+  Searching all pages of a large document can be slow, so the search can be
+  limited: with "first" only pages up to the first page containing a match are
+  searched (following the search direction), and with "page" the current page
+  is always searched completely in addition. When navigating with ``n`` and
+  ``N``, matches of all pages visited so far are accumulated for as long as
+  the search pattern stays the same; past the last known match the search is
+  extended onto the following pages in the same direction, and once the whole
+  document has been visited the navigation wraps around to the earlier
+  matches again.
+
+  * Value type: String
+  * Default value: all
+
 *selection-clipboard*
   Defines the X clipboard into which mouse-selected data will be written.  When
   it is "clipboard", selected data will be written to the CLIPBOARD clipboard,

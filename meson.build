@@ -79,6 +79,9 @@ flags = [
 ]
 flags = cc.get_supported_arguments(flags)
 
+# attribute log messages (g_return_if_fail etc.) to the zathura domain
+defines += ['-DG_LOG_DOMAIN="zathura"']
+
 # optional dependencies
 synctex = dependency('synctex', version: '>=2', required: get_option('synctex'))
 seccomp = dependency('libseccomp', required: get_option('seccomp'))

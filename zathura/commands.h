@@ -7,6 +7,7 @@
 #include <girara/types.h>
 
 #include <girara-gtk/session.h>
+#include "zathura.h"
 
 /**
  * Create a bookmark
@@ -152,6 +153,16 @@ bool cmd_savef(girara_session_t* session, girara_list_t* argument_list);
  * @return true if no error occurred
  */
 bool cmd_search(girara_session_t* session, const char* input, girara_argument_t* argument);
+
+/**
+ * Continue the last search in the given direction, scanning further pages when
+ * the search was limited (see the search-limit setting)
+ *
+ * @param zathura The zathura instance
+ * @param direction FORWARD or BACKWARD
+ * @return true if a match was found and the view moved to it
+ */
+bool search_continue(zathura_t* zathura, int direction);
 
 /**
  * Save attachment to a file

@@ -589,6 +589,98 @@ girara_list_t* flatten_rectangles(girara_list_t* rectangles) {
   return new_rectangles;
 }
 
+bool parse_search_limit(const char* limit, zathura_search_limit_t* out) {
+  if (limit == NULL || out == NULL) {
+    return false;
+  } else if (g_strcmp0(limit, "all") == 0) {
+    *out = ZATHURA_SEARCH_LIMIT_ALL;
+    return true;
+  } else if (g_strcmp0(limit, "first") == 0) {
+    *out = ZATHURA_SEARCH_LIMIT_FIRST;
+    return true;
+  } else if (g_strcmp0(limit, "page") == 0) {
+    *out = ZATHURA_SEARCH_LIMIT_PAGE;
+    return true;
+  }
+  return false;
+}
+
+bool search_limit_stops(zathura_search_limit_t limit, bool is_current_page, bool has_results) {
+  switch (limit) {
+  case ZATHURA_SEARCH_LIMIT_ALL:
+    return false;
+  case ZATHURA_SEARCH_LIMIT_FIRST:
+    return has_results;
+  case ZATHURA_SEARCH_LIMIT_PAGE:
+    return has_results && !is_current_page;
+  }
+
+  g_assert_not_reached();
+}
+
+unsigned int search_page_index(unsigned int num_pages, unsigned int start, int step, unsigned int i) {
+  if (num_pages == 0) {
+    return 0;
+  }
+
+  /* keep intermediates small and non-negative: reduce first, then apply a double modulo that
+   * also works for negative values */
+  const int n    = (int)num_pages;
+  const int page = (int)(start % num_pages) + step * (int)(i % num_pages);
+  return (unsigned int)(((page % n) + n) % n);
+}
+
+bool search_results_stale(const char* last_pattern, const char* input) {
+  return g_strcmp0(last_pattern, input) != 0;
+}
+
+bool search_select_target(const zathura_page_search_state_t* pages, unsigned int num_pages, unsigned int current_page,
+                          int diff, bool new_search, unsigned int* out_page, int* out_idx) {
+  if (pages == NULL || num_pages == 0 || current_page >= num_pages || out_page == NULL || out_idx == NULL ||
+      (diff != 1 && diff != -1)) {
+    return false;
+  }
+
+  for (unsigned int dist = 0; dist < num_pages; ++dist) {
+    const unsigned int page = search_page_index(num_pages, current_page, diff, dist);
+    const int len           = pages[page].num_results;
+    const int cur_idx       = pages[page].current;
+
+    if (len == 0 || cur_idx == -1) {
+      continue;
+    }
+
+    if (new_search == true || page != current_page) {
+      *out_page = page;
+      *out_idx  = diff == 1 ? 0 : len - 1;
+      return true;
+    }
+
+    /* advance within the current page; single-page documents wrap around */
+    if ((diff == 1 && (cur_idx < len - 1 || num_pages == 1)) || (diff == -1 && (cur_idx > 0 || num_pages == 1))) {
+      *out_page = page;
+      *out_idx  = diff == 1 ? (cur_idx + 1) % len : (cur_idx - 1 + len) % len;
+      return true;
+    }
+
+    /* running off the end of the page: continue on the nearest following page
+     * with results */
+    for (unsigned int d2 = 1; d2 < num_pages; ++d2) {
+      const unsigned int p2 = search_page_index(num_pages, page, diff, d2);
+      const int len2        = pages[p2].num_results;
+      if (len2 != 0) {
+        *out_page = p2;
+        *out_idx  = diff == 1 ? 0 : len2 - 1;
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  return false;
+}
+
 bool search_document(zathura_t* zathura, girara_argument_t* argument, bool disable_notify) {
   g_return_val_if_fail(argument != NULL, false);
   g_return_val_if_fail(zathura->document != NULL, false);
@@ -619,61 +711,40 @@ bool search_document(zathura_t* zathura, girara_argument_t* argument, bool disab
     diff = -diff;
   }
 
-  zathura_page_t* target_page = NULL;
-  int target_idx              = 0;
-
+  /* collect the per-page search state and let the pure helper pick the target */
+  g_autofree zathura_page_search_state_t* states = g_new0(zathura_page_search_state_t, num_pages);
   for (unsigned int page_id = 0; page_id < num_pages; ++page_id) {
-    int tmp              = cur_page + diff * page_id;
-    zathura_page_t* page = zathura_document_get_page(zathura->document, (tmp + num_pages) % num_pages);
+    zathura_page_t* page = zathura_document_get_page(zathura->document, page_id);
     if (page == NULL) {
       continue;
     }
 
     GtkWidget* page_widget = zathura_page_get_widget(zathura, page);
-
-    int num_search_results = 0, current = -1;
-    g_object_get(G_OBJECT(page_widget), "search-current", &current, "search-length", &num_search_results, NULL);
-    if (num_search_results == 0 || current == -1) {
-      continue;
-    }
-
-    if (new_search == true || first_time_after_abort == true || (tmp + num_pages) % num_pages != cur_page) {
-      target_page = page;
-      target_idx  = diff == 1 ? 0 : num_search_results - 1;
-      break;
-    }
-
-    if (diff == 1 && (current < num_search_results - 1 || num_pages == 1)) {
-      /* the next result is on the same page */
-      target_page = page;
-      target_idx  = (current + 1) % num_search_results;
-    } else if (diff == -1 && (current > 0 || num_pages == 1)) {
-      target_page = page;
-      target_idx  = (current - 1 + num_search_results) % num_search_results;
-    } else {
-      /* the next result is on a different page */
-      g_object_set(G_OBJECT(page_widget), "search-current", -1, NULL);
-
-      for (unsigned int npage_id = 1; npage_id < num_pages; ++npage_id) {
-        int ntmp                     = cur_page + diff * (page_id + npage_id);
-        zathura_page_t* npage        = zathura_document_get_page(zathura->document, (ntmp + 2 * num_pages) % num_pages);
-        GtkWidget* npage_page_widget = zathura_page_get_widget(zathura, npage);
-        g_object_get(G_OBJECT(npage_page_widget), "search-length", &num_search_results, NULL);
-        if (num_search_results != 0) {
-          target_page = npage;
-          target_idx  = diff == 1 ? 0 : num_search_results - 1;
-          break;
-        }
-      }
-    }
-
-    break;
+    g_object_get(G_OBJECT(page_widget), "search-current", &states[page_id].current, "search-length",
+                 &states[page_id].num_results, NULL);
   }
 
-  if (target_page != NULL) {
-    girara_list_t* results   = NULL;
-    GtkWidget* page_widget   = zathura_page_get_widget(zathura, target_page);
-    GObject* obj_page_widget = G_OBJECT(page_widget);
+  /* when running off the end of the current page, deselect it before moving on */
+  const zathura_page_search_state_t* cur_state = &states[cur_page];
+  const bool run_off =
+      new_search == false && first_time_after_abort == false && num_pages > 1 && cur_state->num_results > 0 &&
+      cur_state->current != -1 &&
+      ((diff == 1 && cur_state->current == cur_state->num_results - 1) || (diff == -1 && cur_state->current == 0));
+  if (run_off == true) {
+    g_object_set(G_OBJECT(zathura_page_get_widget(zathura, zathura_document_get_page(zathura->document, cur_page))),
+                 "search-current", -1, NULL);
+  }
+
+  unsigned int target_page_index = cur_page;
+  int target_idx                 = -1;
+  const bool found = search_select_target(states, num_pages, cur_page, diff, new_search || first_time_after_abort,
+                                          &target_page_index, &target_idx);
+
+  if (found == true) {
+    zathura_page_t* target_page = zathura_document_get_page(zathura->document, target_page_index);
+    girara_list_t* results      = NULL;
+    GtkWidget* page_widget      = zathura_page_get_widget(zathura, target_page);
+    GObject* obj_page_widget    = G_OBJECT(page_widget);
     g_object_set(obj_page_widget, "search-current", target_idx, NULL);
     g_object_get(obj_page_widget, "search-results", &results, NULL);
 
@@ -730,5 +801,5 @@ bool search_document(zathura_t* zathura, girara_argument_t* argument, bool disab
     girara_statusbar_item_set_text(zathura->ui.session, zathura->ui.statusbar.search_count, "");
   }
 
-  return false;
+  return found;
 }

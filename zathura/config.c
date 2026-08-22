@@ -579,6 +579,7 @@ void config_load_default(zathura_t* zathura) {
   girara_setting_add(gsession, "incremental-search",         &bool_value,  BOOLEAN, false, _("Enable incremental search"), cb_incsearch_changed, NULL);
   bool_value = true;
   girara_setting_add(gsession, "abort-clear-search",         &bool_value,  BOOLEAN, false, _("Clear search results on abort"), NULL, NULL);
+  girara_setting_add(gsession, "search-limit",               "all",        STRING,  false, _("How far a new search searches (all, first, page)"), NULL, NULL);
   bool_value = false;
   girara_setting_add(gsession, "window-title-basename",      &bool_value,  BOOLEAN, false, _("Use basename of the file in the window title"), cb_window_statbusbar_changed, NULL);
   bool_value = false;

@@ -975,9 +975,16 @@ bool sc_search(girara_session_t* session, girara_argument_t* argument, girara_ev
                unsigned int UNUSED(t)) {
   g_return_val_if_fail(session != NULL, false);
   g_return_val_if_fail(session->global.data != NULL, false);
+  g_return_val_if_fail(argument != NULL, false);
   zathura_t* zathura = session->global.data;
 
-  return search_document(zathura, argument, false);
+  /* navigate to the next cached match; if there is none (e.g. because the
+   * search was limited), continue the search on the following pages */
+  if (search_document(zathura, argument, false) == true) {
+    return true;
+  }
+
+  return search_continue(zathura, argument->n);
 }
 
 /* helper: get the current row index from the column view selection */

@@ -208,9 +208,14 @@ static bool init_ui(zathura_t* zathura) {
   gtk_event_controller_set_propagation_phase(GTK_EVENT_CONTROLLER(zoom), GTK_PHASE_BUBBLE);
   gtk_widget_add_controller(GTK_WIDGET(zathura->ui.session->gtk.view), GTK_EVENT_CONTROLLER(zoom));
 
-  /* zathura signals */
-  zathura->signals.refresh_view = g_signal_new("refresh-view", GTK_TYPE_WIDGET, G_SIGNAL_RUN_LAST, 0, NULL, NULL,
-                                               g_cclosure_marshal_generic, G_TYPE_NONE, 1, G_TYPE_POINTER);
+  /* zathura signals; the signal lives on the GtkWidget class so it can only be
+   * registered once per process */
+  if (g_signal_lookup("refresh-view", GTK_TYPE_WIDGET) == 0) {
+    zathura->signals.refresh_view = g_signal_new("refresh-view", GTK_TYPE_WIDGET, G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+                                                 g_cclosure_marshal_generic, G_TYPE_NONE, 1, G_TYPE_POINTER);
+  } else {
+    zathura->signals.refresh_view = g_signal_lookup("refresh-view", GTK_TYPE_WIDGET);
+  }
 
   g_signal_connect(G_OBJECT(zathura->ui.session->gtk.view), "refresh-view", G_CALLBACK(cb_refresh_view), zathura);
 
@@ -470,6 +475,9 @@ void zathura_free(zathura_t* zathura) {
 
   document_close(zathura, false);
   document_predecessor_free(zathura);
+
+  /* last search pattern */
+  g_free(zathura->global.search_string);
 
   /* MIME type detection */
   zathura_content_type_free(zathura->content_type_context);

@@ -397,36 +397,36 @@ bool cmd_savef(girara_session_t* session, girara_list_t* argument_list) {
 #endif
 }
 
-bool cmd_search(girara_session_t* session, const char* input, girara_argument_t* argument) {
-  g_return_val_if_fail(session != NULL, false);
-  g_return_val_if_fail(input != NULL, false);
-  g_return_val_if_fail(argument != NULL, false);
-  g_return_val_if_fail(session->global.data != NULL, false);
-  zathura_t* zathura           = session->global.data;
-  zathura_document_t* document = zathura_get_document(zathura);
+static void search_scan_pages(zathura_t* zathura, const char* input, unsigned int start_page_number) {
+  g_return_if_fail(zathura != NULL);
+  g_return_if_fail(input != NULL);
 
-  if (document == NULL || strlen(input) == 0) {
-    return false;
+  zathura_document_t* document = zathura_get_document(zathura);
+  girara_session_t* session    = zathura->ui.session;
+  if (document == NULL || session == NULL) {
+    return;
   }
 
   zathura_error_t error = ZATHURA_ERROR_OK;
 
-  /* set search direction */
-  zathura->global.search_direction = argument->n;
+  const unsigned int number_of_pages = zathura_document_get_number_of_pages(document);
+  const int step                     = zathura->global.search_direction == BACKWARD ? -1 : 1;
 
-  unsigned int number_of_pages     = zathura_document_get_number_of_pages(document);
-  unsigned int current_page_number = zathura_document_get_current_page_number(document);
+  /* decide how far to search */
+  zathura_search_limit_t limit = ZATHURA_SEARCH_LIMIT_ALL;
+  char* limit_string           = NULL;
+  girara_setting_get(session, "search-limit", &limit_string);
+  if (limit_string != NULL) {
+    if (parse_search_limit(limit_string, &limit) == false) {
+      girara_warning("Invalid search-limit setting: '%s'", limit_string);
+      limit = ZATHURA_SEARCH_LIMIT_ALL;
+    }
+    g_free(limit_string);
+  }
 
-  zathura->global.total_search_results  = 0;
-  zathura->global.current_search_result = 0;
-
-  /* reset search highlighting */
-  bool nohlsearch = false;
-  girara_setting_get(session, "nohlsearch", &nohlsearch);
-
-  /* search pages */
+  /* search pages, starting from the given one and following the search direction */
   for (unsigned int page_id = 0; page_id < number_of_pages; ++page_id) {
-    unsigned int index   = (page_id + current_page_number) % number_of_pages;
+    unsigned int index   = search_page_index(number_of_pages, start_page_number, step, page_id);
     zathura_page_t* page = zathura_document_get_page(document, index);
     if (page == NULL) {
       continue;
@@ -453,7 +453,7 @@ bool cmd_search(girara_session_t* session, const char* input, girara_argument_t*
 
     g_object_set(obj_page_widget, "search-results", result, NULL);
 
-    if (argument->n == BACKWARD) {
+    if (zathura->global.search_direction == BACKWARD) {
       /* start at bottom hit in page */
       g_object_set(obj_page_widget, "search-current", girara_list_size(result) - 1, NULL);
     } else {
@@ -461,7 +461,64 @@ bool cmd_search(girara_session_t* session, const char* input, girara_argument_t*
     }
 
     zathura->global.total_search_results += girara_list_size(result);
+
+    if (search_limit_stops(limit, index == start_page_number, true) == true) {
+      break;
+    }
   }
+}
+
+static void search_clear_all_pages(zathura_t* zathura) {
+  zathura_document_t* document = zathura_get_document(zathura);
+  if (document == NULL) {
+    return;
+  }
+
+  const unsigned int number_of_pages = zathura_document_get_number_of_pages(document);
+  for (unsigned int page_id = 0; page_id < number_of_pages; ++page_id) {
+    zathura_page_t* page = zathura_document_get_page(document, page_id);
+    if (page == NULL) {
+      continue;
+    }
+    GtkWidget* page_widget = zathura_page_get_widget(zathura, page);
+    if (page_widget == NULL) {
+      continue;
+    }
+    /* clearing the results resets the current index as well */
+    g_object_set(G_OBJECT(page_widget), "search-results", NULL, NULL);
+  }
+}
+
+bool cmd_search(girara_session_t* session, const char* input, girara_argument_t* argument) {
+  g_return_val_if_fail(session != NULL, false);
+  g_return_val_if_fail(input != NULL, false);
+  g_return_val_if_fail(argument != NULL, false);
+  g_return_val_if_fail(session->global.data != NULL, false);
+  zathura_t* zathura           = session->global.data;
+  zathura_document_t* document = zathura_get_document(zathura);
+
+  if (document == NULL || strlen(input) == 0) {
+    return false;
+  }
+
+  /* set search direction */
+  zathura->global.search_direction = argument->n;
+
+  /* remember the pattern so that n/N can continue the search; drop results of
+   * an earlier pattern so that n/N cannot navigate onto stale matches */
+  const bool stale = search_results_stale(zathura->global.search_string, input);
+  g_free(zathura->global.search_string);
+  zathura->global.search_string = g_strdup(input);
+  if (stale) {
+    search_clear_all_pages(zathura);
+  }
+
+  unsigned int current_page_number = zathura_document_get_current_page_number(document);
+
+  zathura->global.total_search_results  = 0;
+  zathura->global.current_search_result = 0;
+
+  search_scan_pages(zathura, input, current_page_number);
 
   bool inc_search = false;
   girara_setting_get(session, "incremental-search", &inc_search);
@@ -470,6 +527,42 @@ bool cmd_search(girara_session_t* session, const char* input, girara_argument_t*
   search_document(zathura, &arg, inc_search);
 
   return true;
+}
+
+bool search_continue(zathura_t* zathura, int direction) {
+  g_return_val_if_fail(zathura != NULL, false);
+
+  zathura_document_t* document = zathura_get_document(zathura);
+  if (document == NULL || zathura->global.search_string == NULL || strlen(zathura->global.search_string) == 0) {
+    return false;
+  }
+
+  const char* input = zathura->global.search_string;
+
+  /* set search direction and remember it for later n/N presses */
+  zathura->global.search_direction = direction;
+
+  /* The result counters are deliberately not reset here: as long as the
+   * pattern stays the same, the results of all visited pages accumulate. */
+
+  /* scan from the neighbouring page: the matches on the current page are
+   * already known */
+  const unsigned int number_of_pages     = zathura_document_get_number_of_pages(document);
+  const unsigned int current_page_number = zathura_document_get_current_page_number(document);
+  const int step                         = direction == BACKWARD ? -1 : 1;
+  const unsigned int nextpage            = search_page_index(number_of_pages, current_page_number, step, 1);
+  search_scan_pages(zathura, input, nextpage);
+
+  /* data stays NULL: continue navigating from the current position instead of
+   * starting a new search that would prefer the selection on the current page */
+  girara_argument_t arg = {.n = FORWARD, .data = NULL};
+  const bool found      = search_document(zathura, &arg, true);
+  if (found == false && zathura->ui.session != NULL) {
+    g_autofree char* escaped_text = g_markup_printf_escaped(_("Pattern not found: %s"), input);
+    girara_notify(zathura->ui.session, GIRARA_INFO, "%s", escaped_text);
+  }
+
+  return found;
 }
 
 bool cmd_export(girara_session_t* session, girara_list_t* argument_list) {

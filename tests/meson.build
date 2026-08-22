@@ -2,6 +2,8 @@
 env = [
   'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
   'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+  # unexpected GLib criticals are bugs: make them fail the tests
+  'G_DEBUG=fatal-criticals',
 ]
 
 test_dependencies = [
@@ -49,7 +51,9 @@ if xvfb.found() or weston.found()
   session = executable('test_session', files('test_session.c'),
     dependencies: build_dependencies + test_dependencies,
     include_directories: include_directories,
-    c_args: defines + flags
+    c_args: defines + flags,
+    # export plugin-api symbols so document plugins can be dlopen'ed
+    export_dynamic: true
   )
 
   config = executable('test_config', files('test_config.c'),
