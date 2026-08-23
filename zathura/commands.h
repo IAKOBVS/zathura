@@ -155,6 +155,18 @@ bool cmd_savef(girara_session_t* session, girara_list_t* argument_list);
 bool cmd_search(girara_session_t* session, const char* input, girara_argument_t* argument);
 
 /**
+ * Open a dialog to attach a note to the most recently selected text, or add a
+ * note directly from a :note command.
+ */
+bool notes_add_from_selection(zathura_t* zathura, const char* note_text);
+
+/* :note <text> - store a note for the current selection */
+bool cmd_note_add(girara_session_t* session, girara_list_t* argument_list);
+
+/* :notes - toggle the notes panel */
+bool cmd_notes_toggle(girara_session_t* session, girara_list_t* argument_list);
+
+/**
  * Continue the last search in the given direction, scanning further pages when
  * the search was limited (see the search-limit setting)
  *

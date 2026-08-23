@@ -12,6 +12,7 @@
 #endif
 #include "macros.h"
 #include "types.h"
+#include "notes.h"
 #include "jumplist.h"
 #include "file-monitor.h"
 
@@ -119,6 +120,7 @@ struct zathura_s {
     GtkWidget* view;                        /**< Scrolled Window */
     ZathuraDocumentWidget* document_widget; /**< Widget that contains all rendered pages */
     GtkWidget* index;                       /**< Widget to show the index of the document */
+    GtkWidget* notes;                       /**< Widget to show the notes of the document */
   } ui;
 
   struct {
@@ -151,6 +153,7 @@ struct zathura_s {
     guint current_index_position;         /**< current row in index */
     int current_search_result;
     int total_search_results;
+    zathura_selection_t* last_selection; /**< most recent text selection, awaiting a note */
   } global;
 
   struct {
@@ -159,11 +162,16 @@ struct zathura_s {
     girara_mode_t index;        /**< Index mode */
     girara_mode_t insert;       /**< Insert mode */
     girara_mode_t presentation; /**< Presentation mode */
+    girara_mode_t notes;        /**< Notes mode */
   } modes;
 
   struct {
     girara_list_t* bookmarks; /**< bookmarks */
   } bookmarks;
+
+  struct {
+    girara_list_t* notes; /**< user annotations, or NULL when no document is open */
+  } notes_obj;
 
   zathura_jumplist_t jumplist;
 

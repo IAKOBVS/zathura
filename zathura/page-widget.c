@@ -1005,6 +1005,25 @@ void zathura_page_widget_clear_selection(ZathuraPageWidget* widget) {
   zathura_page_widget_redraw_canvas(widget);
 }
 
+girara_list_t* zathura_page_widget_get_selection_rectangles(ZathuraPageWidget* widget) {
+  g_return_val_if_fail(ZATHURA_IS_PAGE_WIDGET(widget), NULL);
+
+  ZathuraPageWidgetPrivate* priv = zathura_page_widget_get_instance_private(widget);
+  if (priv->selection.list == NULL) {
+    return NULL;
+  }
+
+  girara_list_t* copy = girara_list_new_with_free(g_free);
+  for (size_t idx = 0; idx != girara_list_size(priv->selection.list); ++idx) {
+    zathura_rectangle_t* source = girara_list_nth(priv->selection.list, idx);
+    zathura_rectangle_t* rect   = g_malloc(sizeof(zathura_rectangle_t));
+    *rect                       = *source;
+    girara_list_append(copy, rect);
+  }
+
+  return copy;
+}
+
 static void cb_zathura_page_widget_button_press_event(GtkGestureClick* gesture, gint n_press, gdouble bx, gdouble by,
                                                       gpointer data) {
   GtkWidget* widget              = GTK_WIDGET(data);

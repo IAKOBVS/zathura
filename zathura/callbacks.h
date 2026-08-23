@@ -171,6 +171,7 @@ void cb_file_monitor(ZathuraFileMonitor* monitor, girara_session_t* session);
  * @return true if input has been handled
  */
 gboolean cb_password_dialog(GtkEntry* entry, void* dialog);
+gboolean cb_notes_dialog(GtkEntry* entry, void* data);
 
 gboolean document_open_password_dialog(gpointer data);
 

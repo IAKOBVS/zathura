@@ -16,6 +16,7 @@
 #include "links-internal.h"
 #include "zathura.h"
 #include "render.h"
+#include "commands.h"
 #include "document.h"
 #include "document-widget.h"
 #include "index-element-object.h"
@@ -581,6 +582,17 @@ gboolean cb_password_dialog(GtkEntry* entry, void* data) {
   return true;
 }
 
+gboolean cb_notes_dialog(GtkEntry* entry, void* data) {
+  zathura_t* zathura = data;
+  if (entry == NULL || zathura == NULL) {
+    return false;
+  }
+
+  g_autofree char* input = gtk_editable_get_chars(GTK_EDITABLE(entry), 0, -1);
+  notes_add_from_selection(zathura, input != NULL && input[0] != '\0' ? input : NULL);
+  return true;
+}
+
 void cb_setting_recolor_change(girara_session_t* session, const char* name, girara_setting_type_t UNUSED(type),
                                const void* value, void* UNUSED(data)) {
   g_return_if_fail(value != NULL);
@@ -673,6 +685,19 @@ void cb_page_widget_text_selected(ZathuraPageWidget* page, const char* text, voi
   girara_mode_t mode = girara_mode_get(zathura->ui.session);
   if (mode != zathura->modes.normal && mode != zathura->modes.fullscreen) {
     return;
+  }
+
+  /* remember the selection so the user can annotate it afterwards */
+  {
+    zathura_page_t* sel_page = zathura_page_widget_get_page(page);
+    if (sel_page != NULL) {
+      girara_list_t* rects = zathura_page_widget_get_selection_rectangles(page);
+      zathura_selection_free(zathura->global.last_selection);
+      zathura->global.last_selection        = g_malloc0(sizeof(zathura_selection_t));
+      zathura->global.last_selection->page  = zathura_page_get_index(sel_page);
+      zathura->global.last_selection->text  = g_strdup(text);
+      zathura->global.last_selection->rects = rects;
+    }
   }
 
   GdkClipboard* selection = get_selection(zathura);

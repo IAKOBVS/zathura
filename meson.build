@@ -138,6 +138,8 @@ sources = files(
   'zathura/file-monitor-signal.c',
   'zathura/index-element-object.c',
   'zathura/jumplist.c',
+  'zathura/notes.c',
+  'zathura/notes-element-object.c',
   'zathura/links.c',
   'zathura/marks.c',
   'zathura/page.c',

@@ -435,6 +435,9 @@ bool zathura_init(zathura_t* zathura) {
   /* bookmarks */
   zathura_bookmarks_init(zathura);
 
+  /* notes (user annotations) */
+  zathura->notes_obj.notes = girara_list_new();
+
   /* jumplist */
   unsigned int jumplist_size = 20;
   girara_setting_get(zathura->ui.session, "jumplist-size", &jumplist_size);
@@ -479,6 +482,9 @@ void zathura_free(zathura_t* zathura) {
 
   /* last search pattern */
   g_free(zathura->global.search_string);
+
+  /* most recent selection (awaiting a note) */
+  zathura_selection_free(zathura->global.last_selection);
 
   /* MIME type detection */
   zathura_content_type_free(zathura->content_type_context);
@@ -995,6 +1001,11 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
     girara_debug("Failed to load bookmarks.");
   }
 
+  /* notes */
+  if (zathura_notes_load(zathura) == false) {
+    girara_debug("Failed to load notes.");
+  }
+
   /* jumplist */
   if (zathura_jumplist_load(zathura, file_path) == false) {
     girara_debug("Failed to load jumplist.");
@@ -1376,6 +1387,18 @@ bool document_close(zathura_t* zathura, bool keep_monitor) {
 
   /* store file information */
   save_fileinfo_to_db(zathura);
+
+  /* persist and release notes */
+  if (zathura->notes_obj.notes != NULL) {
+    zathura_notes_save(zathura);
+    for (size_t i = 0; i < girara_list_size(zathura->notes_obj.notes); ++i) {
+      zathura_note_free(girara_list_nth(zathura->notes_obj.notes, i));
+    }
+    girara_list_free(zathura->notes_obj.notes);
+    zathura->notes_obj.notes = NULL;
+  }
+  zathura_selection_free(zathura->global.last_selection);
+  zathura->global.last_selection = NULL;
 
   /* remove marks */
   if (zathura->global.marks != NULL) {

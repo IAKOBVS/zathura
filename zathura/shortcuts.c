@@ -22,6 +22,8 @@
 #include "document-widget.h"
 #include "document.h"
 #include "index-element-object.h"
+#include "notes-element-object.h"
+#include "notes.h"
 #include "page-widget.h"
 #include "page.h"
 #include "plugin.h"
@@ -1342,6 +1344,168 @@ error_free:
       g_object_unref(zathura->ui.index);
     }
     zathura->ui.index = NULL;
+  }
+
+  return false;
+}
+
+/* --- notes panel ------------------------------------------------------- */
+
+static void notes_row_setup(GtkListItemFactory* UNUSED(factory), GtkListItem* item, void* UNUSED(user_data)) {
+  GtkWidget* label = gtk_label_new(NULL);
+  gtk_label_set_xalign(GTK_LABEL(label), 0.0);
+  gtk_label_set_ellipsize(GTK_LABEL(label), PANGO_ELLIPSIZE_END);
+  gtk_list_item_set_child(item, label);
+}
+
+static void notes_row_bind(GtkListItemFactory* UNUSED(factory), GtkListItem* item, void* UNUSED(user_data)) {
+  ZathuraNotesElementObject* obj = ZATHURA_NOTES_ELEMENT_OBJECT(gtk_list_item_get_item(item));
+  GtkLabel* label                = GTK_LABEL(gtk_list_item_get_child(item));
+  if (obj == NULL || label == NULL) {
+    return;
+  }
+  g_autofree char* markup = g_markup_printf_escaped("<b>%s</b>  %s", obj->page_label ? obj->page_label : "",
+                                                    obj->text != NULL ? obj->text : "");
+  gtk_label_set_markup(label, markup);
+}
+
+static bool sc_notes_jump(zathura_t* zathura, guint64 id);
+
+static void cb_notes_activate(GtkListView* view, guint position, gpointer user_data) {
+  zathura_t* zathura = user_data;
+  if (zathura == NULL) {
+    return;
+  }
+  GtkSelectionModel* model = gtk_list_view_get_model(view);
+  GObject* obj             = g_list_model_get_item(G_LIST_MODEL(model), position);
+  if (obj == NULL) {
+    return;
+  }
+  sc_notes_jump(zathura, ZATHURA_NOTES_ELEMENT_OBJECT(obj)->id);
+  g_object_unref(obj);
+}
+
+bool sc_notes_jump(zathura_t* zathura, guint64 id) {
+  g_return_val_if_fail(zathura != NULL, false);
+
+  zathura_note_t* note = zathura_notes_find(zathura, id);
+  if (note == NULL) {
+    return false;
+  }
+
+  double pos_x = 0.0;
+  double pos_y = 0.0;
+  page_number_to_position(zathura, note->page, 0.5, 0.5, &pos_x, &pos_y);
+
+  if (note->rects != NULL && girara_list_size(note->rects) > 0) {
+    zathura_page_t* page      = zathura_document_get_page(zathura->document, note->page);
+    zathura_rectangle_t* rect = girara_list_nth(note->rects, 0);
+    zathura_rectangle_t r     = recalc_rectangle(page, *rect);
+
+    unsigned int doc_height = 0;
+    unsigned int doc_width  = 0;
+    zathura_document_widget_get_document_size(ZATHURA_DOCUMENT_WIDGET(zathura->ui.document_widget), &doc_height,
+                                              &doc_width);
+
+    const double center_y = (r.y1 + r.y2) / 2;
+    const double center_x = (r.x1 + r.x2) / 2;
+    pos_y += (center_y - (double)doc_height / 2) / (double)doc_height;
+    pos_x += (center_x - (double)doc_width / 2) / (double)doc_width;
+  }
+
+  zathura_jumplist_add(zathura);
+  position_set(zathura, pos_x, pos_y);
+  zathura_jumplist_add(zathura);
+  return false;
+}
+
+bool sc_note_add(girara_session_t* session, girara_argument_t* UNUSED(argument), girara_event_t* UNUSED(event),
+                 unsigned int UNUSED(t)) {
+  g_return_val_if_fail(session != NULL && session->global.data != NULL, false);
+  zathura_t* zathura = session->global.data;
+
+  if (zathura_get_document(zathura) == NULL) {
+    girara_notify(session, GIRARA_ERROR, _("No document opened."));
+    return false;
+  }
+
+  girara_dialog(zathura->ui.session, _("Note: "), false, NULL, cb_notes_dialog, zathura);
+  return false;
+}
+
+bool sc_notes_delete(girara_session_t* session, girara_argument_t* UNUSED(argument), girara_event_t* UNUSED(event),
+                     unsigned int UNUSED(t)) {
+  g_return_val_if_fail(session != NULL && session->global.data != NULL, false);
+  zathura_t* zathura = session->global.data;
+
+  if (zathura->ui.notes == NULL || girara_mode_get(session) != zathura->modes.notes) {
+    return false;
+  }
+
+  GtkWidget* child = gtk_scrolled_window_get_child(GTK_SCROLLED_WINDOW(zathura->ui.notes));
+  if (child == NULL) {
+    return false;
+  }
+  GtkListView* view       = GTK_LIST_VIEW(child);
+  GtkSingleSelection* sel = GTK_SINGLE_SELECTION(gtk_list_view_get_model(view));
+  guint pos               = gtk_single_selection_get_selected(sel);
+  if (pos == GTK_INVALID_LIST_POSITION) {
+    return false;
+  }
+
+  GObject* obj = g_list_model_get_item(G_LIST_MODEL(sel), pos);
+  if (obj == NULL) {
+    return false;
+  }
+  guint64 id = ZATHURA_NOTES_ELEMENT_OBJECT(obj)->id;
+  g_object_unref(obj);
+
+  if (zathura_notes_remove(zathura, id) == true) {
+    zathura_notes_save(zathura);
+    GListModel* model = zathura_notes_build_model(zathura);
+    gtk_single_selection_set_model(sel, model);
+    g_object_unref(model);
+  }
+
+  return false;
+}
+
+bool sc_toggle_notes(girara_session_t* session, girara_argument_t* UNUSED(argument), girara_event_t* UNUSED(event),
+                     unsigned int UNUSED(t)) {
+  g_return_val_if_fail(session != NULL && session->global.data != NULL, false);
+  zathura_t* zathura = session->global.data;
+  if (zathura_get_document(zathura) == NULL) {
+    girara_notify(session, GIRARA_WARNING, _("No document opened."));
+    return false;
+  }
+
+  if (zathura->ui.notes == NULL) {
+    zathura->ui.notes = gtk_scrolled_window_new();
+    if (zathura->ui.notes == NULL) {
+      return false;
+    }
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(zathura->ui.notes), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  }
+
+  GListModel* root            = zathura_notes_build_model(zathura);
+  GtkSingleSelection* sel     = gtk_single_selection_new(root);
+  GtkListItemFactory* factory = gtk_signal_list_item_factory_new();
+  g_signal_connect(factory, "setup", G_CALLBACK(notes_row_setup), NULL);
+  g_signal_connect(factory, "bind", G_CALLBACK(notes_row_bind), NULL);
+  GtkListView* view = GTK_LIST_VIEW(gtk_list_view_new(GTK_SELECTION_MODEL(sel), factory));
+  gtk_widget_add_css_class(GTK_WIDGET(view), "indexmode");
+  g_signal_connect(view, "activate", G_CALLBACK(cb_notes_activate), zathura);
+  gtk_widget_set_visible(GTK_WIDGET(view), TRUE);
+  gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(zathura->ui.notes), GTK_WIDGET(view));
+
+  if (girara_mode_get(session) == zathura->modes.notes) {
+    girara_set_view(zathura->ui.session, zathura->ui.view);
+    girara_mode_set(zathura->ui.session, zathura->modes.normal);
+    refresh_view(zathura);
+  } else {
+    zathura_jumplist_add(zathura);
+    girara_set_view(session, zathura->ui.notes);
+    girara_mode_set(zathura->ui.session, zathura->modes.notes);
   }
 
   return false;

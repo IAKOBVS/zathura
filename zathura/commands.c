@@ -527,6 +527,49 @@ bool cmd_search(girara_session_t* session, const char* input, girara_argument_t*
   return true;
 }
 
+bool notes_add_from_selection(zathura_t* zathura, const char* note_text) {
+  g_return_val_if_fail(zathura != NULL, false);
+
+  if (zathura_get_document(zathura) == NULL) {
+    girara_notify(zathura->ui.session, GIRARA_ERROR, _("No document opened."));
+    return false;
+  }
+
+  if (zathura->global.last_selection == NULL) {
+    girara_notify(zathura->ui.session, GIRARA_INFO, _("Select some text first, then add a note."));
+    return false;
+  }
+
+  zathura_selection_t* selection = zathura->global.last_selection;
+  zathura_note_t* note           = zathura_note_new(selection->page, selection->text, selection->rects, note_text);
+  selection->rects               = NULL; /* ownership transferred to the note */
+
+  zathura_notes_add(zathura, note);
+  zathura_notes_save(zathura);
+
+  girara_notify(zathura->ui.session, GIRARA_INFO, _("Note added on page %u"), selection->page + 1);
+  return true;
+}
+
+bool cmd_note_add(girara_session_t* session, girara_list_t* argument_list) {
+  g_return_val_if_fail(session != NULL && session->global.data != NULL, false);
+  zathura_t* zathura = session->global.data;
+
+  if (girara_list_size(argument_list) < 1) {
+    girara_notify(session, GIRARA_ERROR, _("Usage: :note <text>"));
+    return false;
+  }
+
+  return notes_add_from_selection(zathura, girara_list_nth(argument_list, 0));
+}
+
+bool cmd_notes_toggle(girara_session_t* session, girara_list_t* UNUSED(argument_list)) {
+  g_return_val_if_fail(session != NULL && session->global.data != NULL, false);
+
+  girara_argument_t argument = {.n = 0, .data = NULL};
+  return sc_toggle_notes(session, &argument, NULL, 0);
+}
+
 bool search_continue(zathura_t* zathura, int direction) {
   g_return_val_if_fail(zathura != NULL, false);
 

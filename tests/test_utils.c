@@ -1,5 +1,6 @@
 /* SPDX-License-Identifier: Zlib */
 
+#include "notes.h"
 #include "utils.h"
 
 static void test_file_valid_extension(void) {
@@ -164,6 +165,84 @@ static void test_search_results_stale(void) {
   g_assert_false(search_results_stale(NULL, NULL));
 }
 
+static void test_notes_path(void) {
+  g_autofree char* path = zathura_notes_path_for_document("/a/b/paper.pdf");
+  g_assert_nonnull(path);
+  g_assert_cmpstr(path, ==, "/a/b/.paper.pdf-notes");
+
+  path = zathura_notes_path_for_document("paper.pdf");
+  g_assert_cmpstr(path, ==, "./.paper.pdf-notes");
+
+  g_assert_null(zathura_notes_path_for_document(NULL));
+}
+
+static void test_notes_serialize_roundtrip(void) {
+  girara_list_t* notes = girara_list_new();
+  g_assert_nonnull(notes);
+
+  girara_list_t* rects   = girara_list_new_with_free(g_free);
+  zathura_rectangle_t* r = g_malloc(sizeof(zathura_rectangle_t));
+  r->x1                  = 1.0;
+  r->y1                  = 2.0;
+  r->x2                  = 3.0;
+  r->y2                  = 4.0;
+  girara_list_append(rects, r);
+
+  girara_list_append(notes, zathura_note_new(0, "hello world", NULL, "first note"));
+  girara_list_append(notes, zathura_note_new(2, "more text", rects, "second note"));
+
+  g_autofree char* data = NULL;
+  gsize length          = 0;
+  g_assert_true(zathura_notes_serialize(notes, &data, &length));
+  g_assert_nonnull(data);
+  g_assert_cmpuint(length, >, 0);
+
+  girara_list_t* restored = girara_list_new();
+  g_assert_true(zathura_notes_deserialize(data, restored));
+  g_assert_cmpuint(girara_list_size(restored), ==, 2);
+
+  zathura_note_t* a = girara_list_nth(restored, 0);
+  g_assert_cmpuint(a->page, ==, 0);
+  g_assert_cmpstr(a->text, ==, "hello world");
+  g_assert_cmpstr(a->note, ==, "first note");
+  g_assert_null(a->rects);
+
+  zathura_note_t* b = girara_list_nth(restored, 1);
+  g_assert_cmpuint(b->page, ==, 2);
+  g_assert_cmpstr(b->text, ==, "more text");
+  g_assert_nonnull(b->rects);
+  g_assert_cmpuint(girara_list_size(b->rects), ==, 1);
+  zathura_rectangle_t* rr = girara_list_nth(b->rects, 0);
+  g_assert_cmpfloat_with_epsilon(rr->x1, 1.0, 1e-9);
+  g_assert_cmpfloat_with_epsilon(rr->y2, 4.0, 1e-9);
+
+  for (size_t i = 0; i < girara_list_size(restored); ++i) {
+    zathura_note_free(girara_list_nth(restored, i));
+  }
+  girara_list_free(restored);
+  for (size_t i = 0; i < girara_list_size(notes); ++i) {
+    zathura_note_free(girara_list_nth(notes, i));
+  }
+  girara_list_free(notes);
+}
+
+static void test_notes_new_free(void) {
+  girara_list_t* rects   = girara_list_new_with_free(g_free);
+  zathura_rectangle_t* r = g_malloc(sizeof(zathura_rectangle_t));
+  *r                     = (zathura_rectangle_t){0, 0, 10, 20};
+  girara_list_append(rects, r);
+
+  zathura_note_t* note = zathura_note_new(3, "selected", rects, "a note");
+  g_assert_cmpuint(note->page, ==, 3);
+  g_assert_cmpstr(note->text, ==, "selected");
+  g_assert_cmpstr(note->note, ==, "a note");
+  g_assert_true(note->rects == rects); /* ownership transferred */
+  g_assert_nonnull(note->time);
+  g_assert_cmpuint(note->id, !=, 0);
+
+  zathura_note_free(note); /* also frees rects via its free function */
+}
+
 int main(int argc, char* argv[]) {
   g_test_init(&argc, &argv, NULL);
   g_test_add_func("/utils/file_valid_extension", test_file_valid_extension);
@@ -175,5 +254,8 @@ int main(int argc, char* argv[]) {
   g_test_add_func("/utils/select_target/cross_page", test_select_target_cross_page);
   g_test_add_func("/utils/select_target/new_search", test_select_target_new_search);
   g_test_add_func("/utils/search_results_stale", test_search_results_stale);
+  g_test_add_func("/utils/notes_path", test_notes_path);
+  g_test_add_func("/utils/notes_serialize_roundtrip", test_notes_serialize_roundtrip);
+  g_test_add_func("/utils/notes_new_free", test_notes_new_free);
   return g_test_run();
 }

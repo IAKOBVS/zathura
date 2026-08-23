@@ -56,6 +56,13 @@ void zathura_page_widget_update_surface(ZathuraPageWidget* widget, cairo_surface
  * @param widget the widget
  */
 void zathura_page_widget_clear_selection(ZathuraPageWidget* widget);
+
+/**
+ * Return a copy of the currently highlighted selection rectangles (page-space
+ * coordinates), or NULL when there is no selection. The caller frees the list
+ * with girara_list_free (its elements with g_free).
+ */
+girara_list_t* zathura_page_widget_get_selection_rectangles(ZathuraPageWidget* widget);
 /**
  * Draw a rectangle to mark links or search results
  * @param widget the widget

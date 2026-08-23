@@ -273,6 +273,13 @@ bool sc_navigate_index(girara_session_t* session, girara_argument_t* argument, g
  */
 bool sc_toggle_index(girara_session_t* session, girara_argument_t* argument, girara_event_t* event, unsigned int t);
 
+/* open a dialog to attach a note to the current selection */
+bool sc_note_add(girara_session_t* session, girara_argument_t* argument, girara_event_t* event, unsigned int t);
+/* toggle the notes panel */
+bool sc_toggle_notes(girara_session_t* session, girara_argument_t* argument, girara_event_t* event, unsigned int t);
+/* remove the selected note from the notes panel */
+bool sc_notes_delete(girara_session_t* session, girara_argument_t* argument, girara_event_t* event, unsigned int t);
+
 /**
  * Toggle multi page mode
  *

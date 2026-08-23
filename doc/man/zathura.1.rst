@@ -300,6 +300,15 @@ source
   Source a configuration file. It is possible to change the config directory
   by passing an argument.
 
+note
+  Add a note for the current text selection. The argument is the note text;
+  if omitted a dialog is opened. Notes are stored in a side-car file next to
+  the document (``.<basename>-notes``, a JSON array).
+
+notes
+  Toggle the notes panel, which lists all notes of the current document. In
+  the panel, ``Enter`` jumps to the note, ``d`` deletes it.
+
 hlsearch
   Highlight current search results.
 

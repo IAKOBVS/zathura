@@ -348,6 +348,22 @@ They can also be combined with modifiers:
 
     Show or hide index.
 
+  * ``note_add``
+
+    Open a dialog to attach a note to the current text selection (default
+    binding: ``<C-a>``). The note can also be added non-interactively with the
+    ``:note`` command.
+
+  * ``toggle_notes``
+
+    Show or hide the notes panel (``:notes``). In the panel, ``Enter`` jumps to
+    the note and ``d`` deletes it.
+
+  * ``notes_delete``
+
+    Delete the currently selected note in the notes panel (default binding in
+    notes mode: ``d``).
+
   * ``toggle_inputbar``
 
     Show or hide inputbar.

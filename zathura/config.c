@@ -379,6 +379,7 @@ static void add_default_shortcuts(girara_session_t* gsession, girara_mode_t mode
   girara_shortcut_add(gsession, 0, GDK_KEY_P, NULL, sc_snap_to_page, mode, 0, NULL);
 
   girara_shortcut_add(gsession, 0, GDK_KEY_Tab, NULL, sc_toggle_index, mode, 0, NULL);
+  girara_shortcut_add(gsession, GDK_CONTROL_MASK, GDK_KEY_a, NULL, sc_note_add, mode, 0, NULL);
   girara_shortcut_add(gsession, GDK_CONTROL_MASK, GDK_KEY_n, NULL, girara_sc_toggle_statusbar, mode, 0, NULL);
   girara_shortcut_add(gsession, GDK_CONTROL_MASK, GDK_KEY_m, NULL, girara_sc_toggle_inputbar, mode, 0, NULL);
   girara_shortcut_add(gsession, 0, GDK_KEY_d, NULL, sc_toggle_page_mode, mode, 0, NULL);
@@ -435,10 +436,12 @@ void config_load_default(zathura_t* zathura) {
   zathura->modes.index        = girara_mode_add(gsession, "index");
   zathura->modes.insert       = girara_mode_add(gsession, "insert");
   zathura->modes.presentation = girara_mode_add(gsession, "presentation");
+  zathura->modes.notes        = girara_mode_add(gsession, "notes");
 
 #define NORMAL zathura->modes.normal
 #define INSERT zathura->modes.insert
 #define INDEX zathura->modes.index
+#define NOTES zathura->modes.notes
 #define FULLSCREEN zathura->modes.fullscreen
 #define PRESENTATION zathura->modes.presentation
 
@@ -688,6 +691,12 @@ void config_load_default(zathura_t* zathura) {
   girara_shortcut_add(gsession, GDK_CONTROL_MASK, GDK_KEY_bracketleft, NULL, sc_toggle_index,   INDEX, 0,                  NULL);
   girara_shortcut_add(gsession, GDK_CONTROL_MASK, GDK_KEY_c,           NULL, sc_toggle_index,   INDEX, 0,                  NULL);
 
+  /* Notes mode */
+  girara_shortcut_add(gsession, 0,                GDK_KEY_Tab,         NULL, sc_toggle_notes,      NOTES, 0, NULL);
+  girara_shortcut_add(gsession, 0,                GDK_KEY_d,           NULL, sc_notes_delete,      NOTES, 0, NULL);
+  girara_shortcut_add(gsession, 0,                GDK_KEY_Escape,      NULL, sc_toggle_notes,      NOTES, 0, NULL);
+  girara_shortcut_add(gsession, GDK_CONTROL_MASK, GDK_KEY_c,           NULL, sc_toggle_notes,      NOTES, 0, NULL);
+
   /* Presentation mode */
   girara_shortcut_add(gsession, 0,              GDK_KEY_J,             NULL, sc_navigate,            PRESENTATION, NEXT,         NULL);
   girara_shortcut_add(gsession, 0,              GDK_KEY_Down,          NULL, sc_navigate,            PRESENTATION, NEXT,         NULL);
@@ -779,6 +788,8 @@ void config_load_default(zathura_t* zathura) {
   girara_inputbar_command_add(gsession, "hlsearch",   NULL,   cmd_hlsearch,            NULL,          _("Highlight current search results"));
   girara_inputbar_command_add(gsession, "version",    NULL,   cmd_version,             NULL,          _("Show version information"));
   girara_inputbar_command_add(gsession, "source",     NULL,   cmd_source,              NULL,          _("Source config file"));
+  girara_inputbar_command_add(gsession, "note",       NULL,   cmd_note_add,             NULL,          _("Add a note for the current selection"));
+  girara_inputbar_command_add(gsession, "notes",      NULL,   cmd_notes_toggle,         NULL,          _("Toggle the notes panel"));
 
   girara_special_command_add(gsession, '/', cmd_search, INCREMENTAL_SEARCH, FORWARD,  NULL);
   girara_special_command_add(gsession, '?', cmd_search, INCREMENTAL_SEARCH, BACKWARD, NULL);
@@ -819,6 +830,9 @@ void config_load_default(zathura_t* zathura) {
   girara_shortcut_mapping_add(gsession, "snap_to_page",             sc_snap_to_page);
   girara_shortcut_mapping_add(gsession, "toggle_fullscreen",        sc_toggle_fullscreen);
   girara_shortcut_mapping_add(gsession, "toggle_index",             sc_toggle_index);
+  girara_shortcut_mapping_add(gsession, "note_add",                 sc_note_add);
+  girara_shortcut_mapping_add(gsession, "toggle_notes",             sc_toggle_notes);
+  girara_shortcut_mapping_add(gsession, "notes_delete",             sc_notes_delete);
   girara_shortcut_mapping_add(gsession, "toggle_page_mode",         sc_toggle_page_mode);
   girara_shortcut_mapping_add(gsession, "toggle_presentation",      sc_toggle_presentation);
   girara_shortcut_mapping_add(gsession, "toggle_single_page_mode",  sc_toggle_single_page_mode);
