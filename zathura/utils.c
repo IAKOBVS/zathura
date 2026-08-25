@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <errno.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <girara/datastructures.h>
@@ -26,6 +27,48 @@
 #include "plugin.h"
 #include "content-type.h"
 #include "index-element-object.h"
+
+zathura_match_t zathura_text_match(const char* text, const char* query) {
+  if (text == NULL || query == NULL) {
+    return ZATHURA_MATCH_NONE;
+  }
+
+  g_autofree char* folded_text  = g_utf8_casefold(text, -1);
+  g_autofree char* folded_query = g_utf8_casefold(query, -1);
+  if (folded_text == NULL || folded_query == NULL) {
+    return ZATHURA_MATCH_NONE;
+  }
+
+  if (folded_query[0] == '\0') {
+    /* an empty query matches everything, but is not an exact hit */
+    return ZATHURA_MATCH_PREFIX;
+  }
+
+  if (g_strcmp0(folded_text, folded_query) == 0) {
+    return ZATHURA_MATCH_EXACT;
+  }
+
+  const size_t query_length = strlen(folded_query);
+  if (strncmp(folded_text, folded_query, query_length) == 0) {
+    return ZATHURA_MATCH_PREFIX;
+  }
+
+  if (strstr(folded_text, folded_query) != NULL) {
+    return ZATHURA_MATCH_SUBSTRING;
+  }
+
+  /* fuzzy match: all characters of the query appear in the same order */
+  const char* haystack = folded_text;
+  for (const char* q = folded_query; *q != '\0'; ++q) {
+    haystack = strchr(haystack, *q);
+    if (haystack == NULL) {
+      return ZATHURA_MATCH_NONE;
+    }
+    ++haystack;
+  }
+
+  return ZATHURA_MATCH_SUBSEQUENCE;
+}
 
 double zathura_correct_zoom_value(girara_session_t* session, const double zoom) {
   if (session == NULL) {
@@ -106,6 +149,158 @@ static GListStore* index_element_build_children(girara_session_t* session, girar
 
 GListModel* document_index_build_model(girara_session_t* session, girara_tree_node_t* tree) {
   return G_LIST_MODEL(index_element_build_children(session, tree));
+}
+
+/* collect matching index elements in display order; returns whether the visited
+ * element itself or any of its descendants matched */
+static bool index_search_collect(GListModel* model, const char* query, GList** matches, GHashTable* relevant,
+                                 GPtrArray* ancestors) {
+  bool found = false;
+  if (model == NULL) {
+    return found;
+  }
+
+  const guint n_items = g_list_model_get_n_items(model);
+  for (guint idx = 0; idx < n_items; ++idx) {
+    g_autoptr(ZathuraIndexElementObject) item = g_list_model_get_item(model, idx);
+    if (item == NULL) {
+      continue;
+    }
+
+    const bool self_match = zathura_text_match(item->title, query) != ZATHURA_MATCH_NONE;
+
+    g_ptr_array_add(ancestors, item); /* also acts as ancestor of the children */
+    const bool child_match = item->children != NULL &&
+                             index_search_collect(G_LIST_MODEL(item->children), query, matches, relevant, ancestors);
+    g_ptr_array_remove_index(ancestors, ancestors->len - 1);
+
+    if (self_match == true || child_match == true) {
+      if (self_match == true) {
+        *matches = g_list_prepend(*matches, item);
+      }
+
+      /* mark the element and all of its ancestors as relevant for expansion */
+      g_hash_table_add(relevant, item);
+      for (guint a = 0; a < ancestors->len; ++a) {
+        g_hash_table_add(relevant, g_ptr_array_index(ancestors, a));
+      }
+
+      found = true;
+    }
+  }
+
+  return found;
+}
+
+GList* zathura_index_search(GListModel* root, const char* query, GHashTable** out_relevant) {
+  if (out_relevant != NULL) {
+    *out_relevant = NULL;
+  }
+
+  if (root == NULL || query == NULL || query[0] == '\0') {
+    return NULL;
+  }
+
+  GList* matches       = NULL;
+  GHashTable* relevant = g_hash_table_new(g_direct_hash, g_direct_equal);
+  GPtrArray* ancestors = g_ptr_array_new();
+
+  index_search_collect(root, query, &matches, relevant, ancestors);
+
+  g_ptr_array_unref(ancestors);
+
+  if (out_relevant != NULL) {
+    *out_relevant = relevant;
+  } else {
+    g_hash_table_unref(relevant);
+  }
+
+  return g_list_reverse(matches);
+}
+
+GListModel* index_create_child_model(gpointer item, gpointer user_data) {
+  (void)user_data;
+  ZathuraIndexElementObject* obj = item;
+  if (obj->children == NULL) {
+    return NULL;
+  }
+  return G_LIST_MODEL(g_object_ref(obj->children));
+}
+
+static bool write_file_contents(const char* filename, const char* content) {
+  if (filename == NULL || filename[0] != '/') {
+    return false;
+  }
+
+  /* make sure the parent directory exists */
+  g_autofree char* dirname = g_path_get_dirname(filename);
+  if (g_mkdir_with_parents(dirname, 0700) == -1 && errno != EEXIST) {
+    girara_debug("failed to create directory '%s'", dirname);
+    return false;
+  }
+
+  if (g_file_set_contents(filename, content != NULL ? content : "", -1, NULL) == FALSE) {
+    girara_debug("failed to write to '%s'", filename);
+    return false;
+  }
+
+  return true;
+}
+
+bool zathura_page_number_write(const char* filename, unsigned int page_number) {
+  g_autofree char* content = g_strdup_printf("%u\n", page_number);
+  return write_file_contents(filename, content);
+}
+
+bool zathura_page_text_write(const char* filename, const char* text) {
+  return write_file_contents(filename, text);
+}
+
+bool index_show_match(zathura_t* zathura, GHashTable* relevant, ZathuraIndexElementObject* target) {
+  if (zathura == NULL || zathura->ui.index == NULL || relevant == NULL || target == NULL ||
+      g_hash_table_contains(relevant, target) == false) {
+    return false;
+  }
+
+  GtkListView* view = GTK_LIST_VIEW(gtk_scrolled_window_get_child(GTK_SCROLLED_WINDOW(zathura->ui.index)));
+  if (view == NULL) {
+    return false;
+  }
+  GtkSelectionModel* selection = gtk_list_view_get_model(view);
+  GListModel* model            = G_LIST_MODEL(selection);
+
+  /* expand every row belonging to the search results until the tree is stable */
+  bool changed = true;
+  while (changed) {
+    changed             = false;
+    const guint n_items = g_list_model_get_n_items(model);
+    for (guint idx = 0; idx < n_items; ++idx) {
+      g_autoptr(GtkTreeListRow) row = g_list_model_get_item(model, idx);
+      if (row == NULL) {
+        continue;
+      }
+      g_autoptr(ZathuraIndexElementObject) obj = gtk_tree_list_row_get_item(row);
+      if (obj != NULL && g_hash_table_contains(relevant, obj) && gtk_tree_list_row_is_expandable(row) &&
+          gtk_tree_list_row_get_expanded(row) == FALSE) {
+        gtk_tree_list_row_set_expanded(row, TRUE);
+        changed = true; /* expanding reveals new rows: rescan */
+      }
+    }
+  }
+
+  /* select and scroll to the target row */
+  const guint n_items = g_list_model_get_n_items(model);
+  for (guint idx = 0; idx < n_items; ++idx) {
+    g_autoptr(GtkTreeListRow) row            = g_list_model_get_item(model, idx);
+    g_autoptr(ZathuraIndexElementObject) obj = row != NULL ? gtk_tree_list_row_get_item(row) : NULL;
+    if (obj == target) {
+      gtk_selection_model_select_item(selection, idx, TRUE);
+      gtk_list_view_scroll_to(view, idx, GTK_LIST_SCROLL_FOCUS | GTK_LIST_SCROLL_SELECT, NULL);
+      return true;
+    }
+  }
+
+  return false;
 }
 
 static GtkListView* get_list_view(zathura_t* zathura) {

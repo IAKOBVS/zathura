@@ -213,6 +213,10 @@ Index mode
     Select and open entry
   gg, G
     Goto to the first or last entry
+  /
+    Search the index: typing selects matching entries (their branches are
+    expanded automatically), Up and Down cycle through the matches, Return
+    jumps to the selected entry and Escape closes the prompt
   Tab, Escape, ^[, ^c
     Hide index and switch to normal mode
 

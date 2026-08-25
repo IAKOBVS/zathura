@@ -797,7 +797,9 @@ void cb_hide_links(GtkWidget* widget, gpointer data) {
 
   /* disconnect from signal */
   gulong handler_id = GPOINTER_TO_UINT(g_object_steal_data(G_OBJECT(widget), "handler_id"));
-  g_signal_handler_disconnect(G_OBJECT(widget), handler_id);
+  if (handler_id != 0 && g_signal_handler_is_connected(G_OBJECT(widget), handler_id)) {
+    g_signal_handler_disconnect(G_OBJECT(widget), handler_id);
+  }
 
   zathura_t* zathura           = data;
   zathura_document_t* document = zathura_get_document(zathura);

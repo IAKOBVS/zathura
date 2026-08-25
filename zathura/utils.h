@@ -9,11 +9,33 @@
 #include <girara-gtk/internal.h>
 
 #include "document.h"
+#include "index-element-object.h"
 
 typedef struct page_offset_s {
   int x;
   int y;
 } page_offset_t;
+
+/**
+ * Quality of the match between a text and a search query. The values are
+ * ordered from worst to best match.
+ */
+typedef enum {
+  ZATHURA_MATCH_NONE = 0,    /**< No match at all */
+  ZATHURA_MATCH_SUBSEQUENCE, /**< All characters of the query appear in order */
+  ZATHURA_MATCH_SUBSTRING,   /**< Query appears somewhere inside the text */
+  ZATHURA_MATCH_PREFIX,      /**< Text starts with the query */
+  ZATHURA_MATCH_EXACT,       /**< Text equals the query */
+} zathura_match_t;
+
+/**
+ * Check how well a text matches a search query. Matching is case-insensitive;
+ * an empty query matches any text (ranked as prefix).
+ * @param text The text to search in.
+ * @param query The search query.
+ * @return The quality of the match.
+ */
+zathura_match_t zathura_text_match(const char* text, const char* query);
 
 /**
  * This function checks if the file has a valid extension. A extension is
@@ -33,6 +55,58 @@ bool file_valid_extension(zathura_t* zathura, const char* path);
  * @return root list model of ZathuraIndexElement objects
  */
 GListModel* document_index_build_model(girara_session_t* session, girara_tree_node_t* tree);
+
+/**
+ * Search an index model (a tree of ZathuraIndexElementObject as built by
+ * document_index_build_model) for titles matching the query. Matching is
+ * case-insensitive; the results are returned in display order.
+ * @param root the root list model of the index
+ * @param query the search text
+ * @param out_relevant if non-NULL, receives a newly allocated GHashTable (of
+ *        the matched elements and all of their ancestors, keyed by pointer,
+ *        to be freed with g_hash_table_unref), or NULL for an empty query
+ * @return a newly allocated GList of borrowed ZathuraIndexElementObject
+ *         instances (to be freed with g_list_free), or NULL for an empty query
+ */
+GList* zathura_index_search(GListModel* root, const char* query, GHashTable** out_relevant);
+
+/**
+ * GtkTreeListModelCreateModelFunc: expose the children store of an index
+ * element as child model.
+ * @param item a ZathuraIndexElementObject
+ * @param user_data unused
+ * @return the children list model or NULL for leaves
+ */
+GListModel* index_create_child_model(gpointer item, gpointer user_data);
+
+/**
+ * Expand every index row that is part of the given relevance set (as returned
+ * by zathura_index_search), then select the target element's row and scroll it
+ * into view.
+ * @param zathura the zathura instance; ui.index must have been created already
+ * @param relevant relevance set of matched elements and their ancestors
+ * @param target the element to select
+ * @return true if the target was found and selected
+ */
+bool index_show_match(zathura_t* zathura, GHashTable* relevant, ZathuraIndexElementObject* target);
+
+/**
+ * Write the current page number (one-based) to a file, creating missing parent
+ * directories. The file contents are "<page>\n".
+ * @param filename the file to write to
+ * @param page_number the current page number, one-based
+ * @return true if the file was written
+ */
+bool zathura_page_number_write(const char* filename, unsigned int page_number);
+
+/**
+ * Write the text of the current page to a file, creating missing parent
+ * directories. A NULL text is written as an empty file.
+ * @param filename the file to write to
+ * @param text the page text
+ * @return true if the file was written
+ */
+bool zathura_page_text_write(const char* filename, const char* text);
 
 /**
  * Scrolls the document index to the current page

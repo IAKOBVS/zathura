@@ -2,6 +2,8 @@
 
 #include "utils.h"
 
+#include "index-element-object.h"
+
 static void test_file_valid_extension(void) {
   g_assert_false(file_valid_extension(NULL, NULL));
   g_assert_false(file_valid_extension((void*)0xDEAD, NULL));
@@ -164,6 +166,135 @@ static void test_search_results_stale(void) {
   g_assert_false(search_results_stale(NULL, NULL));
 }
 
+static void test_text_match(void) {
+  g_assert_cmpuint(zathura_text_match("todo", "todo"), ==, ZATHURA_MATCH_EXACT);
+  g_assert_cmpuint(zathura_text_match("todo", "to"), ==, ZATHURA_MATCH_PREFIX);
+  g_assert_cmpuint(zathura_text_match("chapter-1-intro", "-1-in"), ==, ZATHURA_MATCH_SUBSTRING);
+  g_assert_cmpuint(zathura_text_match("chapter-1-intro", "cint"), ==, ZATHURA_MATCH_SUBSEQUENCE);
+  g_assert_cmpuint(zathura_text_match("Theory", "theory"), ==, ZATHURA_MATCH_EXACT);
+  g_assert_cmpuint(zathura_text_match("theory", "THEO"), ==, ZATHURA_MATCH_PREFIX);
+  g_assert_cmpuint(zathura_text_match("a-theory", "THEORY"), ==, ZATHURA_MATCH_SUBSTRING);
+  g_assert_cmpuint(zathura_text_match("t-h-e-o-r-y", "Theory"), ==, ZATHURA_MATCH_SUBSEQUENCE);
+  g_assert_cmpuint(zathura_text_match("anything", ""), ==, ZATHURA_MATCH_PREFIX);
+  g_assert_cmpuint(zathura_text_match("foo", "bar"), ==, ZATHURA_MATCH_NONE);
+  g_assert_cmpuint(zathura_text_match(NULL, "foo"), ==, ZATHURA_MATCH_NONE);
+  g_assert_cmpuint(zathura_text_match("foo", NULL), ==, ZATHURA_MATCH_NONE);
+}
+
+static void test_page_number_write(void) {
+  g_assert_false(zathura_page_number_write(NULL, 1));
+  g_autofree char* dir = g_dir_make_tmp("zathura-page-test-XXXXXX", NULL);
+  g_assert_nonnull(dir);
+  g_autofree char* filename = g_build_filename(dir, "nested", "page", NULL);
+  g_assert_true(zathura_page_number_write(filename, 7));
+  g_autofree gchar* contents = NULL;
+  gsize length               = 0;
+  g_assert_true(g_file_get_contents(filename, &contents, &length, NULL));
+  g_assert_cmpstr(contents, ==, "7\n");
+  g_assert_true(zathura_page_number_write(filename, 42));
+  g_assert_true(g_file_get_contents(filename, &contents, &length, NULL));
+  g_assert_cmpstr(contents, ==, "42\n");
+}
+
+static void test_page_text_write(void) {
+  g_autofree char* dir = g_dir_make_tmp("zathura-page-text-test-XXXXXX", NULL);
+  g_assert_nonnull(dir);
+  g_assert_false(zathura_page_text_write(NULL, "hello"));
+  g_autofree char* filename = g_build_filename(dir, "nested", "text", NULL);
+  g_assert_true(zathura_page_text_write(filename, "hello\nworld\n"));
+  g_autofree gchar* contents = NULL;
+  gsize length               = 0;
+  g_assert_true(g_file_get_contents(filename, &contents, &length, NULL));
+  g_assert_cmpstr(contents, ==, "hello\nworld\n");
+  g_assert_true(zathura_page_text_write(filename, NULL));
+  g_assert_true(g_file_get_contents(filename, &contents, &length, NULL));
+  g_assert_cmpstr(contents, ==, "");
+  g_assert_true(zathura_page_text_write(filename, "other"));
+  g_assert_true(g_file_get_contents(filename, &contents, &length, NULL));
+  g_assert_cmpstr(contents, ==, "other");
+}
+
+static ZathuraIndexElementObject* make_index_element(const char* title, GListStore* children) {
+  ZathuraIndexElementObject* item = g_object_new(ZATHURA_TYPE_INDEX_ELEMENT_OBJECT, NULL);
+  item->title                     = g_markup_escape_text(title, -1);
+  if (children != NULL) {
+    item->children = g_object_ref(children);
+    g_object_unref(children);
+  }
+  return item;
+}
+
+static void index_store_append(GListStore* store, const char* title, GListStore* children) {
+  g_list_store_append(store, make_index_element(title, children));
+}
+
+static void free_index_tree(GListModel* model) {
+  const guint n = g_list_model_get_n_items(model);
+  for (guint i = 0; i < n; ++i) {
+    ZathuraIndexElementObject* obj = g_list_model_get_item(model, i);
+    if (obj != NULL) {
+      if (obj->children != NULL) {
+        free_index_tree(G_LIST_MODEL(obj->children));
+      }
+      g_free(obj->title);
+      g_object_unref(obj);
+    }
+  }
+  g_object_unref(model);
+}
+
+static void test_index_search_order_and_relevance(void) {
+  GListStore* sub = g_list_store_new(ZATHURA_TYPE_INDEX_ELEMENT_OBJECT);
+  index_store_append(sub, "Nested THEORY here", NULL);
+  GListStore* root = g_list_store_new(ZATHURA_TYPE_INDEX_ELEMENT_OBJECT);
+  index_store_append(root, "Theory intro", sub);
+  index_store_append(root, "Other", NULL);
+  index_store_append(root, "Appendix", NULL);
+
+  GHashTable* relevant     = NULL;
+  g_autoptr(GList) matches = zathura_index_search(G_LIST_MODEL(root), "theory", &relevant);
+  g_assert_nonnull(matches);
+  g_assert_nonnull(relevant);
+  g_assert_cmpuint(g_list_length(matches), ==, 2);
+  g_assert_cmpstr(((ZathuraIndexElementObject*)matches->data)->title, ==, "Nested THEORY here");
+  g_assert_cmpstr(((ZathuraIndexElementObject*)matches->next->data)->title, ==, "Theory intro");
+  g_assert_true(g_hash_table_contains(relevant, matches->data));
+  g_assert_true(g_hash_table_contains(relevant, matches->next->data));
+  /* ancestor of the nested match must be in the relevance set */
+  ZathuraIndexElementObject* root0 = g_list_model_get_item(G_LIST_MODEL(root), 0);
+  g_assert_true(g_hash_table_contains(relevant, root0));
+  g_object_unref(root0);
+  g_hash_table_unref(relevant);
+
+  g_autoptr(GList) none = zathura_index_search(G_LIST_MODEL(root), "missing", &relevant);
+  g_assert_null(none);
+  g_assert_nonnull(relevant);
+  g_assert_cmpuint(g_hash_table_size(relevant), ==, 0);
+  g_hash_table_unref(relevant);
+
+  g_autoptr(GList) all = zathura_index_search(G_LIST_MODEL(root), "", &relevant);
+  g_assert_null(all);
+  g_assert_null(relevant);
+
+  free_index_tree(G_LIST_MODEL(root));
+}
+
+static void test_index_search_no_query_or_no_match(void) {
+  GHashTable* relevant = NULL;
+  g_autoptr(GList) r1  = zathura_index_search(NULL, "foo", &relevant);
+  g_assert_null(r1);
+  g_assert_null(relevant);
+
+  GListStore* root = g_list_store_new(ZATHURA_TYPE_INDEX_ELEMENT_OBJECT);
+  index_store_append(root, "Hello", NULL);
+  g_autoptr(GList) r2 = zathura_index_search(G_LIST_MODEL(root), "missing", &relevant);
+  g_assert_null(r2);
+  g_assert_nonnull(relevant);
+  g_assert_cmpuint(g_hash_table_size(relevant), ==, 0);
+  g_hash_table_unref(relevant);
+  free_index_tree(G_LIST_MODEL(root));
+}
+
 int main(int argc, char* argv[]) {
   g_test_init(&argc, &argv, NULL);
   g_test_add_func("/utils/file_valid_extension", test_file_valid_extension);
@@ -175,5 +306,10 @@ int main(int argc, char* argv[]) {
   g_test_add_func("/utils/select_target/cross_page", test_select_target_cross_page);
   g_test_add_func("/utils/select_target/new_search", test_select_target_new_search);
   g_test_add_func("/utils/search_results_stale", test_search_results_stale);
+  g_test_add_func("/utils/text_match", test_text_match);
+  g_test_add_func("/utils/page_number_write", test_page_number_write);
+  g_test_add_func("/utils/page_text_write", test_page_text_write);
+  g_test_add_func("/index/search/order_and_relevance", test_index_search_order_and_relevance);
+  g_test_add_func("/index/search/no_query_or_no_match", test_index_search_no_query_or_no_match);
   return g_test_run();
 }

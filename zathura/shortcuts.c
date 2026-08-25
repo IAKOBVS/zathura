@@ -85,6 +85,210 @@ static bool link_shortcuts(zathura_t* zathura, girara_callback_inputbar_activate
   return false;
 }
 
+/* state of an incremental search through the index */
+typedef struct index_search_ctx_s {
+  zathura_t* zathura;                 /**< The zathura instance */
+  gulong changed_handler;             /**< "changed" handler on the inputbar entry */
+  GtkEventController* key_controller; /**< Key controller on the inputbar entry */
+  GList* matches;                     /**< Matching elements in display order (borrowed) */
+  GList* current;                     /**< Currently shown element within matches */
+  GHashTable* relevant;               /**< Matched elements and their ancestors */
+} index_search_ctx_t;
+
+static void index_search_state_clear(index_search_ctx_t* ctx) {
+  g_list_free(ctx->matches);
+  ctx->matches = NULL;
+  ctx->current = NULL;
+  if (ctx->relevant != NULL) {
+    g_hash_table_unref(ctx->relevant);
+    ctx->relevant = NULL;
+  }
+}
+
+static gboolean index_search_cleanup_idle(gpointer data) {
+  index_search_ctx_t* ctx = data;
+
+  /* only ever clean up once */
+  GtkWidget* inputbar = GTK_WIDGET(ctx->zathura->ui.session->gtk.inputbar);
+  if (g_object_steal_data(G_OBJECT(inputbar), "index-search-ctx") != ctx) {
+    return G_SOURCE_REMOVE;
+  }
+
+  /* disconnect this handler … */
+  gulong hide_id = GPOINTER_TO_UINT(g_object_steal_data(G_OBJECT(inputbar), "index-search-hide-handler"));
+  if (hide_id != 0 && g_signal_handler_is_connected(G_OBJECT(inputbar), hide_id)) {
+    g_signal_handler_disconnect(inputbar, hide_id);
+  }
+  /* … and drop everything attached to the inputbar entry */
+  GtkWidget* entry = GTK_WIDGET(ctx->zathura->ui.session->gtk.inputbar_entry);
+  if (g_signal_handler_is_connected(G_OBJECT(entry), ctx->changed_handler)) {
+    g_signal_handler_disconnect(entry, ctx->changed_handler);
+  }
+  gtk_widget_remove_controller(entry, ctx->key_controller);
+  index_search_state_clear(ctx);
+  g_free(ctx);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void cb_index_search_hide(GtkWidget* UNUSED(widget), gpointer data) {
+  index_search_ctx_t* ctx = data;
+
+  /* The hide can be triggered from within our own key press handler (Return)
+   * while its signal emission is still on the stack; tearing handlers and the
+   * controller down right then is asking for GObject complaints, so defer the
+   * actual cleanup to the next main loop iteration. */
+  g_idle_add(index_search_cleanup_idle, ctx);
+}
+
+static GtkListView* index_search_view(index_search_ctx_t* ctx) {
+  return GTK_LIST_VIEW(gtk_scrolled_window_get_child(GTK_SCROLLED_WINDOW(ctx->zathura->ui.index)));
+}
+
+static void cb_index_search_changed(GtkEditable* editable, gpointer data) {
+  index_search_ctx_t* ctx = data;
+  if (ctx->zathura->ui.index == NULL) {
+    return;
+  }
+
+  g_autofree char* text = gtk_editable_get_chars(GTK_EDITABLE(editable), 0, -1);
+
+  /* recompute the matches for the new query, but keep the current match if it
+   * is still one of them */
+  ZathuraIndexElementObject* previous = ctx->current != NULL ? ctx->current->data : NULL;
+  index_search_state_clear(ctx);
+
+  GtkListView* view = index_search_view(ctx);
+  GtkTreeListModel* tree_model =
+      GTK_TREE_LIST_MODEL(gtk_single_selection_get_model(GTK_SINGLE_SELECTION(gtk_list_view_get_model(view))));
+  ctx->matches =
+      zathura_index_search(gtk_tree_list_model_get_model(tree_model), text[0] == '/' ? text + 1 : text, &ctx->relevant);
+  if (ctx->matches == NULL || ctx->relevant == NULL) {
+    return;
+  }
+
+  ctx->current = previous != NULL ? g_list_find(ctx->matches, previous) : NULL;
+  if (ctx->current == NULL) {
+    ctx->current = ctx->matches;
+  }
+
+  index_show_match(ctx->zathura, ctx->relevant, ctx->current->data);
+}
+
+static guint index_flat_position(GtkListView* view, ZathuraIndexElementObject* target) {
+  GtkSelectionModel* selection = gtk_list_view_get_model(view);
+  GListModel* model            = G_LIST_MODEL(selection);
+
+  const guint n_items = g_list_model_get_n_items(model);
+  for (guint idx = 0; idx < n_items; ++idx) {
+    g_autoptr(GtkTreeListRow) row            = g_list_model_get_item(model, idx);
+    g_autoptr(ZathuraIndexElementObject) obj = row != NULL ? gtk_tree_list_row_get_item(row) : NULL;
+    if (obj == target) {
+      return idx;
+    }
+  }
+
+  return G_MAXUINT;
+}
+
+static gboolean cb_index_search_activate(index_search_ctx_t* ctx) {
+  /* jump to the selected chapter like activating its row would */
+  if (ctx->zathura->ui.index != NULL && ctx->current != NULL) {
+    GtkListView* view    = index_search_view(ctx);
+    const guint position = index_flat_position(view, ctx->current->data);
+    if (position != G_MAXUINT) {
+      cb_index_row_activated(view, position, ctx->zathura);
+    }
+  }
+
+  return true;
+}
+
+static gboolean cb_index_search_key_pressed(GtkEventControllerKey* UNUSED(controller), guint keyval,
+                                            guint UNUSED(keycode), GdkModifierType UNUSED(state), gpointer data) {
+  index_search_ctx_t* ctx = data;
+
+  if (keyval == GDK_KEY_Return || keyval == GDK_KEY_KP_Enter) {
+    /* the jump closes the index and may take the inputbar with it, so keep
+     * the pointer around in a local; ctx must not be touched afterwards */
+    GtkWidget* inputbar = GTK_WIDGET(ctx->zathura->ui.session->gtk.inputbar);
+    cb_index_search_activate(ctx);
+    gtk_widget_set_visible(inputbar, FALSE);
+    return true;
+  }
+
+  int direction = 0;
+  if (keyval == GDK_KEY_Down) {
+    direction = 1;
+  } else if (keyval == GDK_KEY_Up) {
+    direction = -1;
+  } else if (keyval == GDK_KEY_Tab || keyval == GDK_KEY_ISO_Left_Tab) {
+    /* don't let girara complete the pseudo command while searching */
+    return true;
+  } else {
+    return false;
+  }
+
+  if (ctx->matches == NULL) {
+    return true;
+  }
+
+  /* move to the next/previous match, wrapping around at both ends */
+  GList* next  = direction > 0 ? g_list_next(ctx->current) : g_list_previous(ctx->current);
+  ctx->current = next != NULL ? next : (direction > 0 ? ctx->matches : g_list_last(ctx->matches));
+
+  if (ctx->zathura->ui.index != NULL) {
+    index_show_match(ctx->zathura, ctx->relevant, ctx->current->data);
+  }
+
+  return true;
+}
+
+bool sc_index_search(girara_session_t* session, girara_argument_t* UNUSED(argument), girara_event_t* UNUSED(event),
+                     unsigned int UNUSED(t)) {
+  g_return_val_if_fail(session != NULL, false);
+  g_return_val_if_fail(session->global.data != NULL, false);
+  zathura_t* zathura = session->global.data;
+
+  if (girara_mode_get(session) != zathura->modes.index || zathura->ui.index == NULL) {
+    return false;
+  }
+
+  GtkWidget* inputbar = session->gtk.inputbar;
+  if (g_object_get_data(G_OBJECT(inputbar), "index-search-ctx") != NULL) {
+    /* a search prompt is already open */
+    return false;
+  }
+
+  index_search_ctx_t* ctx = g_new0(index_search_ctx_t, 1);
+  ctx->zathura            = zathura;
+  ctx->changed_handler =
+      g_signal_connect(session->gtk.inputbar_entry, "changed", G_CALLBACK(cb_index_search_changed), ctx);
+
+  /* capture Up, Down and Return before the entry itself sees them */
+  ctx->key_controller = gtk_event_controller_key_new();
+  gtk_event_controller_set_propagation_phase(ctx->key_controller, GTK_PHASE_CAPTURE);
+  g_signal_connect(ctx->key_controller, "key-pressed", G_CALLBACK(cb_index_search_key_pressed), ctx);
+  gtk_widget_add_controller(GTK_WIDGET(session->gtk.inputbar_entry), ctx->key_controller);
+
+  /* free the search state whenever the inputbar goes away again */
+  gulong handler_id = g_signal_connect(inputbar, "hide", G_CALLBACK(cb_index_search_hide), ctx);
+  g_object_set_data(G_OBJECT(inputbar), "index-search-hide-handler", GUINT_TO_POINTER(handler_id));
+  g_object_set_data(G_OBJECT(inputbar), "index-search-ctx", ctx);
+
+  /* show the regular inputbar with a leading slash, just like a document
+   * search; setting the text runs the first (empty) query */
+  GtkWidget* entry = GTK_WIDGET(session->gtk.inputbar_entry);
+  zathura_document_set_adjust_mode(zathura->document, ZATHURA_ADJUST_INPUTBAR);
+  gtk_widget_set_visible(inputbar, TRUE);
+  gtk_widget_set_visible(GTK_WIDGET(session->gtk.notification_area), FALSE);
+  gtk_widget_grab_focus(entry);
+  gtk_editable_set_text(GTK_EDITABLE(entry), "/");
+  gtk_editable_set_position(GTK_EDITABLE(entry), -1);
+
+  return false;
+}
+
 bool sc_abort(girara_session_t* session, girara_argument_t* UNUSED(argument), girara_event_t* UNUSED(event),
               unsigned int UNUSED(t)) {
   g_return_val_if_fail(session != NULL, false);
@@ -1257,15 +1461,6 @@ static void index_row_bind(GtkSignalListItemFactory* UNUSED(factory), GObject* l
   gtk_label_set_text(GTK_LABEL(page), it->page_label ? it->page_label : "");
   gtk_label_set_text(GTK_LABEL(alt), it->page_alt ? it->page_alt : "");
   g_object_unref(it);
-}
-
-/* GtkTreeListModelCreateModelFunc */
-static GListModel* index_create_child_model(gpointer item, gpointer UNUSED(user_data)) {
-  ZathuraIndexElementObject* obj = item;
-  if (obj->children == NULL) {
-    return NULL;
-  }
-  return G_LIST_MODEL(g_object_ref(obj->children));
 }
 
 static void cb_index_activate(GtkListView* view, guint position, gpointer user_data) {

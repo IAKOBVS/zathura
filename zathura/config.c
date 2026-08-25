@@ -657,6 +657,8 @@ void config_load_default(zathura_t* zathura) {
 
   /* Index mode */
   girara_shortcut_add(gsession, 0,                GDK_KEY_Tab,         NULL, sc_toggle_index,   INDEX, 0,                  NULL);
+  girara_shortcut_add(gsession, 0,                GDK_KEY_slash,       NULL, sc_index_search,   INDEX, 0,                  NULL);
+  girara_shortcut_add(gsession, GDK_SHIFT_MASK,   GDK_KEY_slash,       NULL, sc_index_search,   INDEX, 0,                  NULL);
   girara_shortcut_add(gsession, 0,                GDK_KEY_k,           NULL, sc_navigate_index, INDEX, UP,                 NULL);
   girara_shortcut_add(gsession, 0,                GDK_KEY_j,           NULL, sc_navigate_index, INDEX, DOWN,               NULL);
   girara_shortcut_add(gsession, GDK_CONTROL_MASK, GDK_KEY_d,           NULL, sc_navigate_index, INDEX, HALF_DOWN,          NULL);
@@ -808,6 +810,7 @@ void config_load_default(zathura_t* zathura) {
   girara_shortcut_mapping_add(gsession, "mark_evaluate",            sc_mark_evaluate);
   girara_shortcut_mapping_add(gsession, "navigate",                 sc_navigate);
   girara_shortcut_mapping_add(gsession, "navigate_index",           sc_navigate_index);
+  girara_shortcut_mapping_add(gsession, "search_index",             sc_index_search);
   girara_shortcut_mapping_add(gsession, "nohlsearch",               sc_nohlsearch);
   girara_shortcut_mapping_add(gsession, "print",                    sc_print);
   girara_shortcut_mapping_add(gsession, "quit",                     sc_quit);

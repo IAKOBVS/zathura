@@ -9,6 +9,7 @@
 #include <glib/gstdio.h>
 
 #include "commands.h"
+#include "index-element-object.h"
 #include "utils.h"
 #include "zathura.h"
 
@@ -208,6 +209,90 @@ static void test_search_accumulate(void) {
 }
 #endif
 
+/* build an index element with the given title and an optional children store */
+static ZathuraIndexElementObject* make_index_element(const char* title, GListStore* children) {
+  ZathuraIndexElementObject* item = g_object_new(ZATHURA_TYPE_INDEX_ELEMENT_OBJECT, NULL);
+  item->title                     = g_markup_escape_text(title, -1);
+  if (children != NULL) {
+    item->children = g_object_ref(children);
+    g_object_unref(children);
+  }
+  return item;
+}
+
+static void index_store_append(GListStore* store, ZathuraIndexElementObject* item) {
+  g_list_store_append(store, item);
+  g_object_unref(item);
+}
+
+static void test_index_search_show_match(void) {
+  setup_logger();
+  girara_set_log_level(GIRARA_ERROR);
+
+  zathura_t* zathura = zathura_create();
+  g_assert_nonnull(zathura);
+  zathura_set_config_dir(zathura, g_getenv("G_TEST_SRCDIR"));
+  g_assert_true(zathura_init(zathura));
+
+  /* index tree: "Theory intro" | "Other" { "Nested THEORY here" } | "Appendix" */
+  GListStore* nested              = g_list_store_new(ZATHURA_TYPE_INDEX_ELEMENT_OBJECT);
+  ZathuraIndexElementObject* deep = make_index_element("Nested THEORY here", NULL);
+  index_store_append(nested, deep);
+
+  GListStore* root                    = g_list_store_new(ZATHURA_TYPE_INDEX_ELEMENT_OBJECT);
+  ZathuraIndexElementObject* other    = make_index_element("Other", nested);
+  ZathuraIndexElementObject* appendix = make_index_element("Appendix", NULL);
+  index_store_append(root, make_index_element("Theory intro", NULL));
+  index_store_append(root, other);
+  index_store_append(root, appendix);
+
+  /* search for something that only matches below a collapsed node */
+  GHashTable* relevant = NULL;
+  GList* matches       = zathura_index_search(G_LIST_MODEL(root), "nested", &relevant);
+  g_assert_nonnull(relevant);
+  g_assert_cmpuint(g_list_length(matches), ==, 1);
+  g_assert_true(g_list_nth_data(matches, 0) == deep);
+
+  /* build the index widgets like sc_toggle_index does */
+  zathura->ui.index = gtk_scrolled_window_new();
+  g_assert_nonnull(zathura->ui.index);
+  GtkTreeListModel* tree =
+      gtk_tree_list_model_new(G_LIST_MODEL(root), FALSE, FALSE, index_create_child_model, NULL, NULL);
+  GtkSingleSelection* sel     = gtk_single_selection_new(G_LIST_MODEL(tree));
+  GtkListItemFactory* factory = gtk_signal_list_item_factory_new();
+  GtkListView* view           = GTK_LIST_VIEW(gtk_list_view_new(GTK_SELECTION_MODEL(sel), factory));
+  gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(zathura->ui.index), GTK_WIDGET(view));
+
+  /* before the search nothing is expanded: only the three top-level rows exist */
+  g_assert_cmpuint(g_list_model_get_n_items(G_LIST_MODEL(sel)), ==, 3);
+
+  /* showing the match must expand its ancestors and select its row */
+  g_assert_true(index_show_match(zathura, relevant, deep));
+  guint n_items       = g_list_model_get_n_items(G_LIST_MODEL(sel));
+  guint target_pos    = G_MAXUINT;
+  bool other_expanded = false;
+  for (guint i = 0; i < n_items; ++i) {
+    g_autoptr(GtkTreeListRow) row            = g_list_model_get_item(G_LIST_MODEL(sel), i);
+    g_autoptr(ZathuraIndexElementObject) obj = gtk_tree_list_row_get_item(row);
+    if (obj == deep) {
+      target_pos = i;
+    } else if (obj == other) {
+      other_expanded = gtk_tree_list_row_get_expanded(row);
+    }
+  }
+  g_assert_cmpuint(target_pos, !=, G_MAXUINT);
+  g_assert_true(other_expanded);
+  g_assert_cmpuint(gtk_single_selection_get_selected(sel), ==, target_pos);
+
+  /* an element outside of the search results cannot be shown */
+  g_assert_false(index_show_match(zathura, relevant, appendix));
+
+  g_list_free(matches);
+  g_hash_table_unref(relevant);
+  g_object_unref(root);
+  zathura_free(zathura);
+}
+
 int main(int argc, char* argv[]) {
   setup_logger();
 
@@ -220,5 +305,6 @@ int main(int argc, char* argv[]) {
   g_test_add_func("/session/search-stale-results", test_search_stale_results);
   g_test_add_func("/session/search-accumulate", test_search_accumulate);
 #endif
+  g_test_add_func("/session/index-search-show-match", test_index_search_show_match);
   return g_test_run();
 }

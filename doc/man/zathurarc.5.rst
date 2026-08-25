@@ -332,6 +332,11 @@ They can also be combined with modifiers:
     Search next/previous item. Pass ``forward`` as argument to search for the next
     hit and ``backward`` to search for the previous hit.
 
+  * ``search_index``
+
+    Incrementally search through the index: typing selects matching entries,
+    Up and Down cycle through them and Return jumps to the selected one.
+
   * ``set``
 
     Set an option.

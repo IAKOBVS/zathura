@@ -263,6 +263,20 @@ bool sc_search(girara_session_t* session, girara_argument_t* argument, girara_ev
 bool sc_navigate_index(girara_session_t* session, girara_argument_t* argument, girara_event_t* event, unsigned int t);
 
 /**
+ * Incrementally search through the index of the document
+ *
+ * Opens a search prompt; typing selects and expands matching entries, Up and
+ * Down cycle through them and Return jumps to the selected one.
+ *
+ * @param session The used girara session
+ * @param argument The used argument
+ * @param event Girara event
+ * @param t Number of executions
+ * @return true if no error occurred otherwise false
+ */
+bool sc_index_search(girara_session_t* session, girara_argument_t* argument, girara_event_t* event, unsigned int t);
+
+/**
  * Show/Hide the index of the document
  *
  * @param session The used girara session

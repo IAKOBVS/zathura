@@ -1529,6 +1529,28 @@ void statusbar_page_number_update(zathura_t* zathura) {
     }
     girara_statusbar_item_set_text(zathura->ui.session, zathura->ui.statusbar.page_number, page_number_text);
 
+    /* keep track of the current page number and text in files that can be
+     * watched by external tools; only rewritten when the page actually
+     * changes */
+    static unsigned int page_number_file_last = UINT_MAX;
+    if (current_page_number + 1 != page_number_file_last) {
+      const bool number_ok = zathura_page_number_write("/tmp/zathura/page", current_page_number + 1);
+
+      zathura_error_t error         = ZATHURA_ERROR_OK;
+      zathura_rectangle_t rectangle = {0, 0, 0, 0};
+      g_autofree char* page_text    = NULL;
+      if (page != NULL) {
+        rectangle.x2 = zathura_page_get_width(page);
+        rectangle.y2 = zathura_page_get_height(page);
+        page_text    = zathura_page_get_text(page, rectangle, &error);
+      }
+      const bool text_ok = zathura_page_text_write("/tmp/zathura/text", page_text);
+
+      if (number_ok || text_ok) {
+        page_number_file_last = current_page_number + 1;
+      }
+    }
+
     bool page_number_in_window_title = false;
     girara_setting_get(zathura->ui.session, "window-title-page", &page_number_in_window_title);
 
