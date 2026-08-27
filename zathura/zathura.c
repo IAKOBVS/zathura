@@ -1529,6 +1529,7 @@ void statusbar_page_number_update(zathura_t* zathura) {
     }
     girara_statusbar_item_set_text(zathura->ui.session, zathura->ui.statusbar.page_number, page_number_text);
 
+#if 0
     /* keep track of the current page number and text in files that can be
      * watched by external tools; only rewritten when the page actually
      * changes */
@@ -1550,6 +1551,7 @@ void statusbar_page_number_update(zathura_t* zathura) {
         page_number_file_last = current_page_number + 1;
       }
     }
+#endif
 
     bool page_number_in_window_title = false;
     girara_setting_get(zathura->ui.session, "window-title-page", &page_number_in_window_title);
