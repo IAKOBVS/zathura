@@ -613,6 +613,10 @@ void config_load_default(zathura_t* zathura) {
   girara_setting_add(gsession, "open-link-confirm",          &bool_value,  BOOLEAN, false, _("Enable prompt to confirm when opening links"), NULL, NULL);
   bool_value = false;
   girara_setting_add(gsession, "single-page-mode",           &bool_value,  BOOLEAN, false, _("Open documents in single-page mode"), NULL, NULL);
+  bool_value = false;
+  girara_setting_add(gsession, "track-page",                 &bool_value,  BOOLEAN, false, _("Track current page number in /tmp/zathura/page"), NULL, NULL);
+  bool_value = false;
+  girara_setting_add(gsession, "track-text",                 &bool_value,  BOOLEAN, false, _("Track current page text in /tmp/zathura/text"), NULL, NULL);
 
   // clang-format on
   // apply some color settings that need their callbacks to run

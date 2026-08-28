@@ -1002,6 +1002,20 @@ The settings described here can be changed with ``set``.
   * Value type: Boolean
   * Default value: false
 
+*track-page*
+  Defines if the current page number should be tracked in
+  ``/tmp/zathura/page`` for external tools.
+
+  * Value type: Boolean
+  * Default value: false
+
+*track-text*
+  Defines if the current page text should be tracked in
+  ``/tmp/zathura/text`` for external tools.
+
+  * Value type: Boolean
+  * Default value: false
+
 *show-directories*
   Defines if the directories should be displayed in completion.
 
