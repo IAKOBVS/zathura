@@ -222,6 +222,11 @@ static bool init_ui(zathura_t* zathura) {
 
   g_signal_connect(G_OBJECT(zathura->ui.session->gtk.view), "notify::scale-factor", G_CALLBACK(cb_scale_factor),
                    zathura);
+  g_signal_connect(G_OBJECT(zathura->ui.session->gtk.view), "realize", G_CALLBACK(cb_view_realized), zathura);
+  /* the window can already be shown at this point */
+  if (gtk_widget_get_realized(zathura->ui.session->gtk.view) == TRUE) {
+    cb_view_realized(zathura->ui.session->gtk.view, zathura);
+  }
 
   /* update the view PPI whenever the monitor configuration changes */
   GdkDisplay* display = gtk_widget_get_display(zathura->ui.session->gtk.view);
@@ -927,7 +932,7 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   if (page_number < 0) {
     page_number += number_of_pages;
   }
-  if ((unsigned)page_number > number_of_pages) {
+  if ((unsigned)page_number >= number_of_pages) {
     girara_warning("document info: '%s' has an invalid page number", file_path);
     zathura_document_set_current_page_number(document, 0);
   } else {
@@ -1071,7 +1076,10 @@ bool document_open(zathura_t* zathura, const char* path, const char* uri, const 
   zathura_document_set_viewport_height(document, view_height);
 
   /* get initial device scale */
-  const int device_factor = gtk_widget_get_scale_factor(zathura->ui.session->gtk.view);
+  GtkNative* native   = gtk_widget_get_native(zathura->ui.session->gtk.view);
+  GdkSurface* surface = native != NULL ? gtk_native_get_surface(native) : NULL;
+  const double device_factor =
+      surface != NULL ? gdk_surface_get_scale(surface) : gtk_widget_get_scale_factor(zathura->ui.session->gtk.view);
   zathura_document_set_device_factors(document, device_factor, device_factor);
 
   /* create blank pages */
