@@ -877,6 +877,57 @@ bool search_select_target(const zathura_page_search_state_t* pages, unsigned int
   return false;
 }
 
+bool zathura_tracking_should_write(unsigned int current_page, unsigned int last_page, bool track_page, bool track_text,
+                                   bool last_track_page, bool last_track_text) {
+  if (track_page == false && track_text == false) {
+    return false;
+  }
+  if (current_page != last_page) {
+    return true;
+  }
+  if ((track_page && !last_track_page) || (track_text && !last_track_text)) {
+    return true;
+  }
+  return false;
+}
+
+bool zathura_visible_pages_should_update(const zathura_visible_state_t* last, const zathura_visible_state_t* current) {
+  if (last == NULL || current == NULL) {
+    return true;
+  }
+  if (last->document != current->document) {
+    return true;
+  }
+  if (last->pos_x != current->pos_x) {
+    return true;
+  }
+  if (last->pos_y != current->pos_y) {
+    return true;
+  }
+  if (last->zoom != current->zoom) {
+    return true;
+  }
+  if (last->rotation != current->rotation) {
+    return true;
+  }
+  if (last->pages_per_row != current->pages_per_row) {
+    return true;
+  }
+  if (last->number_of_pages != current->number_of_pages) {
+    return true;
+  }
+  if (last->first_page_column != current->first_page_column) {
+    return true;
+  }
+  if (last->view_width != current->view_width) {
+    return true;
+  }
+  if (last->view_height != current->view_height) {
+    return true;
+  }
+  return false;
+}
+
 bool search_document(zathura_t* zathura, girara_argument_t* argument, bool disable_notify) {
   g_return_val_if_fail(argument != NULL, false);
   g_return_val_if_fail(zathura->document != NULL, false);

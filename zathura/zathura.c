@@ -1539,9 +1539,8 @@ void statusbar_page_number_update(zathura_t* zathura) {
     bool track_text                           = false;
     girara_setting_get(zathura->ui.session, "track-page", &track_page);
     girara_setting_get(zathura->ui.session, "track-text", &track_text);
-    const bool page_changed = current_page_number + 1 != page_number_file_last;
-    const bool toggled_on   = (track_page && !last_track_page) || (track_text && !last_track_text);
-    if ((track_page || track_text) && (page_changed || toggled_on)) {
+    if (zathura_tracking_should_write(current_page_number + 1, page_number_file_last, track_page, track_text,
+                                      last_track_page, last_track_text)) {
       if (track_page) {
         zathura_page_number_write("/tmp/zathura/page", current_page_number + 1);
       }

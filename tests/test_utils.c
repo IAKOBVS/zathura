@@ -214,6 +214,100 @@ static void test_page_text_write(void) {
   g_assert_cmpstr(contents, ==, "other");
 }
 
+static void test_tracking_should_write(void) {
+  /* disabled: never write even if page changed */
+  g_assert_false(zathura_tracking_should_write(5, 4, false, false, false, false));
+  g_assert_false(zathura_tracking_should_write(5, UINT_MAX, false, false, false, false));
+  g_assert_false(zathura_tracking_should_write(5, 5, false, false, false, false));
+
+  /* enabled and page changed: must write */
+  g_assert_true(zathura_tracking_should_write(5, 4, true, false, true, false));
+  g_assert_true(zathura_tracking_should_write(5, 4, false, true, false, true));
+  g_assert_true(zathura_tracking_should_write(5, 4, true, true, true, true));
+  g_assert_true(zathura_tracking_should_write(1, UINT_MAX, true, false, false, false));
+
+  /* same page, not toggled: must NOT write (bug: previously rewrote every
+   * statusbar update → high CPU) */
+  g_assert_false(zathura_tracking_should_write(5, 5, true, false, true, false));
+  g_assert_false(zathura_tracking_should_write(5, 5, false, true, false, true));
+  g_assert_false(zathura_tracking_should_write(5, 5, true, true, true, true));
+
+  /* same page but tracking just toggled on: must write */
+  g_assert_true(zathura_tracking_should_write(5, 5, true, false, false, false));
+  g_assert_true(zathura_tracking_should_write(5, 5, false, true, false, false));
+  g_assert_true(zathura_tracking_should_write(5, 5, true, true, false, false));
+  g_assert_false(
+      zathura_tracking_should_write(5, 5, true, false, true, false)); /* only text toggled, page already enabled */
+  g_assert_true(zathura_tracking_should_write(5, 5, false, true, false, false));
+  /* toggled off: still no write */
+  g_assert_false(zathura_tracking_should_write(5, 5, false, false, true, false));
+
+  /* regression: busy retry when write fails — should_writereturns false on
+   * second identical call, caller will advance last_page to avoid loop */
+  g_assert_true(zathura_tracking_should_write(1, UINT_MAX, true, true, false, false));
+  g_assert_false(zathura_tracking_should_write(1, 1, true, true, true, true));
+}
+
+static void test_visible_pages_should_update(void) {
+  zathura_visible_state_t base = {0};
+  base.document                = (void*)0x1;
+  base.pos_x                   = 0.5;
+  base.pos_y                   = 0.5;
+  base.zoom                    = 1.0;
+  base.rotation                = 0;
+  base.pages_per_row           = 1;
+  base.number_of_pages         = 100;
+  base.first_page_column       = 1;
+  base.view_width              = 800;
+  base.view_height             = 600;
+
+  zathura_visible_state_t same = base;
+  g_assert_false(zathura_visible_pages_should_update(&base, &same));
+
+  /* null handling */
+  g_assert_true(zathura_visible_pages_should_update(NULL, &base));
+  g_assert_true(zathura_visible_pages_should_update(&base, NULL));
+
+  /* document pointer change */
+  zathura_visible_state_t doc2 = base;
+  doc2.document                = (void*)0x2;
+  g_assert_true(zathura_visible_pages_should_update(&base, &doc2));
+
+  /* each field that affects visibility must trigger update */
+  zathura_visible_state_t mod = base;
+  mod.pos_x                   = 0.6;
+  g_assert_true(zathura_visible_pages_should_update(&base, &mod));
+  mod       = base;
+  mod.pos_y = 0.6;
+  g_assert_true(zathura_visible_pages_should_update(&base, &mod));
+  mod      = base;
+  mod.zoom = 2.0;
+  g_assert_true(zathura_visible_pages_should_update(&base, &mod));
+  mod          = base;
+  mod.rotation = 90;
+  g_assert_true(zathura_visible_pages_should_update(&base, &mod));
+  mod               = base;
+  mod.pages_per_row = 2;
+  g_assert_true(zathura_visible_pages_should_update(&base, &mod));
+  mod                 = base;
+  mod.number_of_pages = 101;
+  g_assert_true(zathura_visible_pages_should_update(&base, &mod));
+  mod                   = base;
+  mod.first_page_column = 2;
+  g_assert_true(zathura_visible_pages_should_update(&base, &mod));
+  mod            = base;
+  mod.view_width = 801;
+  g_assert_true(zathura_visible_pages_should_update(&base, &mod));
+  mod             = base;
+  mod.view_height = 601;
+  g_assert_true(zathura_visible_pages_should_update(&base, &mod));
+
+  /* bug: idling with same state must NOT update (50% CPU regression) */
+  for (int i = 0; i < 100; i++) {
+    g_assert_false(zathura_visible_pages_should_update(&base, &same));
+  }
+}
+
 static ZathuraIndexElementObject* make_index_element(const char* title, GListStore* children) {
   ZathuraIndexElementObject* item = g_object_new(ZATHURA_TYPE_INDEX_ELEMENT_OBJECT, NULL);
   item->title                     = g_markup_escape_text(title, -1);
@@ -309,6 +403,8 @@ int main(int argc, char* argv[]) {
   g_test_add_func("/utils/text_match", test_text_match);
   g_test_add_func("/utils/page_number_write", test_page_number_write);
   g_test_add_func("/utils/page_text_write", test_page_text_write);
+  g_test_add_func("/utils/tracking_should_write", test_tracking_should_write);
+  g_test_add_func("/utils/visible_pages_should_update", test_visible_pages_should_update);
   g_test_add_func("/index/search/order_and_relevance", test_index_search_order_and_relevance);
   g_test_add_func("/index/search/no_query_or_no_match", test_index_search_no_query_or_no_match);
   return g_test_run();

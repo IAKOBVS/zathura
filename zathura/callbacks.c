@@ -70,9 +70,31 @@ void cb_buffer_changed(girara_session_t* session) {
 }
 
 void update_visible_pages(zathura_t* zathura) {
-  zathura_document_t* document       = zathura_get_document(zathura);
+  zathura_document_t* document = zathura_get_document(zathura);
+  if (document == NULL || zathura->ui.document_widget == NULL) {
+    return;
+  }
   const unsigned int number_of_pages = zathura_document_get_number_of_pages(document);
   const unsigned int pages_per_row   = zathura_document_widget_get_pages_per_row(zathura->ui.document_widget);
+
+  /* throttle: visible pages only change when scroll position, zoom, or layout
+   * changes; idling calls (e.g. size_allocate → update_visible_pages) would
+   * otherwise iterate over all pages ~60fps → 50% CPU on large docs */
+  static zathura_visible_state_t last_state = {0};
+  zathura_visible_state_t current_state     = {0};
+  current_state.document                    = document;
+  current_state.pos_x                       = zathura_document_get_position_x(document);
+  current_state.pos_y                       = zathura_document_get_position_y(document);
+  current_state.zoom                        = zathura_document_get_zoom(document);
+  current_state.rotation                    = zathura_document_get_rotation(document);
+  current_state.pages_per_row               = pages_per_row;
+  current_state.number_of_pages             = number_of_pages;
+  current_state.first_page_column = zathura_document_widget_get_first_page_column(zathura->ui.document_widget);
+  zathura_document_get_viewport_size(document, &current_state.view_height, &current_state.view_width);
+  if (!zathura_visible_pages_should_update(&last_state, &current_state)) {
+    return;
+  }
+  last_state = current_state;
 
   for (unsigned int page_id = 0; page_id < number_of_pages; page_id++) {
     zathura_page_t* page                   = zathura_document_get_page(document, page_id);
@@ -102,18 +124,19 @@ void update_visible_pages(zathura_t* zathura) {
       zathura_page_widget_update_view_time(zathura_page_widget);
     } else {
       /* make page invisible */
-      if (zathura_page_get_visibility(page) == true) {
+      const bool was_visible = zathura_page_get_visibility(page) == true;
+      if (was_visible) {
         zathura_page_set_visibility(page, false);
         /* If a page becomes invisible, abort the render request. */
         zathura_page_widget_abort_render_request(zathura_page_widget);
-      }
 
-      /* reset current search result */
-      girara_list_t* results   = NULL;
-      GObject* obj_page_widget = G_OBJECT(page_widget);
-      g_object_get(obj_page_widget, "search-results", &results, NULL);
-      if (results != NULL) {
-        g_object_set(obj_page_widget, "search-current", 0, NULL);
+        /* reset current search result only on transition to invisible */
+        girara_list_t* results   = NULL;
+        GObject* obj_page_widget = G_OBJECT(page_widget);
+        g_object_get(obj_page_widget, "search-results", &results, NULL);
+        if (results != NULL) {
+          g_object_set(obj_page_widget, "search-current", 0, NULL);
+        }
       }
     }
   }

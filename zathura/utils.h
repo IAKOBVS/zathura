@@ -332,4 +332,46 @@ typedef struct {
 bool search_select_target(const zathura_page_search_state_t* pages, unsigned int num_pages, unsigned int current_page,
                           int diff, bool new_search, unsigned int* out_page, int* out_idx);
 
+/**
+ * Decide whether tracking files should be written (page number and/or text).
+ * Mirrors the throttling in statusbar_page_number_update: only when tracking
+ * is enabled and page changed or tracking just toggled on.
+ *
+ * @param[in] current_page 1-indexed current page (current_page_number + 1)
+ * @param[in] last_page    1-indexed last written page (UINT_MAX for none)
+ * @param[in] track_page   Whether track-page is enabled
+ * @param[in] track_text   Whether track-text is enabled
+ * @param[in] last_track_page Previous track-page value
+ * @param[in] last_track_text Previous track-text value
+ * @return True if files should be written
+ */
+bool zathura_tracking_should_write(unsigned int current_page, unsigned int last_page, bool track_page, bool track_text,
+                                   bool last_track_page, bool last_track_text);
+
+/**
+ * State for visible-pages throttling (see callbacks.c:update_visible_pages).
+ * All fields that affect visibility must be compared.
+ */
+typedef struct {
+  void* document; /* zathura_document_t* as void* to avoid include cycle */
+  double pos_x;
+  double pos_y;
+  double zoom;
+  unsigned int rotation;
+  unsigned int pages_per_row;
+  unsigned int number_of_pages;
+  unsigned int first_page_column;
+  unsigned int view_width;
+  unsigned int view_height;
+} zathura_visible_state_t;
+
+/**
+ * Decide whether update_visible_pages needs to run.
+ *
+ * @param[in] last    Previous state (or zeroed for first call)
+ * @param[in] current Current state
+ * @return True if an update is required
+ */
+bool zathura_visible_pages_should_update(const zathura_visible_state_t* last, const zathura_visible_state_t* current);
+
 #endif // UTILS_H
